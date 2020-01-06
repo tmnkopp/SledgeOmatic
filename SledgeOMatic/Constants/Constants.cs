@@ -14,11 +14,7 @@ namespace SOM
         public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString();
         public static string Extention = ConfigurationManager.AppSettings["Extention"].ToString(); 
         public static string FileIn = ConfigurationManager.AppSettings["FileIn"].ToString();
-        public static string FileOut = ConfigurationManager.AppSettings["FileOut"].ToString(); 
-        public static string CompileSource = ConfigurationManager.AppSettings["CompileSource"].ToString();
-        public static string CompileDest = ConfigurationManager.AppSettings["CompileDest"].ToString(); 
-        public static string ParseSource = ConfigurationManager.AppSettings["ParseSource"].ToString();
-        public static string ParseDest = ConfigurationManager.AppSettings["ParseDest"].ToString();
+        public static string FileOut = ConfigurationManager.AppSettings["FileOut"].ToString();   
     }
     public static class Placeholders
     {

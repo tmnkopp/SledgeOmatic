@@ -17,7 +17,7 @@ namespace SOM.Data
         public SqlDataReader oReader { get; set; } 
         public virtual void ExecuteSql(string sSql)
         {
-            var con = ConfigurationManager.ConnectionStrings["Cyberscope123"].ToString();
+            var con = ConfigurationManager.ConnectionStrings["default"].ToString();
             using (SqlConnection myConnection = new SqlConnection(con))
             {
                 SqlCommand oCmd = new SqlCommand(sSql, myConnection);

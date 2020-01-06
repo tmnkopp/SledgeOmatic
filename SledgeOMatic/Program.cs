@@ -20,8 +20,7 @@ namespace SOM
     {
         static void Main(string[] args)
         {
-            string root = @"C:\temp\_input.txt";
-
+            string root = @"C:\temp\_input.txt"; 
             string content;
             content = new FileReader(root).Read().ToString();
             content = new SqlKeyValCompile(@"C:\temp\unittest.sql").Execute(content);

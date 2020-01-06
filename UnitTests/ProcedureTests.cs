@@ -10,6 +10,15 @@ namespace UnitTests
     public class ProcedureTests
     {
         [TestMethod]
+        public void RegExExpectedResult()
+        { 
+            string parseme = "[failed]\n[11111]";
+            RegexCompile extract = new RegexCompile("[dir]regextest.sql");
+            string actual = extract.Execute(parseme);
+            string expected = "[passed]\n[passed]\n";
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
         public void ContextExtractReturnsExpectedResult()
         {
             string parseme = "1-2-3-4-5-6-7-8-9-01-2-3-4-5-6-7-8-9-0";
