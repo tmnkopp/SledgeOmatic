@@ -11,26 +11,26 @@ namespace SOM.IO
     public static class Cache
     { 
         public static string Read() {
-            string _filename = ConfigurationManager.AppSettings["Cache"].ToString();
+            string _filename = AppSettings.Cache;
             FileReader r = new FileReader(_filename);
             return r.Read();
         }
         public static void Write(string content)
         {
-            string _filename = ConfigurationManager.AppSettings["Cache"].ToString();
+            string _filename = AppSettings.Cache;
             FileWriter w = new FileWriter(_filename);
             w.Write(content);
         }
         public static void Append(string content)
         {
-            string _filename = ConfigurationManager.AppSettings["Cache"].ToString();
+            string _filename = AppSettings.Cache;
             FileWriter w = new FileWriter(_filename);
             w.Write(Cache.Read() + content);
         }
         public static void CacheEdit() {
             Process p = new Process();
             p.StartInfo.FileName = ConfigurationManager.AppSettings["CodeViewer"].ToString();
-            p.StartInfo.Arguments = ConfigurationManager.AppSettings["Cache"].ToString();
+            p.StartInfo.Arguments = AppSettings.Cache;
             p.Start();
         }
     }

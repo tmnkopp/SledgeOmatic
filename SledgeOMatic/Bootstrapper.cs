@@ -11,20 +11,25 @@ namespace SOM
     {
         public static void Run()
         {
-            string[] filenames = new string[] { "_cache", "_input", "_output", "_compile", "_compiled", "_parse", "_parsed" };
-
+            DirectoryInfo DI = new DirectoryInfo(AppSettings.BasePath);
+            if (!DI.Exists)
+            {
+                Directory.CreateDirectory(AppSettings.BasePath);
+            }
+             
+            string[] filenames = new string[] { "_cache", "_input", "_output"  }; 
             foreach (string filename in filenames)
             {
                 using (StreamWriter w = File.AppendText($"{AppSettings.BasePath }\\{filename}{AppSettings.Extention}"))
                 {
                 }
             }
-            DirectoryInfo DI = new DirectoryInfo(AppSettings.BasePath);
+            
             foreach (var file in DI.GetFiles("$*"))
                 file.Delete();
             foreach (var file in DI.GetFiles("_parsed_*"))
                 file.Delete();
-            //DI.Exists()
+            //
             //DI.CreateSubdirectory();
 
 
