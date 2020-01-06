@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SledgeOMatic", "SledgeOMatic\SledgeOMatic.csproj", "{1D77EEE9-DAAC-42A7-92CF-08B462383397}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{82D613EB-2B2C-4254-90DD-197D6859C344}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1D77EEE9-DAAC-42A7-92CF-08B462383397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D77EEE9-DAAC-42A7-92CF-08B462383397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D77EEE9-DAAC-42A7-92CF-08B462383397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D613EB-2B2C-4254-90DD-197D6859C344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D613EB-2B2C-4254-90DD-197D6859C344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D613EB-2B2C-4254-90DD-197D6859C344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D613EB-2B2C-4254-90DD-197D6859C344}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

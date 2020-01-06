@@ -1,8 +1,18 @@
+using SOM.Procedures; 
+using SOM.Data;
+using SOM.IO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Reflection;
+using System.IO; 
+using HtmlAgilityPack;
+using System.Data.OleDb;
+using System.Text;
+using System.Data;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace SOM
 {
@@ -10,12 +20,18 @@ namespace SOM
     {
         static void Main(string[] args)
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+            string root = @"C:\temp\_input.txt";
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+            string content;
+            content = new FileReader(root).Read().ToString();
+            content = new SqlKeyValCompile(@"C:\temp\unittest.sql").Execute(content);
+
+            Cache.Write(content);
+            Cache.CacheEdit();
+
+            //Console.WriteLine("Hello World!");
+            //Console.ReadKey();
+
         }
     }
 }

@@ -32,7 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.17.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.17\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,11 +49,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Data\DBUtils.cs" />
+    <Compile Include="Extentions\StringExtentions.cs" />
+    <Compile Include="IO\Cache.cs" />
+    <Compile Include="IO\IReader.cs" />
+    <Compile Include="IO\IWriter.cs" />
+    <Compile Include="Procedures\Compilers\CustomCompile.cs" />
+    <Compile Include="Procedures\Compilers\IndexCompile.cs" />
+    <Compile Include="Procedures\Compilers\IProcedure.cs" />
+    <Compile Include="Procedures\Compilers\KeyValCompile.cs" />
+    <Compile Include="Procedures\Compilers\PathCompile.cs" />
+    <Compile Include="Procedures\Compilers\RegexCompile.cs" />
+    <Compile Include="Procedures\Compilers\RepeaterCompile.cs" />
+    <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
+    <Compile Include="Procedures\Parsers\ContextExtractor.cs" />
+    <Compile Include="Procedures\Parsers\CustomParse.cs" />
+    <Compile Include="Procedures\Parsers\JiraTicketParse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
