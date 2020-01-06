@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1D77EEE9-DAAC-42A7-92CF-08B462383397}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SledgeOMatic</RootNamespace>
-    <AssemblyName>SledgeOMatic</AssemblyName>
+    <RootNamespace>SOM</RootNamespace>
+    <AssemblyName>SOM</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
