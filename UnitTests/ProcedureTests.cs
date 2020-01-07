@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SOM.Data;
 using SOM.Procedures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SOM;
 
 namespace UnitTests
 {
@@ -30,8 +31,7 @@ namespace UnitTests
         [TestMethod]
         public void KeyValDBReaderNotNull()
         {
-            SqlKeyValCompile KVCompile = new SqlKeyValCompile("[dir]unittest.sql");
-            //Dictionary<string, string> dict = KVCompile.Data;
+            SqlKeyValCompile KVCompile = new SqlKeyValCompile( $"{Placeholder.Basepath}unittest.sql"); 
             string actual = KVCompile.Execute("[UNITTEST]");
             string expected = "passed";
             Assert.AreEqual(expected, actual);

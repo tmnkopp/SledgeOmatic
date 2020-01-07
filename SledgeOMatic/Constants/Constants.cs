@@ -16,8 +16,10 @@ namespace SOM
         public static string FileIn = AppSettings.BasePath + ConfigurationManager.AppSettings["FileIn"].ToString();
         public static string FileOut = AppSettings.BasePath + ConfigurationManager.AppSettings["FileOut"].ToString();
         public static string Cache = AppSettings.BasePath + ConfigurationManager.AppSettings["Cache"].ToString();
+        public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();
+        public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString();
     }
-    public static class Placeholders
+    public static class Placeholder
     {
         public static string Basepath = "[basepath]";
         public static string Index = "[index]";
