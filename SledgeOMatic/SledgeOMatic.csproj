@@ -56,7 +56,8 @@
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Data\DBUtils.cs" />
     <Compile Include="Extentions\StringExtentions.cs" />
-    <Compile Include="FileSys\DirRenamer.cs" />
+    <Compile Include="FileSys\IDirRenamer.cs" />
+    <Compile Include="FileSys\KeyValRenamer.cs" />
     <Compile Include="FileSys\DirCompiler.cs" />
     <Compile Include="IO\Cache.cs" />
     <Compile Include="IO\IReader.cs" />

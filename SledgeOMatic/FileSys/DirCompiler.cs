@@ -11,17 +11,11 @@ namespace SOM
 {
     public class DirCompiler
     {
-        private List<IProcedure> _Procedures;
-        public DirCompiler(List<IProcedure> Procedures)
-        {
-            _Procedures = Procedures;
-        } 
         private string _SourceDir = AppSettings.SourceDir;
-        public string SourceDir
+        public DirCompiler(string SourceDir)
         {
-            get { return _SourceDir; }
-            set { _SourceDir = value; }
-        }
+            _SourceDir = SourceDir;
+        }  
         private string _DestDir = AppSettings.DestDir;
         public string DestDir
         {
@@ -32,17 +26,29 @@ namespace SOM
             }
             set { _DestDir = value; }
         }
-        public void Compile( ) {
-            DirectoryInfo DI = new DirectoryInfo($"{SourceDir}");
+        public void Compile(List<IProcedure> Procedures) {
+            DirectoryInfo DI = new DirectoryInfo($"{_SourceDir}");
             
             foreach (var file in DI.GetFiles("*", SearchOption.AllDirectories))
             {
                 string content = new FileReader(file.FullName).Read().ToString();
-                foreach (IProcedure proc  in _Procedures)
+                foreach (IProcedure proc  in Procedures)
                     content = proc.Execute(content);
 
                 FileWriter fw = new FileWriter($"{DestDir}\\{file.Name}");
                 fw.Write(content);
+            }
+        }
+        public void Rename(List<IProcedure> Procedures)
+        {
+            DirectoryInfo DI = new DirectoryInfo($"{DestDir}"); 
+            foreach (var file in DI.GetFiles("*", SearchOption.AllDirectories))
+            {
+                string newname = file.Name;
+                foreach (IProcedure proc in Procedures)
+                    newname = proc.Execute(newname);
+
+                file.MoveTo($"{DestDir}\\{newname}");
             }
         }
     }

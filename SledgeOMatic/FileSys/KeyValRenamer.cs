@@ -1,4 +1,5 @@
-﻿using SOM.IO;
+﻿ 
+using SOM.IO;
 using SOM.Procedures;
 using System;
 using System.Collections.Generic;
@@ -7,24 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOM 
+namespace SOM
 {
-    public class DirRenamer
+    public class KeyValRenamer: IDirRenamer
     {
         private string _dir;
         private IProcedure _proc;
-        public DirRenamer(string Dir, IProcedure RenameProcedure)
+        public KeyValRenamer(string Dir, IProcedure RenameProcedure)
         {
             _dir = Dir;
             _proc = RenameProcedure;
         }  
         public void Rename() {
             DirectoryInfo DI = new DirectoryInfo($"{_dir}");
-            int cnt = 0;
             foreach (FileInfo file in DI.GetFiles("*", SearchOption.AllDirectories))
             {
-                string newname = _proc.Execute(file.Name);
-                newname = newname.Replace("[INDEX]",(cnt++).ToString());
+                string newname = _proc.Execute(file.Name); 
                 file.MoveTo($"{_dir}\\{newname}") ;
             }
         } 
