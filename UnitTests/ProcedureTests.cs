@@ -24,8 +24,7 @@ namespace UnitTests
         }
         [TestMethod]
         public void RegExExpectedResult()
-        {
-            
+        { 
             string parseme = "[failed]\n[11111]";
             SqlRegexCompile extract = new SqlRegexCompile($"{Placeholder.Basepath}_regextest.sql");
             string actual = extract.Execute(parseme);
