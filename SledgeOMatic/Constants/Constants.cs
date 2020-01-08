@@ -14,7 +14,7 @@ namespace SOM
         public static string ProcAssembly = "SOM.ProcAssembly";
         public static string Extention = ".txt";
         public static string FileIn = AppSettings.BasePath + "_input.txt";
-        public static string FileOut = AppSettings.BasePath + "_output";
+        public static string FileOut = AppSettings.BasePath + "_output.txt";
         public static string Cache = AppSettings.BasePath + "_cache.txt";
 
         public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString();
