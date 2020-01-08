@@ -11,38 +11,26 @@ using SOM.Data;
 
 namespace SOM.Procedures
 {
-    public class RegexCompile : IProcedure
+    public abstract class RegexCompile : IProcedure
     {
-        private Dictionary<string, string> _dict;
-        public RegexCompile(string sqlFile)
-        {
-            IReader r = new FileReader(sqlFile);
-            KeyValDBReader dbreader = new KeyValDBReader(r.Read());
-            dbreader.ExecuteRead();
-            this._dict = dbreader.Data;
-          
-        }
-        public RegexCompile(Dictionary<string, string> dict)
-        { 
-            this._dict = dict;
-
-        }
-        public string Execute(string compileme)
+        public Dictionary<string, string> KeyVals = new Dictionary<string, string>();
+        public virtual string Execute(string compileme)
         {
             StringBuilder result = new StringBuilder();
-            string[] lines = compileme.Split('\n'); 
+            string[] lines = compileme.Split('\n');
             foreach (var line in lines)
             {
                 bool matched = false;
-                foreach (var item in _dict)
+                foreach (var item in KeyVals)
                 {
                     string pattern = item.Key;
                     Match match = Regex.Match(line, pattern);
-                    if (match.Success )  {
+                    if (match.Success)
+                    {
                         string replacewith = item.Value.Replace("$1", match.Value);
-                        result.AppendFormat("{0}\n",line.Replace(match.Value, replacewith));
+                        result.AppendFormat("{0}\n", line.Replace(match.Value, replacewith));
                         matched = true;
-                    } 
+                    }
                 }
                 if (!matched)
                 {
@@ -51,10 +39,34 @@ namespace SOM.Procedures
             }
             return result.ToString(); 
         }
-        
         public override string ToString()
         {
-            return $"{base.ToString()} -#{_dict.ToString()}";
+            return $"{base.ToString()} -{KeyVals.ToString()}";
+        }
+    }
+    public class SqlRegexCompile : RegexCompile 
+    { 
+        public SqlRegexCompile(string SqlFile)
+        {
+            IReader r = new FileReader(SqlFile);
+            KeyValDBReader dbreader = new KeyValDBReader(r.Read());
+            dbreader.ExecuteRead();
+            this.KeyVals = dbreader.Data; 
+        }  
+        public override string ToString()
+        {
+            return $"{base.ToString()} -#{KeyVals.ToString()}";
+        }
+    }
+    public class KeyValRegexCompile : RegexCompile 
+    { 
+        public KeyValRegexCompile(Dictionary<string, string> Dict)
+        { 
+            this.KeyVals = Dict;
+        }
+        public override string ToString()
+        {
+            return $"{base.ToString()} -#{KeyVals.ToString()}";
         }
     }
 }

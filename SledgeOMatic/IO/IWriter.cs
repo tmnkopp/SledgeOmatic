@@ -15,25 +15,26 @@ namespace SOM.IO
     } 
     public class FileWriter :  IWriter
     {
-        private string _path = ConfigurationManager.AppSettings["FileOut"].ToString();
-        private string _basepath = ConfigurationManager.AppSettings["BasePath"].ToString();
+  
+        private string _filename = AppSettings.FileIn;
+        private string _basepath = AppSettings.BasePath;
         public FileWriter()
         {
         }
         public FileWriter(string Path)
         {
-            _path = Path;
+            _filename = Path;
         }
         public void Write(string writeme)
         { 
             try
             { 
-                Console.WriteLine($"write {_path}");
-                File.WriteAllText($"{_path}", writeme);
+                Console.WriteLine($"write {_filename}");
+                File.WriteAllText($"{_filename}", writeme);
             }
             catch (Exception)
             {
-                Console.WriteLine($"\n\nbad path {_path}\n\n");
+                Console.WriteLine($"\n\nbad path {_filename}\n\n");
                 throw new InvalidProgramException();
                 
             }

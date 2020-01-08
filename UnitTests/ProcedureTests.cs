@@ -4,17 +4,30 @@ using SOM.Data;
 using SOM.Procedures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SOM;
+using SOM.IO;
 
 namespace UnitTests
 {
     [TestClass]
     public class ProcedureTests
     {
+        //DECLARE @KVTABLE
+        [TestMethod]
+        public void Path_Compiles_To_Output()
+        { 
+            FileReader f = new FileReader(AppSettings.FileIn);
+            PathCompile compiler = new PathCompile();
+            string compiled = compiler.Execute(f.Read());
+            Cache.Write(compiled);
+            Cache.CacheEdit();
+            Assert.IsNotNull(compiled);
+        }
         [TestMethod]
         public void RegExExpectedResult()
-        { 
+        {
+            
             string parseme = "[failed]\n[11111]";
-            RegexCompile extract = new RegexCompile($"{Placeholder.Basepath}_regextest.sql");
+            SqlRegexCompile extract = new SqlRegexCompile($"{Placeholder.Basepath}_regextest.sql");
             string actual = extract.Execute(parseme);
             string expected = "[passed]\n[passed]\n";
             Assert.AreEqual(expected, actual);
