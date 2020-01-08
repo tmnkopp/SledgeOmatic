@@ -19,11 +19,7 @@ namespace SOM
         private string _DestDir = AppSettings.DestDir;
         public string DestDir
         {
-            get {
-                if (_DestDir == "")
-                    _DestDir = AppSettings.BasePath + "_compiled";
-                return _DestDir;
-            }
+            get { return _DestDir;  }
             set { _DestDir = value; }
         }
         public void Compile(List<IProcedure> Procedures) {

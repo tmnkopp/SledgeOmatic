@@ -12,10 +12,10 @@ namespace UnitTests
     public class Bootstrapper
     {
         [TestMethod]
-        public void BasePathCreated()
-        {
+        public void DestDirCreated()
+        { 
             SOM.Bootstrapper.Run();
-            DirectoryInfo DI = new DirectoryInfo($"{AppSettings.BasePath}");
+            DirectoryInfo DI = new DirectoryInfo($"{AppSettings.DestDir}");
             Assert.IsTrue(DI.Exists);
         }
        
