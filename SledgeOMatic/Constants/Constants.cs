@@ -13,15 +13,14 @@ namespace SOM
     {
         public static string ProcAssembly = "SOM.ProcAssembly";
         public static string Extention = ".txt";
-
-        public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString();
-        public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();
-        public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString();
-
         public static string FileIn = AppSettings.BasePath + "_input.txt";
         public static string FileOut = AppSettings.BasePath + "_output";
         public static string Cache = AppSettings.BasePath + "_cache.txt";
 
+        public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString();
+        public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();
+        public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString(); 
+        
     }
     public static class Placeholder
     {
