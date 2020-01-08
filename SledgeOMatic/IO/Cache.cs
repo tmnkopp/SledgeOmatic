@@ -11,20 +11,17 @@ namespace SOM.IO
     public static class Cache
     { 
         public static string Read() {
-            string _filename = AppSettings.Cache;
-            FileReader r = new FileReader(_filename);
+            FileReader r = new FileReader(AppSettings.Cache);
             return r.Read();
         }
         public static void Write(string content)
-        {
-            string _filename = AppSettings.Cache;
-            FileWriter w = new FileWriter(_filename);
+        { 
+            FileWriter w = new FileWriter(AppSettings.Cache);
             w.Write(content);
         }
         public static void Append(string content)
         {
-            string _filename = AppSettings.Cache;
-            FileWriter w = new FileWriter(_filename);
+            FileWriter w = new FileWriter(AppSettings.Cache);
             w.Write(Cache.Read() + content);
         }
         public static void CacheEdit() {

@@ -34,10 +34,10 @@ namespace SOM
                 }
             }
 
-            using (StreamWriter w = File.AppendText($"{AppSettings.BasePath }\\unittest.sql"))
+            using (StreamWriter w = File.AppendText($"{AppSettings.BasePath }\\_unittest.sql"))
             {
             }
-            FileWriter fw = new FileWriter($"{AppSettings.BasePath }\\unittest.sql"); 
+            FileWriter fw = new FileWriter($"{AppSettings.BasePath }\\_unittest.sql"); 
             StringBuilder sb = new StringBuilder(); 
             sb.Append(" DECLARE @KVTABLE TABLE(K NVARCHAR(15), V NVARCHAR(255)) \n");
             sb.Append(" INSERT INTO @KVTABLE(K, V) VALUES('[UNITTEST]', 'passed') , ('[DATE]', CONVERT(NVARCHAR(25), GETDATE())) \n");

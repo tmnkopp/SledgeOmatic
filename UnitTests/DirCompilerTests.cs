@@ -15,7 +15,7 @@ namespace UnitTests
         public void DirCompileToDestDirExist()
         {
             List<IProcedure> sprocs = new List<IProcedure>();
-            sprocs.Add(new SqlKeyValCompile($"{Placeholder.Basepath}unittest.sql"));
+            sprocs.Add(new SqlKeyValCompile($"{Placeholder.Basepath}_unittest.sql"));
 
             DirCompiler dirCompile = new DirCompiler(AppSettings.SourceDir);
             dirCompile.Compile(sprocs);

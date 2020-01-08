@@ -27,7 +27,7 @@ namespace SOM.Procedures
             this._dict = dict;
 
         }
-        public   string Execute(string compileme)
+        public string Execute(string compileme)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = compileme.Split('\n'); 

@@ -14,7 +14,7 @@ namespace UnitTests
         public void RegExExpectedResult()
         { 
             string parseme = "[failed]\n[11111]";
-            RegexCompile extract = new RegexCompile("[dir]regextest.sql");
+            RegexCompile extract = new RegexCompile($"{Placeholder.Basepath}_regextest.sql");
             string actual = extract.Execute(parseme);
             string expected = "[passed]\n[passed]\n";
             Assert.AreEqual(expected, actual);
@@ -31,7 +31,7 @@ namespace UnitTests
         [TestMethod]
         public void KeyValDBReaderNotNull()
         {
-            SqlKeyValCompile KVCompile = new SqlKeyValCompile( $"{Placeholder.Basepath}unittest.sql"); 
+            SqlKeyValCompile KVCompile = new SqlKeyValCompile( $"{Placeholder.Basepath}_unittest.sql"); 
             string actual = KVCompile.Execute("[UNITTEST]");
             string expected = "passed";
             Assert.AreEqual(expected, actual);
