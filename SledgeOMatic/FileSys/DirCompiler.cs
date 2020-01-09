@@ -22,26 +22,26 @@ namespace SOM
             get { return _DestDir;  }
             set { _DestDir = value; }
         }
-        public void Compile(List<IProcedure> Procedures) {
+        public void Compile(List<IProcedure> CompileProcedures) {
             DirectoryInfo DI = new DirectoryInfo($"{_SourceDir}");
             
             foreach (var file in DI.GetFiles("*", SearchOption.AllDirectories))
             {
                 string content = new FileReader(file.FullName).Read().ToString();
-                foreach (IProcedure proc  in Procedures)
+                foreach (IProcedure proc  in CompileProcedures)
                     content = proc.Execute(content);
 
                 FileWriter fw = new FileWriter($"{DestDir}\\{file.Name}");
                 fw.Write(content);
             }
         }
-        public void Rename(List<IProcedure> Procedures)
+        public void Rename(List<IProcedure> RenameProcedures)
         {
             DirectoryInfo DI = new DirectoryInfo($"{DestDir}"); 
             foreach (var file in DI.GetFiles("*", SearchOption.AllDirectories))
             {
                 string newname = file.Name;
-                foreach (IProcedure proc in Procedures)
+                foreach (IProcedure proc in RenameProcedures)
                     newname = proc.Execute(newname);
 
                 file.MoveTo($"{DestDir}\\{newname}");

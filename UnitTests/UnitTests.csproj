@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="DirCompilerTests.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="StringTests.cs" />
     <Compile Include="ProcedureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

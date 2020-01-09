@@ -21,6 +21,14 @@ namespace SOM.Extentions
             Array.Reverse(array);
             return new String(array);
         }
+        public static string RemoveDuplicate(this string input, string Remove)
+        {
+            do
+            {
+                input = input.Replace($"{Remove}{Remove}", $"{Remove}");
+            } while (input.Contains($"{Remove}{Remove}"));
+            return input;
+        }
         public static string ReplaceWhitespace(this string input, string ReplaceWith)
         {
             do
@@ -29,13 +37,36 @@ namespace SOM.Extentions
             } while (input.Contains(" ")); 
             return input;
         }
+        public static string TrimLines(this string input )
+        {
+            StringBuilder result = new StringBuilder();
+            string[] lines = input.Split('\n');
+            foreach (var line in lines)
+            {
+                result.AppendFormat("{0}\n", line);
+            }
+            return result.ToString();
+        }
+        public static string RemoveEmptyLines(this string input)
+        {
+            StringBuilder result = new StringBuilder();
+            string[] lines = input.Split('\n');
+            foreach (var line in lines)
+            { 
+                if (line.RemoveWhiteAndBreaks().Length > 0)
+                {
+                    result.AppendFormat("{0}\n", line);
+                } 
+            }
+            return result.ToString();
+        }
         public static string RemoveWhiteAndBreaks(this string input)
         {
             do
             {
                 input = input.Replace(" ", "");
             } while (input.Contains(" "));
-            input = input.Replace("\n", "").Replace("\r", "");
+            input = input.Replace("\n", "").Replace("\r", "").Replace("\t", "");
             return input;
         }
         public static string CleanHTML(this string input) {

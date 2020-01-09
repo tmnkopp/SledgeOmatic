@@ -34,16 +34,16 @@ namespace SOM
 
             FileWriter fw = new FileWriter($"{AppSettings.BasePath }\\_unittest.sql"); 
             StringBuilder sb = new StringBuilder(); 
-            sb.Append(@" DECLARE @KVTABLE TABLE(K NVARCHAR(15), V NVARCHAR(255))  \n");
-            sb.Append(@" INSERT INTO @KVTABLE(K, V) VALUES('[UNITTEST]', 'passed') , ('[DATE]', CONVERT(NVARCHAR(25), GETDATE()))  \n");
-            sb.Append(@" SELECT * FROM @KVTABLE  \n");
+            sb.Append("DECLARE @KVTABLE TABLE(K NVARCHAR(15), V NVARCHAR(255))  \n");
+            sb.Append("INSERT INTO @KVTABLE(K, V) VALUES('[UNITTEST]', 'passed') , ('[DATE]', CONVERT(NVARCHAR(25), GETDATE()))  \n");
+            sb.Append("SELECT * FROM @KVTABLE  \n");
             fw.Write(sb.ToString());
 
             fw = new FileWriter($"{AppSettings.BasePath }\\_regextest.sql");
             sb = new StringBuilder();
-            sb.Append(@" DECLARE @KVTABLE TABLE(K NVARCHAR(15), V NVARCHAR(255))  \n");
-            sb.Append(@" INSERT INTO @KVTABLE(K, V) VALUES ('\[fail\w*\]','[passed]'),	('\[1111\d*\]','[passed]')  \n");
-            sb.Append(@" SELECT * FROM @KVTABLE  \n");
+            sb.Append( "DECLARE @KVTABLE TABLE(K NVARCHAR(15), V NVARCHAR(255))\n");
+            sb.Append(@"INSERT INTO @KVTABLE(K, V) VALUES ('\[fail\w*\]','[passed]'),	('\[1111\d*\]','[passed]')");
+            sb.Append( "\nSELECT * FROM @KVTABLE\n");
             fw.Write(sb.ToString());
         }
     }

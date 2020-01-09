@@ -15,8 +15,7 @@ namespace SOM.Procedures
         public virtual string Execute(string compileme)
         {
             foreach (var item in Dict) { 
-                    compileme = compileme.Replace(item.Key, item.Value);
-                
+                    compileme = compileme.Replace(item.Key, item.Value); 
             }
             return compileme;        
         }
@@ -26,9 +25,7 @@ namespace SOM.Procedures
         }
     }
     public class SqlKeyValCompile : KeyValCompile, IProcedure  {
-        private string _sqlFileParam = ""; 
-        public Dictionary<string, string> Data { get { return base.Dict; }   } 
-
+        private string _sqlFileParam = "";  
         public SqlKeyValCompile(string sqlFile)
         { 
             IReader r = new FileReader(sqlFile);

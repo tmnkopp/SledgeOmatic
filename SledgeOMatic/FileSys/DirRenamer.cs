@@ -10,20 +10,21 @@ using System.Threading.Tasks;
 
 namespace SOM
 {
-    public class KeyValRenamer: IDirRenamer
+    public class DirRenamer: IDirRenamer
     {
-        private string _dir;
-        private IProcedure _proc;
-        public KeyValRenamer(string Dir, IProcedure RenameProcedure)
+        private string _dir; 
+        public DirRenamer(string Dir)
         {
-            _dir = Dir;
-            _proc = RenameProcedure;
+            _dir = Dir; 
         }  
-        public void Rename() {
+        public void Rename(List<IProcedure> RenameProcedures) {
             DirectoryInfo DI = new DirectoryInfo($"{_dir}");
+            
             foreach (FileInfo file in DI.GetFiles("*", SearchOption.AllDirectories))
             {
-                string newname = _proc.Execute(file.Name); 
+                string newname = file.Name;
+                foreach (IProcedure _proc in RenameProcedures) 
+                     newname = _proc.Execute(newname); 
                 file.MoveTo($"{_dir}\\{newname}") ;
             }
         } 
