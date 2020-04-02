@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.11.17.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -69,12 +70,17 @@
     <Compile Include="Procedures\Compilers\PathCompile.cs" />
     <Compile Include="Procedures\Compilers\RegexCompile.cs" />
     <Compile Include="Procedures\Compilers\RepeaterCompile.cs" />
+    <Compile Include="Procedures\Data\EntityMapper.cs" />
+    <Compile Include="Procedures\Data\FieldMaps\NgFieldMapStrategy.cs" />
+    <Compile Include="Procedures\Data\IFieldMapStrategy.cs" />
+    <Compile Include="Procedures\Data\SchemaField.cs" />
     <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
     <Compile Include="Procedures\Parsers\ContextExtractor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

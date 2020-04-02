@@ -28,8 +28,7 @@ namespace SOM.IO
         public void Write(string writeme)
         { 
             try
-            { 
-                Console.WriteLine($"write {_filename}");
+            {  
                 File.WriteAllText($"{_filename}", writeme);
             }
             catch (Exception)

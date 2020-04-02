@@ -13,6 +13,7 @@ using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using SOM.Procedures.Data;
 
 namespace SOM
 {
@@ -20,16 +21,10 @@ namespace SOM
     {
         static void Main(string[] args)
         {
-            string root = @"C:\temp\_input.txt"; 
-            string content;
-            content = new FileReader(root).Read().ToString();
-            content = new SqlKeyValCompile(@"C:\temp\unittest.sql").Execute(content);
-
-            Cache.Write(content);
-            Cache.CacheEdit();
-
-            //Console.WriteLine("Hello World!");
-            //Console.ReadKey();
+            EntityMapper EM = new EntityMapper("fsma_questions" );
+            string result = EM.MapFields(new NgFieldMapStrategy());
+            Console.Write(result);
+            Console.Read(); 
 
         }
     }

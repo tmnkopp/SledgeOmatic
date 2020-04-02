@@ -14,15 +14,16 @@ namespace UnitTests
     { 
         [TestMethod]
         public void Removes_White_And_Newline()
-        { 
-            FileReader f = new FileReader(@"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\RMA\2020\2020_Q1_RMA_0.aspx");
-            string content = f.Read(); 
+        {
+          
+            string expected= $"line\nline\nline\nline\nline\n";
+            string content = $"line\nline\n\r\r\n\nline\nline\n\n\nline\n";
+            Cache.Write($"{content}\n--------------------\n{expected}");
+
             content = content
                 .RemoveEmptyLines();
-            
-            Cache.Write(content);
             Cache.CacheEdit();
-            Assert.IsNotNull(content);
+            Assert.AreEqual(expected, content);
         } 
     }
 }

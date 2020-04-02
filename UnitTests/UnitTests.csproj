@@ -52,6 +52,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldMapper.cs" />
     <Compile Include="DirCompilerTests.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="StringTests.cs" />
