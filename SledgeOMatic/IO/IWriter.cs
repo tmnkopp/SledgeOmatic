@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOM.Extentions;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -25,10 +26,24 @@ namespace SOM.IO
         {
             _filename = Path;
         }
+        public void Write(string writeme , bool Create)
+        {
+            if (Create)
+            {        
+                using (StreamWriter w = File.AppendText($"{_filename}"))
+                { 
+                }
+            }
+            Write(writeme); 
+        }
         public void Write(string writeme)
         { 
             try
-            {  
+            {
+                do
+                {
+                    writeme = writeme.TrimTrailingNewline();
+                } while (writeme.EndsWith("\n"));
                 File.WriteAllText($"{_filename}", writeme);
             }
             catch (Exception)

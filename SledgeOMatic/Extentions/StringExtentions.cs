@@ -47,6 +47,14 @@ namespace SOM.Extentions
             }
             return result.ToString();
         }
+        public static string TrimTrailingNewline(this string input)
+        {
+            if (input.EndsWith("\n"))
+            {
+                input = input.Substring(0, input.Length - 1);
+            }
+            return input;
+        }
         public static string RemoveEmptyLines(this string input)
         {
             StringBuilder result = new StringBuilder();

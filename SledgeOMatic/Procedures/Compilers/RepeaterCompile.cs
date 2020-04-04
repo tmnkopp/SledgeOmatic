@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SOM.Extentions;
 namespace SOM.Procedures
 {
     public class RepeaterCompile : IProcedure
@@ -26,7 +27,7 @@ namespace SOM.Procedures
             {
                 result.AppendFormat("{0}\n", compileme); 
             } 
-            return result.ToString();
+            return  result.ToString().TrimTrailingNewline();
         }
         public override string ToString()
         {

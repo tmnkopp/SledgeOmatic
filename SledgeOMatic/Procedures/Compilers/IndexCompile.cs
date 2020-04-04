@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using SOM.Extentions;
 namespace SOM.Procedures
 {
     public class IndexCompile : IProcedure
@@ -29,7 +29,7 @@ namespace SOM.Procedures
                     index++; 
                 result.AppendFormat("{0}\n", line.Replace(""+ _indexName + "", ReSetter(index).ToString()));
             }
-            return result.ToString();
+            return result.ToString().TrimTrailingNewline();
         }
         private int ReSetter(int index) {
             if (_reset <= 1)

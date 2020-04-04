@@ -41,6 +41,16 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
+        public void LineExtractReturnsExpectedResult()
+        {
+            string parseme = "111\n222\n333\n-target-\n444\n555\n666\n";
+            LineExtractor extract = new LineExtractor("-target-", 2);
+            string actual = extract.Execute(parseme);
+            string expected = "222\n333\n-target-\n444\n555\n";
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void KeyValDBReaderNotNull()
         {
             SqlKeyValCompile KVCompile = new SqlKeyValCompile( $"{Placeholder.Basepath}_unittest.sql"); 

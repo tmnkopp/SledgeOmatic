@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Compilers\BaseCompiler.cs" />
+    <Compile Include="Compilers\CompilationBuilder.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Data\DBUtils.cs" />
     <Compile Include="Extentions\StringExtentions.cs" />
@@ -64,6 +66,8 @@
     <Compile Include="IO\Cache.cs" />
     <Compile Include="IO\IReader.cs" />
     <Compile Include="IO\IWriter.cs" />
+    <Compile Include="Parsers\BaseParser.cs" />
+    <Compile Include="Parsers\ParseBuilder.cs" />
     <Compile Include="Procedures\Compilers\IndexCompile.cs" />
     <Compile Include="Procedures\Compilers\IProcedure.cs" />
     <Compile Include="Procedures\Compilers\KeyValCompile.cs" />
@@ -75,6 +79,7 @@
     <Compile Include="Procedures\Data\IFieldMapStrategy.cs" />
     <Compile Include="Procedures\Data\SchemaField.cs" />
     <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
+    <Compile Include="Procedures\Parsers\LineExtractor.cs" />
     <Compile Include="Procedures\Parsers\ContextExtractor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
