@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures.Data
 {
-    public class SchemaField
+    public class DBColumnDefinition
     {
         public string COLUMN_NAME { get; set; }
         public string DATA_TYPE { get; set; }

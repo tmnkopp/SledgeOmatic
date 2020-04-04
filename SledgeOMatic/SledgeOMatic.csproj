@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1D77EEE9-DAAC-42A7-92CF-08B462383397}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>SOM</RootNamespace>
     <AssemblyName>SOM</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -32,8 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>SOM.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.11.17.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -74,10 +73,10 @@
     <Compile Include="Procedures\Compilers\PathCompile.cs" />
     <Compile Include="Procedures\Compilers\RegexCompile.cs" />
     <Compile Include="Procedures\Compilers\RepeaterCompile.cs" />
-    <Compile Include="Procedures\Data\EntityMapper.cs" />
-    <Compile Include="Procedures\Data\FieldMaps\NgFieldMapStrategy.cs" />
-    <Compile Include="Procedures\Data\IFieldMapStrategy.cs" />
-    <Compile Include="Procedures\Data\SchemaField.cs" />
+    <Compile Include="Procedures\Data\DBColumnConverter.cs" />
+    <Compile Include="Procedures\Data\FieldMaps\NGMapper.cs" />
+    <Compile Include="Procedures\Data\IColumnConvertStrategy.cs" />
+    <Compile Include="Procedures\Data\DBColumnDefinition.cs" />
     <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
     <Compile Include="Procedures\Parsers\LineExtractor.cs" />
     <Compile Include="Procedures\Parsers\ContextExtractor.cs" />

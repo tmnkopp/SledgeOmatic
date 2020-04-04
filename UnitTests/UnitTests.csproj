@@ -52,7 +52,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FieldMapper.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="ProcedureTests.cs" />

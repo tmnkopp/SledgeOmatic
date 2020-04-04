@@ -21,11 +21,20 @@ namespace SOM
     {
         static void Main(string[] args)
         {
-            EntityMapper EM = new EntityMapper("fsma_questions" );
-            string result = EM.MapFields(new NgFieldMapStrategy());
-            Console.Write(result);
+            DBColumnConverter ColumnConverter = new DBColumnConverter(
+                "fsma_questions", 
+                new NGMapper()
+            );
+
+            string result = ColumnConverter.Execute("[fields]");
+            Console.Write("RESULT: " + result);
             Console.Read(); 
 
         }
     }
 }
+
+/*
+ ,
+                (r, p1) => r.Replace("[fields]", p1) 
+ */

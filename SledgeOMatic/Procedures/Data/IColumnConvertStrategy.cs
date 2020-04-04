@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures.Data
 {
-    public interface IFieldMapStrategy
+    public interface IColumnConvertStrategy
     {
         string Wrap  { get; set;  }
-        string Execute(SchemaField schemaField);
+        string Convert(DBColumnDefinition schemaField);
     }
 }

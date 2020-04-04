@@ -12,19 +12,35 @@ using System.Data.SqlClient;
 
 namespace SOM.Procedures.Data
 { 
-    public class EntityMapper
+    public class DBColumnConverter: IProcedure
     {  
-        private StringBuilder result = new StringBuilder(); 
-        private string _entityName = ""; 
+        private StringBuilder _result = new StringBuilder();
+        private IColumnConvertStrategy _ConvertStrategy;
+        private Func<string, string, string> _ContentReplacement;
+        public DBColumnConverter(string TableName, IColumnConvertStrategy ConversionStrategy)
+        {
+            _tablename = TableName;
+            _ConvertStrategy = ConversionStrategy; 
+        }
+        public string Execute(string content)
+        {
+            string result = IterateColumns();
+            //content = _ContentReplacement(content, result);
+            return result;
+        }
+
+        #region Props 
+        private string _entityName = "";
         public string EntityName
         {
-            get {
-                if (_entityName == "")  { _entityName = _tablename;  }
+            get
+            {
+                if (_entityName == "") { _entityName = _tablename; }
                 return _entityName;
             }
             set { _entityName = value; }
-        } 
-        private string _tablename = ""; 
+        }
+        private string _tablename = "";
         public string TableName
         {
             get { return _tablename; }
@@ -36,25 +52,33 @@ namespace SOM.Procedures.Data
             get { return _wrapper; }
             set { _wrapper = value; }
         }
-         
-        public EntityMapper(string TableName)
-        { 
-            _tablename = TableName;
-        } 
-        public string MapFields(IFieldMapStrategy fieldMapStrategy)
+        #endregion
+        public string IterateColumns()
         {
             var con = ConfigurationManager.ConnectionStrings["default"].ToString();
             using (SqlConnection myConnection = new SqlConnection(con))
             {
                 SqlCommand oCmd = new SqlCommand($"SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME  = '{_tablename}'", myConnection);
                 SqlDataReader oReader;
-                myConnection.Open();
+                try
+                {
+                    myConnection.Open();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                    Console.Write(ex.InnerException);
+                    Console.Write(ex.Message);
+               
+                    
+                }
+                
                 using (oReader = oCmd.ExecuteReader())
                 { 
                     while (oReader.Read())
                     { 
-                        result.AppendFormat("{0}{1}", "\n\t", fieldMapStrategy.Execute(
-                             new SchemaField
+                        _result.AppendFormat("{0}{1}", "\n\t", _ConvertStrategy.Convert(
+                             new DBColumnDefinition
                              {
                                  COLUMN_NAME = oReader["COLUMN_NAME"].ToString(),
                                  DATA_TYPE = oReader["DATA_TYPE"].ToString()
@@ -65,12 +89,14 @@ namespace SOM.Procedures.Data
                 }
             }
             if (_wrapper == "") 
-                _wrapper = fieldMapStrategy.Wrap; 
+                _wrapper = _ConvertStrategy.Wrap; 
             string ret = _wrapper;
             ret = ret.Replace("[entityname]", EntityName);
-            ret = ret.Replace("[fields]", result.ToString());
+            ret = ret.Replace("[fields]", _result.ToString());
             return ret;
         }
+
+
     } 
 }
  
