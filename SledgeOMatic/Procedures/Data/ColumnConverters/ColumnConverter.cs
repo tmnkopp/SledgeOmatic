@@ -6,60 +6,50 @@ using System.Threading.Tasks;
 namespace SOM.Procedures.Data {
     public class ccCustomConverter : IColumnConverter
     { 
-        Func<DBColumnDefinition, string> _ColumnConverter; 
-        public ccCustomConverter(Func<DBColumnDefinition,string> ColumnConverter )
+        Func<PropDefinition, string> _ColumnConverter; 
+        public ccCustomConverter(Func<PropDefinition,string> ColumnConverter )
         {
             _ColumnConverter = ColumnConverter;
         }
-        public string Convert(DBColumnDefinition dbColumnDefinition)
+        public string Convert(PropDefinition propDef)
         {
-            return _ColumnConverter(dbColumnDefinition);
+            return _ColumnConverter(propDef);
         }
     }
     public class ccCSHARPModel : IColumnConverter
     { 
-        public string Convert(DBColumnDefinition dbColumnDefinition)
+        public string Convert(PropDefinition propDef)
         {
             string format = "public {1} {0} {{ get; set; }}";
-            switch (dbColumnDefinition.DATA_TYPE.ToLower())
-            {
-                case "int":
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "int");
-                case "datetime":
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "DateTime");
-                default:
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "string");
-            }
+            if (propDef.DATA_TYPE.ToLower().Contains("int")) 
+                return string.Format(format, propDef.NAME, "int"); 
+            if (propDef.DATA_TYPE.ToLower().Contains("date")) 
+                return string.Format(format, propDef.NAME, "DateTime"); 
+            return string.Format(format, propDef.NAME, "string");
         }
     }
     public class ccNgInput : IColumnConverter
     { 
-        public string Convert(DBColumnDefinition dbColumnDefinition)
+        public string Convert(PropDefinition propDef)
         {
-            string format = "<input type=\"text\" id=\"{1}\" formControlName =\"{1}\" class=\"form-control\" />";
-            switch (dbColumnDefinition.DATA_TYPE.ToLower())
-            {
-                case "int":
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "int");
-                case "datetime":
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "DateTime");
-                default:
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "string");
-            }
+            string format = "<input type=\"text\" id=\"{0}\" formControlName =\"{0}\" class=\"form-control\" />";
+
+            if (propDef.DATA_TYPE.ToLower().Contains("int")) {
+                return string.Format(format, propDef.NAME, "int");
+            } 
+            if (propDef.DATA_TYPE.ToLower().Contains("date"))
+                return string.Format(format, propDef.NAME, "DateTime");
+            return string.Format(format, propDef.NAME, "string");
         }
     }
     public class ccNGInterface : IColumnConverter
     {
-        public string Convert(DBColumnDefinition dbColumnDefinition)
+        public string Convert(PropDefinition propDef)
         {
             string format = "{0}: {1};";
-            switch (dbColumnDefinition.DATA_TYPE)
-            {
-                case "int":
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "number");
-                default:
-                    return string.Format(format, dbColumnDefinition.COLUMN_NAME, "string");
-            }
+            if (propDef.DATA_TYPE.ToLower().Contains("int"))
+                return string.Format(format, propDef.NAME, "number"); 
+            return string.Format(format, propDef.NAME, "string"); 
         }
     }
 }

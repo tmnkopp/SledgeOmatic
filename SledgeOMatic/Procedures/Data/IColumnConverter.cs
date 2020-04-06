@@ -8,6 +8,6 @@ namespace SOM.Procedures.Data
 {
     public interface IColumnConverter
     { 
-        string Convert(DBColumnDefinition columnDefinition);
+        string Convert(PropDefinition columnDefinition);
     }
 }

@@ -13,14 +13,16 @@ namespace SOM.Compilers
     public enum CompileMode
     {
         Debug,
-        Commit
+        Commit,
+        ForceCommit
     }
-    public class Compiler : BaseCompiler
+    public class AppSettingsCompiler : BaseCompiler
     {
-        public Compiler()
+        public AppSettingsCompiler()
         {
             Source = AppSettings.SourceDir;
             Dest = AppSettings.DestDir;
+            FileFilter = "*_*";
         }
         public override void Compile()
         { 
@@ -50,24 +52,16 @@ namespace SOM.Compilers
 
                 string newFileName = file.Name;
                 foreach (IProcedure proc in FilenameCompilation)
-                    newFileName = proc.Execute(newFileName).RemoveWhiteAndBreaks();
+                    newFileName = proc.Execute(newFileName).RemoveWhiteAndBreaks(); 
 
-                Cache.Append($"{Source}\n{Dest}\n");
-                Cache.Append($"{file.Name} -> {newFileName}\n\n");
-
-                if (CompileMode == CompileMode.Commit) 
-                    CommitFile(content, $"{Dest}\\{newFileName}");
-               
-                if (ContentCompilation.Count > 0)
-                    Cache.Append($"\n{content}\n");
-            }
-            if (CompileMode == CompileMode.Debug)
-            {
-                Cache.CacheEdit();
-            }
+                if (CompileMode != CompileMode.Debug) 
+                    CommitFile(content, $"{Dest}\\{newFileName}"); 
+            } 
         }
         private void CommitFile(string Content, string FileName)
         {
+            if (CompileMode == CompileMode.ForceCommit)
+                FileSys.Utils.DirectoryCreator(FileName, AppSettings.BasePath);
             FileWriter fw = new FileWriter($"{FileName}");
             fw.Write(Content);
         }

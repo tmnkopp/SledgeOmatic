@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures.Data
 {
-    public class DBColumnDefinition
+    public class PropDefinition
     {
-        public string COLUMN_NAME { get; set; }
+        public string NAME { get; set; }
         public string DATA_TYPE { get; set; }
         public int ORDINAL_POSITION { get; set; } 
         public bool Nullable { get; set; }

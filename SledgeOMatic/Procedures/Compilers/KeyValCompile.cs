@@ -46,7 +46,7 @@ namespace SOM.Procedures
         }
         public override string ToString()
         {
-            return $"{AppSettings.ProcAssembly}.SqlKeyValCompile -{_sqlFileParam.ToString()}";
+            return $"SqlKeyValCompile -{_sqlFileParam.ToString()}";
         }
     } 
 }
