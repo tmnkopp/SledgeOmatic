@@ -11,7 +11,7 @@ namespace SOM.Procedures
 {
     public abstract class KeyValCompile : IProcedure
     { 
-        public Dictionary<string, string> Dict { get; set; }
+        public Dictionary<string, string> Dict { get; set; } 
         public virtual string Execute(string compileme)
         {
             foreach (var item in Dict) { 
@@ -22,6 +22,13 @@ namespace SOM.Procedures
         public override string ToString()
         {
             return $"{base.ToString()} -{Dict.ToString()}";
+        }
+    }
+    public class JsonCompile : KeyValCompile, IProcedure {
+         
+        public JsonCompile(string json)
+        {
+            base.Dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
     }
     public class SqlKeyValCompile : KeyValCompile, IProcedure  {

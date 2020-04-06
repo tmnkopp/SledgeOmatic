@@ -21,8 +21,6 @@ namespace SOM.Compilers
         {
             Source = AppSettings.SourceDir;
             Dest = AppSettings.DestDir;
-            ContentCompilation = new List<IProcedure>();
-            FilenameCompilation = new List<IProcedure>();
         }
         public override void Compile()
         { 
