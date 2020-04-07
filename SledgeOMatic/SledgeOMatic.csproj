@@ -74,8 +74,7 @@
     <Compile Include="Procedures\Compilers\PathCompile.cs" />
     <Compile Include="Procedures\Compilers\RegexCompile.cs" />
     <Compile Include="Procedures\Compilers\RepeaterCompile.cs" />
-    <Compile Include="Procedures\Data\ColumnConverters\ColumnConverter.cs" />
-    <Compile Include="Procedures\Data\IColumnConverter.cs" />
+    <Compile Include="Procedures\Data\IPropFormatter.cs" />
     <Compile Include="Procedures\Data\PropDefinition.cs" />
     <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
     <Compile Include="Procedures\Parsers\LineExtractor.cs" />

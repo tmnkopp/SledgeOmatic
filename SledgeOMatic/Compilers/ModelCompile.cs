@@ -13,66 +13,58 @@ using SOM.Procedures.Data;
 
 namespace SOM.Compilers
 {
-    public class TypeModelCompiler : BaseModelCompile, IProcedure
+
+    public class ModelCompile : BaseModelCompile 
     {
-        Func<string, string, string> _ContentIntegrator;
-        public TypeModelCompiler(string type, IColumnConverter ColumnConverter, Func<string, string, string> ContentIntegrator)
-            : base(ColumnConverter, new TypeEnumerator(Type.GetType(type)))
+        public ModelCompile(string ModelName)
         {
-            _ContentIntegrator = ContentIntegrator;
+            this.ModelEnumerator = DeriveEnumerator(ModelName);
         }
-        public string Execute(string content)
+        public ModelCompile(string ModelName, IPropFormatter PropFormatter) 
         {
-            return _ContentIntegrator(content, base.Compile());
+            this.ModelEnumerator = DeriveEnumerator(ModelName);
+            this.PropFormatter = PropFormatter; 
+        }
+        private IModelEnumerator DeriveEnumerator(string ModelName) {
+            if (ModelName.Contains("."))
+                return new TypeEnumerator(Type.GetType(ModelName));
+            else
+                return new TableEnumerator(ModelName);
         }
     }
-    public class TableModelCompiler : BaseModelCompile, IProcedure
+    public class TypeModelCompiler : BaseModelCompile
     {
-        Func<string, string, string> _ContentIntegrator;
-        public TableModelCompiler(string ModelName, IColumnConverter ColumnConverter, Func<string, string, string> ContentIntegrator)
-            : base(ColumnConverter, new TableEnumerator(ModelName))
-        {
-            _ContentIntegrator = ContentIntegrator;
-        }
-        public string Execute(string content)
-        {
-            return _ContentIntegrator(content, base.Compile());
-        }
+        public TypeModelCompiler(string type, IPropFormatter PropFormatter)
+            : base(PropFormatter, new TypeEnumerator(Type.GetType(type)))   {   }
     }
-    public class ModelCompile : BaseModelCompile, IProcedure
+    public class TableModelCompiler : BaseModelCompile
     {
-        IModelEnumerator _ModelEnumerator;
-        IColumnConverter _ColumnConverter;
-        Func<string, string, string> _ContentIntegrator;
-        public ModelCompile(IModelEnumerator ModelEnumerator, IColumnConverter ColumnConverter, Func<string, string, string> ContentIntegrator)
-        : base(ColumnConverter, ModelEnumerator)
-        {  
-            _ContentIntegrator = ContentIntegrator;
-        }
-        public string Execute(string content)
-        {
-            return _ContentIntegrator(content, base.Compile()); 
-        } 
+        public TableModelCompiler(string ModelName, IPropFormatter PropFormatter)
+            : base(PropFormatter, new TableEnumerator(ModelName))   {   }
     }
-   
     public abstract class BaseModelCompile  {
      
-        public IColumnConverter ColumnConverter;
-        public IModelEnumerator ModelEnumerator; 
-
-        public BaseModelCompile(IColumnConverter ColumnConverter, IModelEnumerator ModelEnumerator)
+        public IPropFormatter PropFormatter;
+        public IModelEnumerator ModelEnumerator;
+        public BaseModelCompile()
+        { 
+        } 
+        public BaseModelCompile(IPropFormatter PropFormatter, IModelEnumerator ModelEnumerator)
         {
             this.ModelEnumerator = ModelEnumerator;
-            this.ColumnConverter = ColumnConverter;
+            this.PropFormatter = PropFormatter;
         }
         public string Compile()
         {
             StringBuilder _result = new StringBuilder();
             foreach (PropDefinition prop in ModelEnumerator.Items())
             {
-                _result.Append( ColumnConverter.Convert(  prop  ));
+                if (PropFormatter != null)
+                    _result.Append(PropFormatter.Format(prop));
+                else
+                    _result.Append(prop); 
             } 
-            return _result.ToString();
+            return  _result.ToString();
         }
     } 
 }
