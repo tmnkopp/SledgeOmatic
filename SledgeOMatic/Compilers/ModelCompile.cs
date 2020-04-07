@@ -15,8 +15,6 @@ namespace SOM.Compilers
 {
     public class TypeModelCompiler : BaseModelCompile, IProcedure
     {
-        IModelEnumerator _ModelEnumerator;
-        IColumnConverter _ColumnConverter;
         Func<string, string, string> _ContentIntegrator;
         public TypeModelCompiler(string type, IColumnConverter ColumnConverter, Func<string, string, string> ContentIntegrator)
             : base(ColumnConverter, new TypeEnumerator(Type.GetType(type)))
@@ -30,8 +28,6 @@ namespace SOM.Compilers
     }
     public class TableModelCompiler : BaseModelCompile, IProcedure
     {
-        IModelEnumerator _ModelEnumerator;
-        IColumnConverter _ColumnConverter;
         Func<string, string, string> _ContentIntegrator;
         public TableModelCompiler(string ModelName, IColumnConverter ColumnConverter, Func<string, string, string> ContentIntegrator)
             : base(ColumnConverter, new TableEnumerator(ModelName))
