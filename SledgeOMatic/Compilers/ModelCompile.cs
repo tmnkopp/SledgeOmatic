@@ -9,52 +9,43 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
-using SOM.Procedures.Data;
+using SOM.Procedures.Data; 
 
 namespace SOM.Compilers
-{
-
-    public class ModelCompile : BaseModelCompile 
+{ 
+    public class PropListFormatter : BasePropListFormatter 
     {
-        public ModelCompile(string ModelName)
+        public PropListFormatter(string ModelName)
         {
-            this.ModelEnumerator = DeriveEnumerator(ModelName);
+            this.ModelEnumerator = this.DeriveModelEnumerator(ModelName);
         }
-        public ModelCompile(string ModelName, IPropFormatter PropFormatter) 
-        {
-            this.ModelEnumerator = DeriveEnumerator(ModelName);
+        public PropListFormatter(string ModelName, IPropFormatter PropFormatter): this(ModelName)
+        { 
             this.PropFormatter = PropFormatter; 
+        } 
+    }
+
+    public abstract class BasePropListFormatter  {
+        public string ModelName = "";
+        public IPropFormatter PropFormatter;
+        public IModelEnumerator ModelEnumerator;
+        public BasePropListFormatter()
+        { 
+        } 
+        public BasePropListFormatter(IPropFormatter PropFormatter, IModelEnumerator ModelEnumerator)
+        {
+            this.ModelEnumerator = ModelEnumerator;
+            this.PropFormatter = PropFormatter;
         }
-        private IModelEnumerator DeriveEnumerator(string ModelName) {
+        public IModelEnumerator DeriveModelEnumerator(string ModelName)
+        {
+            this.ModelName = ModelName;
             if (ModelName.Contains("."))
                 return new TypeEnumerator(Type.GetType(ModelName));
             else
                 return new TableEnumerator(ModelName);
         }
-    }
-    public class TypeModelCompiler : BaseModelCompile
-    {
-        public TypeModelCompiler(string type, IPropFormatter PropFormatter)
-            : base(PropFormatter, new TypeEnumerator(Type.GetType(type)))   {   }
-    }
-    public class TableModelCompiler : BaseModelCompile
-    {
-        public TableModelCompiler(string ModelName, IPropFormatter PropFormatter)
-            : base(PropFormatter, new TableEnumerator(ModelName))   {   }
-    }
-    public abstract class BaseModelCompile  {
-     
-        public IPropFormatter PropFormatter;
-        public IModelEnumerator ModelEnumerator;
-        public BaseModelCompile()
-        { 
-        } 
-        public BaseModelCompile(IPropFormatter PropFormatter, IModelEnumerator ModelEnumerator)
-        {
-            this.ModelEnumerator = ModelEnumerator;
-            this.PropFormatter = PropFormatter;
-        }
-        public string Compile()
+        public string Format()
         {
             StringBuilder _result = new StringBuilder();
             foreach (PropDefinition prop in ModelEnumerator.Items())
@@ -66,5 +57,15 @@ namespace SOM.Compilers
             } 
             return  _result.ToString();
         }
-    } 
+    }
+    public class TypePropFormatter : BasePropListFormatter
+    {
+        public TypePropFormatter(string type, IPropFormatter PropFormatter)
+            : base(PropFormatter, new TypeEnumerator(Type.GetType(type))) { }
+    }
+    public class TablePropFormatter : BasePropListFormatter
+    {
+        public TablePropFormatter(string ModelName, IPropFormatter PropFormatter)
+            : base(PropFormatter, new TableEnumerator(ModelName)) { }
+    }
 }
