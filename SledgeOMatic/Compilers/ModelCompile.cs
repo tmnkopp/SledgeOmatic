@@ -13,7 +13,7 @@ using SOM.Procedures.Data;
 
 namespace SOM.Compilers
 { 
-    public class PropListFormatter : BasePropListFormatter 
+    public  class PropListFormatter : BasePropListFormatter 
     {
         public PropListFormatter(string ModelName)
         {
