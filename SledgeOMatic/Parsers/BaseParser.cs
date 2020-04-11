@@ -9,7 +9,16 @@ using System.Threading.Tasks;
 
 namespace SOM.Parsers
 {
- 
+    public interface IParser {
+        ParseResultMode ParseResultMode { get; set; }
+        List<IProcedure> ParseProcedures { get; set; }
+        string Find { get; set; }
+        string Parse(string Content);
+    }
+    public enum ParseResultMode {
+        Exact,
+        Verbose
+    }
     public abstract class BaseParser
     {
         public string DirSource = "";
@@ -19,7 +28,7 @@ namespace SOM.Parsers
         public List<string> ExcludeList = new List<string>();
         public StringBuilder FindingResults = new StringBuilder();
         public StringBuilder FilesFound = new StringBuilder();
-
+        public ParseResultMode ParseResultMode = ParseResultMode.Exact;
         public virtual bool IsFound(string content)
         {
             return content.Contains(Find);
@@ -32,12 +41,19 @@ namespace SOM.Parsers
         public virtual void Display()
         {
             Cache.Write("");
-            Cache.Append($"{FilesFound.ToString()}\n{FindingResults.ToString()}");
+            if (this.ParseResultMode == ParseResultMode.Exact)
+            {
+                Cache.Append($"{FindingResults.ToString()}");
+            }
+            if (this.ParseResultMode == ParseResultMode.Verbose)
+            {
+                Cache.Append($"{FilesFound.ToString()}\n{FindingResults.ToString()}");
+            }
             Cache.CacheEdit(); 
         }
         public virtual string ParseFinding(string content)
         {
-            string result = new LineExtractor(Find , 3, true).Execute(content); 
+            string result = new LineExtractor(Find , 12, true).Execute(content); 
             return $"{CurrentFilePath}\n{result}";
         }
 
@@ -55,6 +71,10 @@ namespace SOM.Parsers
                     {
                         this.CurrentFilePath = file.FullName;
                         string result = ParseFinding(content);
+                        if (this.ParseResultMode == ParseResultMode.Verbose)
+                        {
+                            FindingResults.Append($"{file.FullName}\n");
+                        }
                         FindingResults.Append($"{result}\n");
                         FilesFound.Append($"{cnt.ToString()} : {file.FullName}\n");
                         cnt++;

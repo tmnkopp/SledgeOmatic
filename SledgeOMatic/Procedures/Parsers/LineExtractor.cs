@@ -28,17 +28,17 @@ namespace SOM.Procedures
             StringBuilder result = new StringBuilder(); 
 
             //content = content.RemoveEmptyLines();
-            content = $"{new string('\n', _numberOfLines-1)}{content}{new string('\n', _numberOfLines)}";
+            content = $"{new string('\n', _numberOfLines)}{content}{new string('\n', _numberOfLines)}";
             string[] lines = content.Split('\n');
             int findingCnt = 0;
-            for (int lineIndex = _numberOfLines-1; lineIndex < lines.Length- _numberOfLines; lineIndex++)
+            for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
             {
                 if (lines[lineIndex].Contains(_extractTarget))
                 {
                     findingCnt++;
                     if (_verbose)
                         result.Append($"\n[{findingCnt.ToString()}:{lineIndex}]\n");
-                    for (int takeIndex = lineIndex - _numberOfLines; takeIndex < lineIndex + _numberOfLines + 1; takeIndex++)
+                    for (int takeIndex = lineIndex - _numberOfLines; takeIndex <= lineIndex + _numberOfLines; takeIndex++)
                     { 
                         if (takeIndex < lines.Length && takeIndex > 0 ) {
                             if (_verbose) 

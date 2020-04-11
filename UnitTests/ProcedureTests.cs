@@ -46,10 +46,18 @@ namespace UnitTests
             string parseme = "111\n222\n333\n-target-\n444\n555\n666\n";
             LineExtractor extract = new LineExtractor("-target-", 2);
             string actual = extract.Execute(parseme);
-            string expected = "222\n333\n-target-\n444\n555\n";
+            string expected = "222\n333\n-target-\n444\n555";
             Assert.AreEqual(expected, actual);
         }
-
+        [TestMethod]
+        public void LineExtractExact()
+        {
+            string parseme = "111\n222\n333\n-target-\n444\n555\n666\n";
+            LineExtractor extract = new LineExtractor("-target-", 0);
+            string actual = extract.Execute(parseme);
+            string expected = "-target-";
+            Assert.AreEqual(expected, actual);
+        }
         [TestMethod]
         public void KeyValDBReaderNotNull()
         {
