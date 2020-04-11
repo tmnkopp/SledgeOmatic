@@ -16,9 +16,12 @@ namespace SOM.FileSys
             FileWriter w;
             foreach (string filepath in filepaths)
             {
-                Utils.DirectoryCreator(filepath, AppSettings.BasePath); 
-                w = new FileWriter($"{filepath}");
-                w.Write($"{filepath}", true);
+                if (filepath != "")
+                {
+                    Utils.DirectoryCreator(filepath, AppSettings.BasePath);
+                    w = new FileWriter($"{filepath}");
+                    w.Write($"{filepath}", true);
+                } 
             }
         }
         public static void DirectoryCreator(string path, string basepath)

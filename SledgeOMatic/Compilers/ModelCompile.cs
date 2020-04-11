@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
-using SOM.Procedures.Data; 
+using SOM.Models;
 
 namespace SOM.Compilers
 { 
@@ -19,7 +19,7 @@ namespace SOM.Compilers
         {
             this.ModelEnumerator = this.DeriveModelEnumerator(ModelName);
         }
-        public PropListFormatter(string ModelName, IPropFormatter PropFormatter): this(ModelName)
+        public PropListFormatter(string ModelName, IModelItemWrapper PropFormatter): this(ModelName)
         { 
             this.PropFormatter = PropFormatter; 
         } 
@@ -27,12 +27,12 @@ namespace SOM.Compilers
 
     public abstract class BasePropListFormatter  {
         public string ModelName = "";
-        public IPropFormatter PropFormatter;
+        public IModelItemWrapper PropFormatter;
         public IModelEnumerator ModelEnumerator;
         public BasePropListFormatter()
         { 
         } 
-        public BasePropListFormatter(IPropFormatter PropFormatter, IModelEnumerator ModelEnumerator)
+        public BasePropListFormatter(IModelItemWrapper PropFormatter, IModelEnumerator ModelEnumerator)
         {
             this.ModelEnumerator = ModelEnumerator;
             this.PropFormatter = PropFormatter;
@@ -48,7 +48,7 @@ namespace SOM.Compilers
         public string Format()
         {
             StringBuilder _result = new StringBuilder();
-            foreach (PropDefinition prop in ModelEnumerator.Items())
+            foreach (AppModelItem prop in ModelEnumerator.Items())
             {
                 if (PropFormatter != null)
                     _result.Append(PropFormatter.Format(prop));
@@ -60,12 +60,12 @@ namespace SOM.Compilers
     }
     public class TypePropFormatter : BasePropListFormatter
     {
-        public TypePropFormatter(string type, IPropFormatter PropFormatter)
+        public TypePropFormatter(string type, IModelItemWrapper PropFormatter)
             : base(PropFormatter, new TypeEnumerator(Type.GetType(type))) { }
     }
     public class TablePropFormatter : BasePropListFormatter
     {
-        public TablePropFormatter(string ModelName, IPropFormatter PropFormatter)
+        public TablePropFormatter(string ModelName, IModelItemWrapper PropFormatter)
             : base(PropFormatter, new TableEnumerator(ModelName)) { }
     }
 }

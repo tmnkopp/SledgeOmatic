@@ -65,6 +65,7 @@
     <Compile Include="IO\Cache.cs" />
     <Compile Include="IO\IReader.cs" />
     <Compile Include="IO\IWriter.cs" />
+    <Compile Include="Models\AppModel.cs" />
     <Compile Include="Parsers\BaseParser.cs" />
     <Compile Include="Parsers\ParseBuilder.cs" />
     <Compile Include="Procedures\Compilers\IndexCompile.cs" />
@@ -74,8 +75,8 @@
     <Compile Include="Procedures\Compilers\PathCompile.cs" />
     <Compile Include="Procedures\Compilers\RegexCompile.cs" />
     <Compile Include="Procedures\Compilers\RepeaterCompile.cs" />
-    <Compile Include="Procedures\Data\IPropFormatter.cs" />
-    <Compile Include="Procedures\Data\PropDefinition.cs" />
+    <Compile Include="Procedures\Formatters\IModelItemWrapper.cs" />
+    <Compile Include="Procedures\Formatters\IWrapStrategy.cs" />
     <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
     <Compile Include="Procedures\Parsers\LineExtractor.cs" />
     <Compile Include="Procedures\Parsers\ContextExtractor.cs" />

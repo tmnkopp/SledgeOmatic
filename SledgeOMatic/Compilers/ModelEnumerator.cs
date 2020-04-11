@@ -1,4 +1,5 @@
-﻿using SOM.Procedures.Data;
+﻿using SOM.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace SOM.Compilers
 {
     public interface IModelEnumerator {
-        IEnumerable<PropDefinition> Items();
+        IEnumerable<AppModelItem> Items();
     }
     public class TypeEnumerator: IModelEnumerator
     {
@@ -19,14 +20,14 @@ namespace SOM.Compilers
         {
             _type = type;
         }
-        public IEnumerable<PropDefinition> Items() {
+        public IEnumerable<AppModelItem> Items() {
             int cnt = 0;
             foreach (var prop in _type.GetProperties())
             { 
-                yield return new PropDefinition() {
-                    NAME = prop.Name,
-                    DATA_TYPE= prop.PropertyType.ToString(),
-                    ORDINAL_POSITION= (cnt++)
+                yield return new AppModelItem() {
+                    Name= prop.Name,
+                    DataType= prop.PropertyType.ToString(),
+                    OrdinalPosition = (cnt++)
                 };
             }
         }
@@ -38,28 +39,37 @@ namespace SOM.Compilers
         {
             _tablename=TableName;
         }
-        public IEnumerable<PropDefinition> Items()
+        public IEnumerable<AppModelItem> Items()
         {
             var con = ConfigurationManager.ConnectionStrings["default"].ToString();
             using (SqlConnection myConnection = new SqlConnection(con))
             {
-                SqlCommand oCmd = new SqlCommand($"SELECT COLUMN_NAME, DATA_TYPE, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME  = '{_tablename}'", myConnection);
+                string sql = $"SELECT COLUMN_NAME, DATA_TYPE, ORDINAL_POSITION, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME  = '{_tablename}'";
+                SqlCommand oCmd = new SqlCommand(sql, myConnection);
                 SqlDataReader oReader;
                 myConnection.Open();
                 using (oReader = oCmd.ExecuteReader())
                 {
                     while (oReader.Read())
                     {
-                        yield return new PropDefinition()
-                        {
-                            NAME = oReader["COLUMN_NAME"].ToString(),
-                            DATA_TYPE = oReader["DATA_TYPE"].ToString(),
-                            ORDINAL_POSITION = Convert.ToInt32(oReader["ORDINAL_POSITION"])
-                        };
+                        yield return GetAppModelItem(oReader); 
                     } 
                     myConnection.Close();
                 }
             } 
-        }
+        } 
+        private AppModelItem GetAppModelItem(SqlDataReader oReader) {
+            AppModelItem _AppModelItem = new AppModelItem()
+            {
+                Name = oReader["COLUMN_NAME"].ToString(),
+                DataType = oReader["DATA_TYPE"].ToString(),
+                OrdinalPosition = Convert.ToInt32(oReader["ORDINAL_POSITION"])
+            };
+            if (oReader["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
+                _AppModelItem.MaxLen = Convert.ToInt32(oReader["CHARACTER_MAXIMUM_LENGTH"]);
+
+
+            return _AppModelItem;
+        } 
     }
 }

@@ -34,6 +34,12 @@ namespace SOM.Parsers
             parser.Find = Find;
             return this;
         }
+        public ParseBuilder<T> ParseResultMode(ParseResultMode ParseResultMode)
+        {
+            parser.ParseResultMode = ParseResultMode;
+            return this;
+        }
+        
         public ParseBuilder<T> Parse()
         {
             parser.Parse();
