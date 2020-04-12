@@ -35,8 +35,8 @@ namespace SOM.Compilers
         public string Source = "";
         public string Dest = "";
         public string FileFilter = "*";
-        public List<IProcedure> ContentCompilation;
-        public List<IProcedure> FilenameCompilation;
+        public List<ICompiler> ContentCompilation;
+        public List<ICompiler> FilenameCompilation;
         public CompileMode CompileMode;
         
         private string content = "";
@@ -47,12 +47,12 @@ namespace SOM.Compilers
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
             {
                 content = new FileReader(file.FullName).Read().ToString();
-                foreach (IProcedure proc in ContentCompilation)
-                    content = proc.Execute(content);
+                foreach (ICompiler proc in ContentCompilation)
+                    content = proc.Compile(content);
 
                 string newFileName = file.Name;
-                foreach (IProcedure proc in FilenameCompilation)
-                    newFileName = proc.Execute(newFileName).RemoveWhiteAndBreaks(); 
+                foreach (ICompiler proc in FilenameCompilation)
+                    newFileName = proc.Compile(newFileName).RemoveWhiteAndBreaks(); 
 
                 if (CompileMode != CompileMode.Debug) 
                     CommitFile(content, $"{Dest}\\{newFileName}"); 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures
 {
-    public class BlockExtractor : IProcedure
+    public class BlockExtractor : ICompiler
     {
         private string _extractTarget;
         private string _fromWhere;
@@ -30,7 +30,7 @@ namespace SOM.Procedures
             _fromWhere = FromWhere;
             _toWhere = ToWhere; 
         }
-        public string Execute(string content)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder(); 
             if (content.Contains(_fromWhere))

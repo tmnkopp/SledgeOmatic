@@ -9,9 +9,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 namespace SOM.Procedures
 {
-    public class PathCompile : IProcedure
+    public class PathCompile : ICompiler
     {  
-        public string Execute(string compileme)
+        public string Compile(string compileme)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = compileme.Split('\n'); 

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace SOM.Parsers
 {
-    public interface IParser {
-        ParseResultMode ParseResultMode { get; set; }
-        List<IProcedure> ParseProcedures { get; set; }
-        string Find { get; set; }
+    public interface IParser<T>
+    { 
+        IEnumerable<T> ParseResults { get; set; }
+        string ParseExpression { get; set; }
         string Parse(string Content);
     }
     public enum ParseResultMode {
@@ -53,7 +53,7 @@ namespace SOM.Parsers
         }
         public virtual string ParseFinding(string content)
         {
-            string result = new LineExtractor(Find , 12, true).Execute(content); 
+            string result = new LineExtractor(Find , 12, true).Compile(content); 
             return $"{CurrentFilePath}\n{result}";
         }
 

@@ -11,10 +11,10 @@ using SOM.Data;
 
 namespace SOM.Procedures
 {
-    public abstract class RegexCompile : IProcedure
+    public abstract class RegexCompile : ICompiler
     {
         public Dictionary<string, string> KeyVals = new Dictionary<string, string>();
-        public virtual string Execute(string compileme)
+        public virtual string Compile(string compileme)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = compileme.Split('\n');

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
-    public class RepeaterCompile : IProcedure
+    public class RepeaterCompile : ICompiler
     {
         private int _from = 0;
         private int _to = 1;
@@ -18,7 +18,7 @@ namespace SOM.Procedures
             _from = From;
             _to = To;
         }
-        public string Execute(string compileme)
+        public string Compile(string compileme)
         {
             if (_from >= _to)
                 throw new InvalidOperationException(); 

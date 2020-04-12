@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
-    public class LineExtractor : IProcedure
+    public class LineExtractor : ICompiler
     {
         private string _extractTarget;
         private int _numberOfLines = 4;
@@ -23,7 +23,7 @@ namespace SOM.Procedures
             _numberOfLines = NumberOfLines;
             _verbose = false;
         }
-        public string Execute(string content)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder(); 
 

@@ -17,7 +17,7 @@ namespace UnitTests
         { 
             FileReader f = new FileReader(AppSettings.FileIn);
             PathCompile compiler = new PathCompile();
-            string compiled = compiler.Execute(f.Read());
+            string compiled = compiler.Compile(f.Read());
             Cache.Write(compiled);
             Cache.CacheEdit();
             Assert.IsNotNull(compiled);
@@ -27,7 +27,7 @@ namespace UnitTests
         { 
             string parseme = "[failed]\n[11111]";
             SqlRegexCompile extract = new SqlRegexCompile($"{Placeholder.Basepath}_regextest.sql");
-            string actual = extract.Execute(parseme);
+            string actual = extract.Compile(parseme);
             string expected = "[passed]\n[passed]\n";
             Assert.AreEqual(expected, actual);
         }
@@ -36,7 +36,7 @@ namespace UnitTests
         {
             string parseme = "1-2-3-4-5-6-7-8-9-01-2-3-4-5-6-7-8-9-0";
             ContextExtractor extract = new ContextExtractor("4-5-6", 1, 3);
-            string actual = extract.Execute(parseme);
+            string actual = extract.Compile(parseme);
             string expected = "-4-5-6-7-\n-4-5-6-7-\n";
             Assert.AreEqual(expected, actual);
         }
@@ -45,7 +45,7 @@ namespace UnitTests
         {
             string parseme = "111\n222\n333\n-target-\n444\n555\n666\n";
             LineExtractor extract = new LineExtractor("-target-", 2);
-            string actual = extract.Execute(parseme);
+            string actual = extract.Compile(parseme);
             string expected = "222\n333\n-target-\n444\n555";
             Assert.AreEqual(expected, actual);
         }
@@ -54,7 +54,7 @@ namespace UnitTests
         {
             string parseme = "111\n222\n333\n-target-\n444\n555\n666\n";
             LineExtractor extract = new LineExtractor("-target-", 0);
-            string actual = extract.Execute(parseme);
+            string actual = extract.Compile(parseme);
             string expected = "-target-";
             Assert.AreEqual(expected, actual);
         }
@@ -62,7 +62,7 @@ namespace UnitTests
         public void KeyValDBReaderNotNull()
         {
             SqlKeyValCompile KVCompile = new SqlKeyValCompile( $"{Placeholder.Basepath}_unittest.sql"); 
-            string actual = KVCompile.Execute("[UNITTEST]");
+            string actual = KVCompile.Compile("[UNITTEST]");
             string expected = "passed";
             Assert.AreEqual(expected, actual);
         }

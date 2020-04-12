@@ -1,4 +1,5 @@
-﻿using SOM.Models;
+﻿using Newtonsoft.Json;
+using SOM.Models;
 
 using System;
 using System.Collections.Generic;
@@ -10,36 +11,48 @@ using System.Threading.Tasks;
 
 namespace SOM.Compilers
 {
-    public interface IModelEnumerator {
-        IEnumerable<AppModelItem> Items();
+    public abstract class BaseTypeEnumerator<T>
+    {
+        public List<T> Items { get => this.Enumerate().ToList() ;   }
+        public abstract IEnumerable<T> Enumerate();
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(
+                this.Enumerate().ToList()
+            );
+        }
     }
-    public class TypeEnumerator: IModelEnumerator
+
+    public class TypeEnumerator: BaseTypeEnumerator<AppModelItem>
     {
         private Type _type ;
         public TypeEnumerator(Type type)
         {
             _type = type;
         }
-        public IEnumerable<AppModelItem> Items() {
+        public override IEnumerable<AppModelItem> Enumerate() {
             int cnt = 0;
             foreach (var prop in _type.GetProperties())
-            { 
-                yield return new AppModelItem() {
-                    Name= prop.Name,
-                    DataType= prop.PropertyType.ToString(),
+            {
+                AppModelItem _item = new AppModelItem()
+                {
+                    Name = prop.Name,
+                    DataType = prop.PropertyType.ToString(),
                     OrdinalPosition = (cnt++)
                 };
+                yield return _item; 
             }
         }
     }
-    public class TableEnumerator : IModelEnumerator
+
+    public class TableEnumerator : BaseTypeEnumerator<AppModelItem>
     {
         private string _tablename;
         public TableEnumerator(string TableName)
         {
             _tablename=TableName;
         }
-        public IEnumerable<AppModelItem> Items()
+        public override IEnumerable<AppModelItem> Enumerate()
         {
             var con = ConfigurationManager.ConnectionStrings["default"].ToString();
             using (SqlConnection myConnection = new SqlConnection(con))
@@ -52,6 +65,7 @@ namespace SOM.Compilers
                 {
                     while (oReader.Read())
                     {
+                        AppModelItem _AppModelItem = GetAppModelItem(oReader);
                         yield return GetAppModelItem(oReader); 
                     } 
                     myConnection.Close();
@@ -66,9 +80,7 @@ namespace SOM.Compilers
                 OrdinalPosition = Convert.ToInt32(oReader["ORDINAL_POSITION"])
             };
             if (oReader["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
-                _AppModelItem.MaxLen = Convert.ToInt32(oReader["CHARACTER_MAXIMUM_LENGTH"]);
-
-
+                _AppModelItem.MaxLen = Convert.ToInt32(oReader["CHARACTER_MAXIMUM_LENGTH"]); 
             return _AppModelItem;
         } 
     }

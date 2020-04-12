@@ -47,12 +47,12 @@ namespace SOM.Compilers
             compiler.FileFilter = FileFilter;
             return this;
         }
-        public CompilationBuilder<T> ContentCompilation(List<IProcedure> ContentCompilation)
+        public CompilationBuilder<T> ContentCompilation(List<ICompiler> ContentCompilation)
         {
             compiler.ContentCompilation = ContentCompilation;
             return this;
         }
-        public CompilationBuilder<T> FilenameCompilation(List<IProcedure> FilenameCompilation)
+        public CompilationBuilder<T> FilenameCompilation(List<ICompiler> FilenameCompilation)
         {
             compiler.FilenameCompilation = FilenameCompilation;
             return this;

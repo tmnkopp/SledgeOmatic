@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
-    public class IndexCompile : IProcedure
+    public class IndexCompile : ICompiler
     {
         private int _seed = 0;
         private int _reset = 1;
@@ -19,7 +19,7 @@ namespace SOM.Procedures
             _reset = Reset;
             _indexName = IndexName;
         }
-        public string Execute(string compileme)
+        public string Compile(string compileme)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = compileme.Split('\n');

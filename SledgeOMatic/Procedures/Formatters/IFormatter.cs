@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOM.Procedures.Formatters
+namespace SOM.Formatters
 {
-    public interface IWrapStrategy
+    public interface ITypeFormatter<T>
     { 
-        string Wrap(string content);
+        string Format(T item);
     }
+
 }

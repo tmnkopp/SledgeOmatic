@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
-    public class ContextExtractor : IProcedure
+    public class ContextExtractor : ICompiler
     {
         private string _extractTarget;
         private int _fromWhere;
@@ -17,7 +17,7 @@ namespace SOM.Procedures
             _fromWhere = FromWhere;
             _toWhere = ToWhere;
         }
-        public string Execute(string content)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
             string[] postFixes = $"~{content}".Split(new[] { _extractTarget }, StringSplitOptions.None);
