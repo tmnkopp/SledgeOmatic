@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using SOM.IO;
 using SOM.Data;
 
-namespace SOM.Procedures
+namespace SOM.Compilers
 {
     public abstract class RegexCompile : ICompiler
     {

@@ -5,7 +5,7 @@ using SOM.Procedures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SOM;
 using SOM.IO;
-
+using SOM.Compilers;
 namespace UnitTests
 {
     [TestClass]

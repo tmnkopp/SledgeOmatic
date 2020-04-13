@@ -15,7 +15,7 @@ using SOM.Formatters;
 namespace SOM.Compilers
 {
 
-    public class ModelCompiler :  ICompiler
+    public class ModelCompiler :  ICompiler, IInjectable
     {
         ITypeFormatter<AppModelItem> _TypeFormatter;
         BaseTypeEnumerator<AppModelItem> _ModelEnumerator;
@@ -32,7 +32,12 @@ namespace SOM.Compilers
             foreach (AppModelItem item in _ModelEnumerator.Items) 
                 _result.Append(_TypeFormatter.Format(item));
            
-            return content.Replace($"[ModelCompile -{_ModelName} -{_TypeFormatter.GetType().Name}]", _result.ToString());
+            return Injector($"{ _result.ToString()}");
+        }
+
+        public string Injector(string content)
+        {
+            return content.Replace($"[ModelCompile -{_ModelName} -{_TypeFormatter.GetType().Name}]", content);
         }
 
         private BaseTypeEnumerator<AppModelItem> DeriveModelEnumerator(string ModelName)

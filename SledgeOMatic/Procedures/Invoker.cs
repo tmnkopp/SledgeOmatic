@@ -14,7 +14,7 @@ namespace SOM.Procedures
         {
             string[] commands = InvocationCommand.Split(new string[] { " -" }, StringSplitOptions.None);
             //SOM.Procedures.{commands[0]}, SOM
- 
+              
             Type type = Type.GetType($"{commands[0]}");
             ConstructorInfo ctor = type.GetConstructors()[0];
             ParameterInfo[] PI = ctor.GetParameters();
