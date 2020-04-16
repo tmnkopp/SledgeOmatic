@@ -10,17 +10,21 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
 using SOM.Models;
-using SOM.Formatters; 
+using SOM.Procedures; 
 
-namespace SOM.Compilers
+namespace SOM.Procedures
 {
 
-    public class ModelCompiler :  ICompiler, IInjectable
+    public class ModelInject : ICompiler, Injector
     {
         ITypeFormatter<AppModelItem> _TypeFormatter;
         BaseTypeEnumerator<AppModelItem> _ModelEnumerator;
-        string _ModelName; 
-        public ModelCompiler(string ModelName, string TypeFormatter ) 
+        string _ModelName;
+        public ModelInject(string ModelName )
+            :this(ModelName, "SOM.Procedures.DefaulTypeFormatter, SOM")
+        {  
+        }
+        public ModelInject(string ModelName, string TypeFormatter ) 
         {
             _ModelName = ModelName; 
             _TypeFormatter = (ITypeFormatter<AppModelItem>)Invoker.Invoke(TypeFormatter); 
@@ -31,15 +35,14 @@ namespace SOM.Compilers
             StringBuilder _result = new StringBuilder();
             foreach (AppModelItem item in _ModelEnumerator.Items) 
                 _result.Append(_TypeFormatter.Format(item));
-           
-            return Injector($"{ _result.ToString()}");
+             
+            return content.Replace(
+                this.InjectExpression
+                , _result.ToString()
+                );
         }
-
-        public string Injector(string content)
-        {
-            return content.Replace($"[ModelCompile -{_ModelName} -{_TypeFormatter.GetType().Name}]", content);
-        }
-
+        public string InjectExpression { get => $"[ModelInject -{this._ModelName} -{this._TypeFormatter.GetType().Name}]";  } 
+ 
         private BaseTypeEnumerator<AppModelItem> DeriveModelEnumerator(string ModelName)
         { 
             if (ModelName.Contains("."))

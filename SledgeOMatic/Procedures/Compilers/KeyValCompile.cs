@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace SOM.Compilers
+namespace SOM.Procedures
 {
     public abstract class BaseKeyValCompile : ICompiler
     { 

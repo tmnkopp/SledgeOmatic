@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-namespace SOM.Compilers
+namespace SOM.Procedures
 {
     public class InjectableCompile : ICompiler
     {  
@@ -16,8 +16,8 @@ namespace SOM.Compilers
         public InjectableCompile()
         {
             Injectables = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                .Where(x => typeof(IInjectable).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
-                .Select(x => x.Name).ToList();
+                .Where(x => typeof(Injector).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                .Select(x => x.Name).ToList(); 
         }
         public string Compile(string content)
         { 

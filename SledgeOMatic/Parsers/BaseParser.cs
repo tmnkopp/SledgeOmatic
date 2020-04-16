@@ -1,4 +1,5 @@
-﻿using SOM.IO;
+﻿using Newtonsoft.Json;
+using SOM.IO;
 using SOM.Procedures;
 using System;
 using System.Collections.Generic;
@@ -9,55 +10,17 @@ using System.Threading.Tasks;
 
 namespace SOM.Parsers
 {
-    public interface IParser<T>
-    { 
-        IEnumerable<T> ParseResults { get; set; }
-        string ParseExpression { get; set; }
-        string Parse(string Content);
-    }
-    public enum ParseResultMode {
-        Exact,
-        Verbose
-    }
+  
     public abstract class BaseParser
     {
         public string DirSource = "";
+        public IWriter Dest;
         public string Find = "";
-        public string FileFilter = "*.*";
-        public string CurrentFilePath = "";
-        public List<string> ExcludeList = new List<string>();
-        public StringBuilder FindingResults = new StringBuilder();
-        public StringBuilder FilesFound = new StringBuilder();
-        public ParseResultMode ParseResultMode = ParseResultMode.Exact;
-        public virtual bool IsFound(string content)
-        {
-            return content.Contains(Find);
-        }
-        public virtual void Parse()
-        {
-            SearchDir();
-            Display();
-        }
-        public virtual void Display()
-        {
-            Cache.Write("");
-            if (this.ParseResultMode == ParseResultMode.Exact)
-            {
-                Cache.Append($"{FindingResults.ToString()}");
-            }
-            if (this.ParseResultMode == ParseResultMode.Verbose)
-            {
-                Cache.Append($"{FilesFound.ToString()}\n{FindingResults.ToString()}");
-            }
-            Cache.CacheEdit(); 
-        }
-        public virtual string ParseFinding(string content)
-        {
-            string result = new LineExtractor(Find , 12, true).Compile(content); 
-            return $"{CurrentFilePath}\n{result}";
-        }
-
-        public void SearchDir()
+        public string FileFilter = "*.*"; 
+        public List<ICompiler> Parsers ; 
+        public List<string> ExcludeList = new List<string>(); 
+        public Dictionary<string, string> Result = new Dictionary<string, string>(); 
+        public void Parse()
         {
             int cnt = 0;
             DirectoryInfo DI = new DirectoryInfo($"{this.DirSource}");
@@ -67,20 +30,36 @@ namespace SOM.Parsers
                 {
                     FileReader r = new FileReader(file.FullName);
                     string content = r.Read().Replace("\t", "").Replace("  ", " ");
-                    if (IsFound(content))
-                    {
-                        this.CurrentFilePath = file.FullName;
-                        string result = ParseFinding(content);
-                        if (this.ParseResultMode == ParseResultMode.Verbose)
-                        {
-                            FindingResults.Append($"{file.FullName}\n");
-                        }
-                        FindingResults.Append($"{result}\n");
-                        FilesFound.Append($"{cnt.ToString()} : {file.FullName}\n");
+ 
+                    if (content.Contains(Find)) 
+                    { 
+                        foreach (ICompiler proc in this.Parsers)
+                            content = proc.Compile(content); 
+
+                        if (!Result.ContainsKey(file.FullName))
+                            Result.Add(file.FullName, $"{file.FullName}\n");
+
+                        Result[file.FullName] = content; 
                         cnt++;
-                    }
-                }
+                    } 
+                } 
             }
+        }
+        public void ParseTo(IWriter writer) {
+            Parse(); 
+            writer.Write(this.ToString()); 
+        }
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this.Result);
+        }
+        public override string ToString()
+        {
+            StringBuilder _results = new StringBuilder();
+            foreach (KeyValuePair<string, string> KVP in this.Result) 
+                _results.Append( $"[{KVP.Key}]\n{KVP.Value}\n" );
+           
+            return _results.ToString();
         }
         private bool IsPathExcluded(string FullFilePath)
         {

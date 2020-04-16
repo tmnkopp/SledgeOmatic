@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using SOM.IO;
 using SOM.Data;
 
-namespace SOM.Compilers
+namespace SOM.Procedures
 {
-    public abstract class RegexCompile : ICompiler
+    public abstract class BaseRegexCompile : ICompiler
     {
         public Dictionary<string, string> KeyVals = new Dictionary<string, string>();
         public virtual string Compile(string compileme)
@@ -41,10 +41,10 @@ namespace SOM.Compilers
         }
         public override string ToString()
         {
-            return $"{base.ToString()} -{KeyVals.ToString()}";
+            return JsonConvert.SerializeObject(  this.KeyVals  );
         }
     }
-    public class SqlRegexCompile : RegexCompile 
+    public class SqlRegexCompile : BaseRegexCompile 
     { 
         public SqlRegexCompile(string SqlFile)
         {
@@ -52,21 +52,20 @@ namespace SOM.Compilers
             KeyValDBReader dbreader = new KeyValDBReader(r.Read());
             dbreader.ExecuteRead();
             this.KeyVals = dbreader.Data; 
-        }  
-        public override string ToString()
-        {
-            return $"{base.ToString()} -#{KeyVals.ToString()}";
-        }
+        } 
     }
-    public class KeyValRegexCompile : RegexCompile 
+    public class JsonRegexCompile : BaseRegexCompile 
     { 
-        public KeyValRegexCompile(Dictionary<string, string> Dict)
+        public JsonRegexCompile(string json)
         { 
-            this.KeyVals = Dict;
-        }
-        public override string ToString()
+            this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        } 
+    }
+    public class  RegexCompile : BaseRegexCompile
+    {
+        public RegexCompile(string Expression, string Replacement)
         {
-            return $"{base.ToString()} -#{KeyVals.ToString()}";
+            this.KeyVals.Add(Expression, Replacement);
         }
     }
 }

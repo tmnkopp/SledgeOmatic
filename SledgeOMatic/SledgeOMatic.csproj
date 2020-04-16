@@ -58,13 +58,14 @@
     <Compile Include="Compilers\BaseCompiler.cs" />
     <Compile Include="Compilers\CompilationBuilder.cs" />
     <Compile Include="Compilers\ModelEnumerator.cs" />
-    <Compile Include="FileSys\Utils.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Data\DBUtils.cs" />
     <Compile Include="Extentions\StringExtentions.cs" />
+    <Compile Include="FileSys\Utils.cs" />
     <Compile Include="IO\Cache.cs" />
     <Compile Include="IO\IReader.cs" />
     <Compile Include="IO\IWriter.cs" />
+    <Compile Include="Models\ParseResult.cs" />
     <Compile Include="Models\AppModel.cs" />
     <Compile Include="Parsers\BaseParser.cs" />
     <Compile Include="Parsers\ParseBuilder.cs" />

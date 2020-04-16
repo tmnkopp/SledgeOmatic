@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-namespace SOM.Compilers
+namespace SOM.Procedures
 {
     public class PathCompile : ICompiler
     {  

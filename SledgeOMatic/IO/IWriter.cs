@@ -13,11 +13,27 @@ namespace SOM.IO
     public interface IWriter
     {
         void Write(string writeme);
-    } 
+    }
+     
+    public class ConsoleWriter : IWriter
+    {
+        public void Write(string writeme)
+        {
+            Console.Write(writeme);
+        }
+    }
+    public class CacheEditor : IWriter
+    {
+        public void Write(string writeme)
+        {
+            Cache.Write(writeme);
+            Cache.CacheEdit();
+        }
+    }
     public class FileWriter :  IWriter
     {
   
-        private string _filename = AppSettings.FileIn;
+        private string _filename = AppSettings.FileOut;
         private string _basepath = AppSettings.BasePath;
         public FileWriter()
         {

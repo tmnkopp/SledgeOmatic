@@ -9,25 +9,15 @@ namespace SOM.Procedures
     public class LineExtractor : ICompiler
     {
         private string _extractTarget;
-        private int _numberOfLines = 4;
-        private bool _verbose = false;
-        public LineExtractor(string ExtractTarget, int NumberOfLines, bool Verbose)
-        {
-            _extractTarget = ExtractTarget;
-            _numberOfLines = NumberOfLines;
-            _verbose = Verbose;
-        }
+        private int _numberOfLines = 4; 
         public LineExtractor(string ExtractTarget, int NumberOfLines )
         {
             _extractTarget = ExtractTarget;
-            _numberOfLines = NumberOfLines;
-            _verbose = false;
+            _numberOfLines = NumberOfLines; 
         }
         public string Compile(string content)
         {
-            StringBuilder result = new StringBuilder(); 
-
-            //content = content.RemoveEmptyLines();
+            StringBuilder result = new StringBuilder();  
             content = $"{new string('\n', _numberOfLines)}{content}{new string('\n', _numberOfLines)}";
             string[] lines = content.Split('\n');
             int findingCnt = 0;
@@ -35,20 +25,14 @@ namespace SOM.Procedures
             {
                 if (lines[lineIndex].Contains(_extractTarget))
                 {
-                    findingCnt++;
-                    if (_verbose)
-                        result.Append($"\n[{findingCnt.ToString()}:{lineIndex}]\n");
+                    findingCnt++; 
+                    result.Append($"\n[SRC {findingCnt.ToString()} {lineIndex}] \n");
                     for (int takeIndex = lineIndex - _numberOfLines; takeIndex <= lineIndex + _numberOfLines; takeIndex++)
                     { 
-                        if (takeIndex < lines.Length && takeIndex > 0 ) {
-                            if (_verbose) 
-                                result.Append($"[{takeIndex.ToString()}]: {lines[takeIndex]}\n");
-                            else
-                                result.Append($"{lines[takeIndex]}\n");
-                        }
-                            
-                    }
-                    
+                        if (takeIndex < lines.Length && takeIndex > 0 ) { 
+                            result.Append($"[LN {takeIndex.ToString()}] {lines[takeIndex]}\n");
+                        }  
+                    } 
                 }
             } 
             return result.ToString().TrimTrailingNewline();
