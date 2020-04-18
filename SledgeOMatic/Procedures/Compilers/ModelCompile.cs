@@ -10,39 +10,40 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
 using SOM.Models;
-using SOM.Procedures; 
+using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
-{
-
-    public class ModelInject : ICompiler, Injector
+{ 
+    public class ModelCompile :  ICompiler, Injectable
     {
+        private string _InjectableExpression;
+
+        public string InjectableExpression
+        {
+            get { return _InjectableExpression; }
+            set { _InjectableExpression = value; }
+        } 
         ITypeFormatter<AppModelItem> _TypeFormatter;
         BaseTypeEnumerator<AppModelItem> _ModelEnumerator;
         string _ModelName;
-        public ModelInject(string ModelName )
-            :this(ModelName, "SOM.Procedures.DefaulTypeFormatter, SOM")
-        {  
-        }
-        public ModelInject(string ModelName, string TypeFormatter ) 
+         
+        public ModelCompile(string ModelName, string TypeFormatter)
         {
-            _ModelName = ModelName; 
-            _TypeFormatter = (ITypeFormatter<AppModelItem>)Invoker.Invoke(TypeFormatter); 
+            _ModelName = ModelName;
+            _TypeFormatter = (ITypeFormatter<AppModelItem>)Invoker.InvokeProcedure(TypeFormatter);
             this._ModelEnumerator = DeriveModelEnumerator(ModelName);
+            InjectableExpression = $"[ModelCompile -{this._ModelName} -{this._TypeFormatter.GetType().Name}]";
         }
+  
         public string Compile(string content)
         { 
-            StringBuilder _result = new StringBuilder();
+            StringBuilder _FormattedModelItem = new StringBuilder();
             foreach (AppModelItem item in _ModelEnumerator.Items) 
-                _result.Append(_TypeFormatter.Format(item));
+                _FormattedModelItem.Append($"{_TypeFormatter.Format(item)}\n");
              
-            return content.Replace(
-                this.InjectExpression
-                , _result.ToString()
-                );
+            return content.Replace(  this.InjectableExpression , _FormattedModelItem.ToString()  );
         }
-        public string InjectExpression { get => $"[ModelInject -{this._ModelName} -{this._TypeFormatter.GetType().Name}]";  } 
- 
+        
         private BaseTypeEnumerator<AppModelItem> DeriveModelEnumerator(string ModelName)
         { 
             if (ModelName.Contains("."))

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SOM.IO;
 using SOM.Data;
+using SOM.Extentions;
 
 namespace SOM.Procedures
 {
@@ -37,7 +38,7 @@ namespace SOM.Procedures
                     result.AppendFormat("{0}\n", line);
                 }
             }
-            return result.ToString(); 
+            return result.ToString().TrimTrailingNewline();
         }
         public override string ToString()
         {

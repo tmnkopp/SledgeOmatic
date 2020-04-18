@@ -12,11 +12,18 @@ namespace SOM.Procedures
     { 
         string Format(T item);
     }
-    public class DefaulTypeFormatter: ITypeFormatter<AppModelItem>
+    public class AMIName : ITypeFormatter<AppModelItem>
+    {
+        public string Format(AppModelItem item)
+        {
+            return $"{item.Name}\n";
+        }
+    }
+    public class AMIJson: ITypeFormatter<AppModelItem>
     { 
         public string Format(AppModelItem item)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None); 
+            return JsonConvert.SerializeObject(item, Formatting.Indented); 
         }
     }
 
