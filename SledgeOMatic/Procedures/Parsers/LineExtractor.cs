@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
@@ -22,8 +23,9 @@ namespace SOM.Procedures
             string[] lines = content.Split('\n');
             int findingCnt = 0;
             for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
-            {
-                if (lines[lineIndex].Contains(_extractTarget))
+            { 
+                Match match = Regex.Match(lines[lineIndex], _extractTarget); 
+                if (match.Success)
                 {
                     findingCnt++; 
                     result.Append($"\n[SRC {findingCnt.ToString()} {lineIndex}] \n");

@@ -30,20 +30,25 @@ namespace SOM.Procedures
             object procedure = ctor.Invoke(typeParams);
             return procedure;
         }
-        public static object InvokeCompiler(string InvocationCommand)
+        public static object InvokeProcedure(string InvocationCommand)
         {
             string[] commands = InvocationCommand.Split(new string[] { " -" }, StringSplitOptions.None); 
             Type type = Type.GetType($"SOM.Procedures.{commands[0]}, SOM");
             ConstructorInfo ctor = type.GetConstructors()[0];
             ParameterInfo[] PI = ctor.GetParameters();
             object[] typeParams = new object[PI.Count()];
-            int i = 0;
-            foreach (ParameterInfo parm in PI){  
-                if (parm.ParameterType == typeof(int)) 
-                    typeParams[i] = Convert.ToInt32(commands[i + 1]); 
-                else 
-                    typeParams[i] = commands[i + 1].RemoveAsChars("'"); 
-                i++;
+            int parmCnt = 0;
+            int commandCnt = 1;
+            foreach (ParameterInfo parm in PI){
+                if (commandCnt<=commands.Length)
+                {
+                    if (parm.ParameterType == typeof(int))
+                        typeParams[parmCnt] = Convert.ToInt32(commands[commandCnt]);
+                    else
+                        typeParams[parmCnt] = commands[commandCnt].RemoveAsChars("'");
+                    parmCnt++;
+                    commandCnt++;
+                } 
             }
             return ctor.Invoke(typeParams); 
         }

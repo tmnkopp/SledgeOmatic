@@ -19,10 +19,10 @@ namespace SOM.Procedures
             _reset = Reset;
             _indexName = IndexName;
         }
-        public string Compile(string compileme)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
-            string[] lines = compileme.Split('\n');
+            string[] lines = content.Split('\n');
             int index = _seed; 
             foreach (var line in lines) {
                 if (line.Contains(_indexName))

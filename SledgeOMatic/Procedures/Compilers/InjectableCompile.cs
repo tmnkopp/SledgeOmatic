@@ -16,7 +16,7 @@ namespace SOM.Procedures
         public InjectableCompile()
         {
             Injectables = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                .Where(x => typeof(Injector).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                .Where(x => typeof(Injectable).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                 .Select(x => x.Name).ToList(); 
         }
         public string Compile(string content)

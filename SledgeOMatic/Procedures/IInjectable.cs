@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures
 {
-    public interface Injector
+    public interface Injectable
     {
-        string InjectExpression { get; }
+        string InjectableExpression { get; }
     } 
 }

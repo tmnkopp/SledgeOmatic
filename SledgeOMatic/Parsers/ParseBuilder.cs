@@ -14,31 +14,29 @@ namespace SOM.Parsers
         public ParseBuilder<T> Init()
         {
             Parser = new T();
+            Parser.Compilers = new List<ICompiler>();
+            Parser.ExcludeList = new List<string>();
             return this;
         }
-        public ParseBuilder<T> DirSource(string DirSource)
+        public ParseBuilder<T> Init(string Path)
         {
-            Parser.DirSource = DirSource;
+            this.Init();
+            Parser.Path = Path; 
             return this;
         }
-        public ParseBuilder<T> FileFilter(string FileFilter)
+        public ParseBuilder<T> Path(string Path)
         {
-            Parser.FileFilter = FileFilter;
+            Parser.Path = Path;
             return this;
-        }
-        public ParseBuilder<T> ExcludePath(string ExcludePath)
-        {
-            Parser.ExcludeList.Add(ExcludePath);
-            return this;
-        }
+        }  
         public ParseBuilder<T> Find(string Find)
         {
-            Parser.Find = Find;
+            Parser.Compilers.Add(new LineExtractor(Find, 1));
             return this;
         }
-        public ParseBuilder<T> Parsers(List<ICompiler> Parsers)
+        public ParseBuilder<T> Compilers(List<ICompiler> Compilers)
         {
-            Parser.Parsers = Parsers;
+            Parser.Compilers.AddRange(Compilers);
             return this;
         }
         public ParseBuilder<T> ParseTo(IWriter Writer)

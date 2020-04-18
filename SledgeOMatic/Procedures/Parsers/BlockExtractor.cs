@@ -38,8 +38,8 @@ namespace SOM.Procedures
                 string[] FromStmts = content.Split(new[] {_fromWhere}, StringSplitOptions.None);
                 foreach (string FromStmt in FromStmts)
                 {
-                    int toPos = FromStmt.IndexOf( _toWhere );
-                    if (FromStmt.Contains(_extractTarget) && toPos < FromStmt.Length)
+                    int toPos = FromStmt.IndexOf( _toWhere ); 
+                    if (Regex.Match(FromStmt, _extractTarget).Success && toPos < FromStmt.Length)
                     {
                         result.AppendFormat("{0}{1}", _fromWhere, FromStmt.Substring(0, toPos + _toWhere.Length));
                         return result.ToString();

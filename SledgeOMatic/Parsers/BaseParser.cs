@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SOM.Extentions;
 using SOM.IO;
 using SOM.Procedures;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SOM.Parsers
@@ -13,17 +15,26 @@ namespace SOM.Parsers
   
     public abstract class BaseParser
     {
-        public string DirSource = "";
-        public IWriter Dest;
-        public string Find = "";
-        public string FileFilter = "*.*"; 
-        public List<ICompiler> Parsers ; 
-        public List<string> ExcludeList = new List<string>(); 
+        public List<ICompiler> Compilers = new List<ICompiler>();
+        public List<string> ExcludeList = new List<string>();
+
+        public string Path { get; set; } 
+        private string _FileFilter=""; 
+        public string FileFilter {
+            get {
+                if (_FileFilter=="") 
+                    _FileFilter = Path.ReverseString().Split(new[] { '\\' })[0].ReverseString(); 
+                return (_FileFilter == "") ? "*.*" : _FileFilter;
+            }
+            set { _FileFilter = value; }
+        }
+            
         public Dictionary<string, string> Result = new Dictionary<string, string>(); 
+
         public void Parse()
         {
             int cnt = 0;
-            DirectoryInfo DI = new DirectoryInfo($"{this.DirSource}");
+            DirectoryInfo DI = new DirectoryInfo($"{this.Path.Replace(FileFilter, "")}");
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
                 if (!IsPathExcluded(file.FullName))
@@ -31,17 +42,13 @@ namespace SOM.Parsers
                     FileReader r = new FileReader(file.FullName);
                     string content = r.Read().Replace("\t", "").Replace("  ", " ");
  
-                    if (content.Contains(Find)) 
-                    { 
-                        foreach (ICompiler proc in this.Parsers)
-                            content = proc.Compile(content); 
+                    foreach (ICompiler proc in this.Compilers)
+                        content = proc.Compile(content); 
 
-                        if (!Result.ContainsKey(file.FullName))
-                            Result.Add(file.FullName, $"{file.FullName}\n");
+                    if (content != "")
+                        Result.Add(file.FullName, $"{content}\n"); 
 
-                        Result[file.FullName] = content; 
-                        cnt++;
-                    } 
+                    cnt++; 
                 } 
             }
         }
