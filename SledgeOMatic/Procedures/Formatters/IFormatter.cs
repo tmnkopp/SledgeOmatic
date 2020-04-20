@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures
 {
+    
     public interface ITypeFormatter<T>
     { 
         string Format(T item);

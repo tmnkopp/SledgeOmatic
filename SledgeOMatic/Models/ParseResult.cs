@@ -17,7 +17,7 @@ namespace SOM.Models
     {
         [JsonProperty("AppModelId")]
         public int AppModelId { get; set; }
-        public string Name { get; set; }
+        public string ModelName { get; set; } 
         public AppModelType AppModelType { get; set; }
         public ICollection<AppModelItem> AppModelItems { get; set;}
     }
