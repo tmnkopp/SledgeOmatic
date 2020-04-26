@@ -8,21 +8,33 @@ using System.Threading.Tasks;
 
 namespace SOM.Models
 {
- 
-    [JsonObject(NamingStrategyType = typeof(DefaultNamingStrategy))]
-    public class ParseResult
-    { 
-        public int ParseResultId { get; set; }
-        public string Expression { get; set; }
-        public string Source { get; set; } 
-        public ICollection<ParseResultItem> ParseResultItems { get; set;}
+    public enum AppModelType
+    {
+        DbTable,
+        Class
     }
     [JsonObject(NamingStrategyType = typeof(DefaultNamingStrategy))]
-    public class ParseResultItem
-    { 
-        public int ParseResultItemId { get; set; }
-        public string Location { get; set; }
-        public string Content { get; set; } 
-        public ParseResult ParseResult { get; set; } 
+    public class AppModel
+    {
+        [JsonProperty("AppModelId")]
+        public int AppModelId { get; set; }
+        public string ModelName { get; set; }
+        public AppModelType AppModelType { get; set; }
+        public virtual ICollection<AppModelItem> AppModelItems { get; set; }
+    }
+    [JsonObject(NamingStrategyType = typeof(DefaultNamingStrategy))]
+    public class AppModelItem
+    {
+        [JsonProperty("AppModelItemId")]
+        public int AppModelItemId { get; set; }
+        public string Name { get; set; }
+        public string DataType { get; set; }
+        public int OrdinalPosition { get; set; }
+        public bool IsNullable { get; set; }
+        public int? MaxLen { get; set; } 
+        public bool IsPkey()
+        {
+            return this.OrdinalPosition == 1;
+        }
     }
 }

@@ -11,14 +11,12 @@ using System.Configuration;
 using System.Data.SqlClient;
 using SOM.Models;
 using System.Text.RegularExpressions;
-using System.Reflection;
-
-namespace SOM.Procedures
-
+using System.Reflection; 
+namespace SOM.Procedures 
 {
     public class ModelItemCompiler : ICompiler
-    { 
-        AppModel _AppModel=new AppModel();
+    {
+        AppModel _AppModel =new AppModel();
         string _modelname = "";
         string _format = "";
         public ModelItemCompiler(string ModelName, string Format)

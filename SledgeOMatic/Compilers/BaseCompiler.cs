@@ -54,16 +54,23 @@ namespace SOM.Procedures
                 foreach (ICompiler proc in FilenameCompilation)
                     newFileName = proc.Compile(newFileName).RemoveWhiteAndBreaks(); 
 
-                if (CompileMode != CompileMode.Debug) 
-                    CommitFile(content, $"{Dest}\\{newFileName}"); 
+                CommitFile(content, $"{Dest}\\{newFileName}"); 
             } 
         }
         private void CommitFile(string Content, string FileName)
         {
             if (CompileMode == CompileMode.ForceCommit)
                 FileSys.Utils.DirectoryCreator(FileName, AppSettings.BasePath);
-            FileWriter fw = new FileWriter($"{FileName}");
-            fw.Write(Content);
+
+            if (CompileMode != CompileMode.Debug)
+            {
+                FileWriter fw = new FileWriter($"{FileName}");
+                fw.Write(Content);
+            }
+            if (CompileMode == CompileMode.Debug)
+            {
+                Cache.Append($"{FileName}\n{Content}\n");
+            } 
         }
     }
 }
