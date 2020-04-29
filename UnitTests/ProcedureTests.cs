@@ -50,6 +50,15 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
+        public void BlockExact()
+        {
+            string parseme = "1\n2\n3\n-target-\n1\n2\n3\n-target-\n4\n5\n3";
+            BlockExtractor extract = new BlockExtractor("-target-", "2", "1");
+            string actual = extract.Compile(parseme);
+ 
+            Assert.AreNotEqual("", actual);
+        }
+        [TestMethod]
         public void LineExtractExact()
         {
             string parseme = "111\n222\n333\n-target-\n444\n555\n666\n";

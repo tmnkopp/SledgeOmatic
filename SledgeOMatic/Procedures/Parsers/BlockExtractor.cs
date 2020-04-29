@@ -33,16 +33,23 @@ namespace SOM.Procedures
         public string Compile(string content)
         {
             StringBuilder result = new StringBuilder(); 
-            if (content.Contains(_fromWhere))
+
+            if (content.Contains(_fromWhere) && Regex.Match(content, _extractTarget).Success)
             {
-                string[] FromStmts = content.Split(new[] {_fromWhere}, StringSplitOptions.None);
-                foreach (string FromStmt in FromStmts)
+                string[] FromSplits = content.Split(new[] {_fromWhere}, StringSplitOptions.None);
+                foreach (string FromSplit in FromSplits)
                 {
-                    int toPos = FromStmt.IndexOf( _toWhere ); 
-                    if (Regex.Match(FromStmt, _extractTarget).Success && toPos < FromStmt.Length)
+                    int matchPos = Regex.Match(FromSplit, _extractTarget).Index;
+                    if (matchPos > 0)
                     {
-                        result.AppendFormat("{0}{1}", _fromWhere, FromStmt.Substring(0, toPos + _toWhere.Length));
-                        return result.ToString();
+                        int toPos = FromSplit.IndexOf(_toWhere);
+                        toPos = (toPos < 0) ? FromSplit.Length : toPos + _toWhere.Length;
+              
+                        if (toPos > FromSplit.Length)
+                            toPos = FromSplit.Length;
+
+                        result.AppendFormat("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos ));
+                        //return result.ToString();
                     } 
                 }
             } 

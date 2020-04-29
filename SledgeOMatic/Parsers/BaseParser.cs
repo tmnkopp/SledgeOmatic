@@ -16,8 +16,9 @@ namespace SOM.Parsers
     public abstract class BaseParser
     {
         public List<ICompiler> Compilers = new List<ICompiler>();
-        public List<string> ExcludeList = new List<string>();
-
+        public List<ICompiler> PostCompile = new List<ICompiler>();
+        public List<string> PathExclusions = new List<string>();
+        public Func<string, string> Fromatter = (r) => (r);
         public string Path { get; set; } 
         private string _FileFilter=""; 
         public string FileFilter {
@@ -45,6 +46,9 @@ namespace SOM.Parsers
                     foreach (ICompiler proc in this.Compilers)
                         content = proc.Compile(content); 
 
+                    foreach (ICompiler proc in this.PostCompile)
+                        content = proc.Compile(content); 
+
                     if (content != "")
                         Result.Add(file.FullName, $"{content}\n"); 
 
@@ -55,7 +59,7 @@ namespace SOM.Parsers
         public void ParseTo(IWriter writer) {
             Parse(); 
             writer.Write(this.ToString()); 
-        }
+        } 
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this.Result);
@@ -63,15 +67,19 @@ namespace SOM.Parsers
         public override string ToString()
         {
             StringBuilder _results = new StringBuilder();
+            foreach (KeyValuePair<string, string> KVP in this.Result)
+                _results.Append($"[{KVP.Key}]\n");
+            _results.Append($"\n");
             foreach (KeyValuePair<string, string> KVP in this.Result) 
                 _results.Append( $"[{KVP.Key}]\n{KVP.Value}\n" );
-           
-            return _results.ToString();
+
+            string result = Fromatter(_results.ToString().ToString());
+            return result; 
         }
         private bool IsPathExcluded(string FullFilePath)
         {
             bool ret = false;
-            foreach (string exclude in ExcludeList)
+            foreach (string exclude in PathExclusions)
             {
                 if (FullFilePath.Contains(exclude))
                     return true;

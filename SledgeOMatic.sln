@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Searcher", "..\ConsoleApp1\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOM-API", "..\SOM-API\SOM-API\SOM-API.csproj", "{9322B03A-E52C-4E0F-BB82-CE85FC897F66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOMData", "..\SOMData\SOMData.csproj", "{E48921EE-C70D-427B-A410-702D12FDA468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOMData", "..\SOMData\SOMData.csproj", "{E48921EE-C70D-427B-A410-702D12FDA468}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
