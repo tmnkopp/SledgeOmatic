@@ -151,6 +151,7 @@
     <Compile Include="Compilers\ModelEnumerator.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Data\DBUtils.cs" />
+    <Compile Include="Data\FileProvider.cs" />
     <Compile Include="Extentions\StringExtentions.cs" />
     <Compile Include="FileSys\Utils.cs" />
     <Compile Include="IO\Cache.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Procedures\IInjectable.cs" />
     <Compile Include="Procedures\Invoker.cs" />
     <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
+    <Compile Include="Procedures\Parsers\IParseStrategy.cs" />
     <Compile Include="Procedures\Parsers\LineExtractor.cs" />
     <Compile Include="Procedures\Parsers\ContextExtractor.cs" />
     <Compile Include="Program.cs" />

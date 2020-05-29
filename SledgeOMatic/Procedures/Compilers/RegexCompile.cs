@@ -28,7 +28,7 @@ namespace SOM.Procedures
                     Match match = Regex.Match(line, pattern);
                     if (match.Success)
                     {
-                        string replacewith = item.Value.Replace("$1", match.Value);
+                        string replacewith = item.Value.Replace("$0", match.Value);
                         result.AppendFormat("{0}\n", line.Replace(match.Value, replacewith));
                         matched = true;
                     }

@@ -28,19 +28,14 @@ namespace SOM.Parsers
             Parser.Path = Path;
             return this;
         }  
-        public ParseBuilder<T> Find(string Find)
+        public ParseBuilder<T> Find(string Find, int ContextLines)
         {
-            Parser.Compilers.Add(new LineExtractor(Find, 1));
+            Parser.Compilers.Add(new LineExtractor(Find, ContextLines));
             return this;
         }
         public ParseBuilder<T> Compilers(List<ICompiler> Compilers)
         {
             Parser.Compilers.AddRange(Compilers);
-            return this;
-        }
-        public ParseBuilder<T> PostCompile(List<ICompiler> Compilers)
-        {
-            Parser.PostCompile.AddRange(Compilers);
             return this;
         } 
         public ParseBuilder<T> AddCompiler(ICompiler Compiler)
