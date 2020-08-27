@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SledgeOMatic", "SledgeOMatic\SledgeOMatic.csproj", "{1D77EEE9-DAAC-42A7-92CF-08B462383397}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E48921EE-C70D-427B-A410-702D12FDA468} = {E48921EE-C70D-427B-A410-702D12FDA468}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{82D613EB-2B2C-4254-90DD-197D6859C344}"
 EndProject
@@ -20,8 +23,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOM-API", "..\SOM-API\SOM-API\SOM-API.csproj", "{9322B03A-E52C-4E0F-BB82-CE85FC897F66}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOMData", "..\SOMData\SOMData.csproj", "{E48921EE-C70D-427B-A410-702D12FDA468}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scraper", "..\Scraper\Scraper\Scraper.csproj", "{613A7FDF-39F4-4DCF-A790-0C6AB86156F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +54,6 @@ Global
 		{E48921EE-C70D-427B-A410-702D12FDA468}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E48921EE-C70D-427B-A410-702D12FDA468}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E48921EE-C70D-427B-A410-702D12FDA468}.Release|Any CPU.Build.0 = Release|Any CPU
-		{613A7FDF-39F4-4DCF-A790-0C6AB86156F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{613A7FDF-39F4-4DCF-A790-0C6AB86156F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{613A7FDF-39F4-4DCF-A790-0C6AB86156F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{613A7FDF-39F4-4DCF-A790-0C6AB86156F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
