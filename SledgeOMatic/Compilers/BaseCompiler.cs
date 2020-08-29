@@ -13,6 +13,7 @@ namespace SOM.Procedures
     public enum CompileMode
     {
         Debug,
+        Cache,
         Commit,
         ForceCommit
     }
@@ -66,7 +67,7 @@ namespace SOM.Procedures
             if (CompileMode == CompileMode.ForceCommit)
                 FileSys.Utils.DirectoryCreator(FileName, AppSettings.BasePath);
 
-            if (CompileMode != CompileMode.Debug)
+            if (CompileMode == CompileMode.Commit)
             {
                 FileWriter fw = new FileWriter($"{FileName}");
                 fw.Write(Content);
@@ -74,6 +75,10 @@ namespace SOM.Procedures
             if (CompileMode == CompileMode.Debug)
             {
                 Cache.Append($"[{FileName}]\n{Content}\n");
+            }             
+            if (CompileMode == CompileMode.Cache)
+            {
+                Cache.Append($"{Content}\n");
             } 
         }
     }
