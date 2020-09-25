@@ -16,7 +16,7 @@ namespace UnitTests
         public void ModuloCompile_Pass()
         {
             string content = "aa%3bb%3cc%3dd%3ee%3ff%3gg";
-            ModuloCompile comp = new ModuloCompile("><");
+            ModuloCompile comp = new ModuloCompile();
             string actual = comp.Compile(content);
             string expected = "aabbcc><ddeeff><gg";
             Assert.AreEqual(expected, actual);

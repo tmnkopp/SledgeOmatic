@@ -18,8 +18,9 @@ namespace SOM.Procedures
         {
             string matchpattern = "";
             Match match = Regex.Match(content, @".*\[%:(\d) format:(.*).*\].*");
-            if (match.Success)
-            {
+            if (!match.Success) {
+                return content;
+            } else {
                 GroupCollection groups = match.Groups;
                 matchpattern = groups[0].Value.TrimTrailingNewline();
                 string[] lines = content.Split(new[] { matchpattern }, StringSplitOptions.None);
