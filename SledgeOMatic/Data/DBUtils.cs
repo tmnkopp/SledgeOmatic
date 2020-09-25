@@ -67,17 +67,4 @@ namespace SOM.Data
         }
     }
 }
-
-/*
  
-         public KeyValDBReader(string key, string value, string table)
-        {
-            base.ExecuteSql($" SELECT DISTINCT CONVERT(nvarchar, {key}) as ID, CONVERT(nvarchar, {value}) as VAL FROM {table}");
-        }
-        public KeyValDBReader(string key, string value, string table, string where)
-        {
-            base.ExecuteSql($" SELECT DISTINCT CONVERT(nvarchar, {key}) as ID, CONVERT(nvarchar, {value}) as VAL FROM {table} WHERE 1=1 AND {where}");
-        }
- 
- */
-

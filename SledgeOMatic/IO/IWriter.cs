@@ -22,10 +22,19 @@ namespace SOM.IO
             Console.Write(writeme);
         }
     }
+    public class CacheWriter : IWriter
+    {
+        public void Write(string writeme)
+        {
+            Cache.Write("");
+            Cache.Write(writeme); 
+        }
+    }
     public class CacheEditor : IWriter
     {
         public void Write(string writeme)
         {
+            Cache.Write("");
             Cache.Write(writeme);
             Cache.CacheEdit();
         }

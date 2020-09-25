@@ -1,17 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SledgeOMatic", "SledgeOMatic\SledgeOMatic.csproj", "{1D77EEE9-DAAC-42A7-92CF-08B462383397}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E48921EE-C70D-427B-A410-702D12FDA468} = {E48921EE-C70D-427B-A410-702D12FDA468}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{82D613EB-2B2C-4254-90DD-197D6859C344}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler", "..\Compiler\FormCompiler\Compiler.csproj", "{0EA7842D-94A9-43A6-A679-A16E1277386F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOM-API", "..\SOM-API\SOM-API\SOM-API.csproj", "{4C8EE27C-4039-4D9B-B7AB-3834E206A944}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D77EEE9-DAAC-42A7-92CF-08B462383397} = {1D77EEE9-DAAC-42A7-92CF-08B462383397}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Searcher", "..\ConsoleApp1\ConsoleApp1\Searcher.csproj", "{6018C83D-CD4B-405F-95F3-11595599DD24}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D77EEE9-DAAC-42A7-92CF-08B462383397} = {1D77EEE9-DAAC-42A7-92CF-08B462383397}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOM-API", "..\SOM-API\SOM-API\SOM-API.csproj", "{9322B03A-E52C-4E0F-BB82-CE85FC897F66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOMData", "..\SOMData\SOMData.csproj", "{E48921EE-C70D-427B-A410-702D12FDA468}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +42,18 @@ Global
 		{0EA7842D-94A9-43A6-A679-A16E1277386F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EA7842D-94A9-43A6-A679-A16E1277386F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EA7842D-94A9-43A6-A679-A16E1277386F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C8EE27C-4039-4D9B-B7AB-3834E206A944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C8EE27C-4039-4D9B-B7AB-3834E206A944}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C8EE27C-4039-4D9B-B7AB-3834E206A944}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C8EE27C-4039-4D9B-B7AB-3834E206A944}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6018C83D-CD4B-405F-95F3-11595599DD24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6018C83D-CD4B-405F-95F3-11595599DD24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6018C83D-CD4B-405F-95F3-11595599DD24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6018C83D-CD4B-405F-95F3-11595599DD24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9322B03A-E52C-4E0F-BB82-CE85FC897F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9322B03A-E52C-4E0F-BB82-CE85FC897F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9322B03A-E52C-4E0F-BB82-CE85FC897F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9322B03A-E52C-4E0F-BB82-CE85FC897F66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E48921EE-C70D-427B-A410-702D12FDA468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E48921EE-C70D-427B-A410-702D12FDA468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E48921EE-C70D-427B-A410-702D12FDA468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E48921EE-C70D-427B-A410-702D12FDA468}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

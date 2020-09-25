@@ -49,7 +49,7 @@ namespace SOM.Extentions
         }
         public static string TrimTrailingNewline(this string input)
         {
-            if (input.EndsWith("\n"))
+            if (input.EndsWith("\n") || input.EndsWith("\r"))
             {
                 input = input.Substring(0, input.Length - 1);
             }

@@ -12,13 +12,11 @@ using System.Text;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
- 
+using System.Linq; 
 using SOM.Procedures;
 
 namespace SOM
-{
-    
+{ 
     class Program
     {
         static void Main(string[] args)
@@ -27,9 +25,4 @@ namespace SOM
 
         }  
     }
-}
-
-/*
- ,
-                (r, p1) => r.Replace("[fields]", p1) 
- */
+} 

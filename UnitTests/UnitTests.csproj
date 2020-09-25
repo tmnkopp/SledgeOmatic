@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="ModelEnumeratorTests.cs" />
+    <Compile Include="RegExCompilerTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="ProcedureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

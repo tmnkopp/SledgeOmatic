@@ -10,12 +10,11 @@ namespace SOM.Parsers
 {
     public class ParseBuilder<T> where T : BaseParser, new()
     {
+      
         public T Parser = new T();
         public ParseBuilder<T> Init()
         {
-            Parser = new T();
-            Parser.Compilers = new List<ICompiler>();
-            Parser.ExcludeList = new List<string>();
+            Parser = new T(); 
             return this;
         }
         public ParseBuilder<T> Init(string Path)
@@ -29,18 +28,24 @@ namespace SOM.Parsers
             Parser.Path = Path;
             return this;
         }  
-        public ParseBuilder<T> Find(string Find)
+        public ParseBuilder<T> Find(string Find, int ContextLines)
         {
-            Parser.Compilers.Add(new LineExtractor(Find, 1));
+            Parser.Compilers.Add(new LineExtractor(Find, ContextLines));
             return this;
         }
         public ParseBuilder<T> Compilers(List<ICompiler> Compilers)
         {
             Parser.Compilers.AddRange(Compilers);
             return this;
-        }
-        public ParseBuilder<T> ParseTo(IWriter Writer)
+        } 
+        public ParseBuilder<T> AddCompiler(ICompiler Compiler)
         {
+            Parser.Compilers.Add(Compiler);
+            return this;
+        }
+        public ParseBuilder<T> ParseTo(IWriter Writer, Func<string, string> Formatter)
+        {
+            Parser.Fromatter = Formatter;
             Parser.ParseTo(Writer);
             return this;
         }
@@ -48,10 +53,6 @@ namespace SOM.Parsers
         {
             Parser.Parse();
             return this;
-        }
-        public override string ToString()
-        {
-            return Parser.ToString(); 
-        }
+        } 
     }
 }

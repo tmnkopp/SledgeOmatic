@@ -31,6 +31,16 @@ namespace SOM.Procedures
             base.Dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
     }
+    public class KeyValCompile : BaseKeyValCompile, ICompiler
+    {
+        public KeyValCompile(string json)
+        {
+            if (json != "")
+            {
+                base.Dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            } 
+        }
+    }
     public class SqlKeyValCompile : BaseKeyValCompile, ICompiler  {
         private string _sqlFileParam = "";  
         public SqlKeyValCompile(string sqlFile)

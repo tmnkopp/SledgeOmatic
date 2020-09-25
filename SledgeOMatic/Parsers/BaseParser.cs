@@ -15,9 +15,9 @@ namespace SOM.Parsers
   
     public abstract class BaseParser
     {
-        public List<ICompiler> Compilers = new List<ICompiler>();
-        public List<string> ExcludeList = new List<string>();
-
+        public List<ICompiler> Compilers = new List<ICompiler>(); 
+        public List<string> PathExclusions = new List<string>();
+        public Func<string, string> Fromatter = (r) => (r);
         public string Path { get; set; } 
         private string _FileFilter=""; 
         public string FileFilter {
@@ -29,49 +29,50 @@ namespace SOM.Parsers
             set { _FileFilter = value; }
         }
             
-        public Dictionary<string, string> Result = new Dictionary<string, string>(); 
+        public Dictionary<string, string> Dict = new Dictionary<string, string>(); 
 
         public void Parse()
-        {
-            int cnt = 0;
+        { 
             DirectoryInfo DI = new DirectoryInfo($"{this.Path.Replace(FileFilter, "")}");
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
                 if (!IsPathExcluded(file.FullName))
                 {
                     FileReader r = new FileReader(file.FullName);
-                    string content = r.Read().Replace("\t", "").Replace("  ", " ");
+                    string content = r.Read();
  
                     foreach (ICompiler proc in this.Compilers)
                         content = proc.Compile(content); 
-
+                      
                     if (content != "")
-                        Result.Add(file.FullName, $"{content}\n"); 
-
-                    cnt++; 
+                        Dict.Add(file.FullName, $"{content}\n");  
                 } 
             }
         }
         public void ParseTo(IWriter writer) {
             Parse(); 
             writer.Write(this.ToString()); 
-        }
+        } 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this.Result);
+            return JsonConvert.SerializeObject(this.Dict);
         }
         public override string ToString()
         {
             StringBuilder _results = new StringBuilder();
-            foreach (KeyValuePair<string, string> KVP in this.Result) 
+            foreach (KeyValuePair<string, string> KVP in this.Dict)
+                _results.Append($"[{KVP.Key}]\n");
+            _results.Append($"\n");
+            foreach (KeyValuePair<string, string> KVP in this.Dict) 
                 _results.Append( $"[{KVP.Key}]\n{KVP.Value}\n" );
-           
-            return _results.ToString();
+
+            string result = Fromatter(_results.ToString() );
+            return result; 
         }
         private bool IsPathExcluded(string FullFilePath)
         {
             bool ret = false;
-            foreach (string exclude in ExcludeList)
+            foreach (string exclude in PathExclusions)
             {
                 if (FullFilePath.Contains(exclude))
                     return true;

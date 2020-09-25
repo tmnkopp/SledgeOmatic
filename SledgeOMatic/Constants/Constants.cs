@@ -24,6 +24,7 @@ namespace SOM
     public static class Placeholder
     {
         public static string Basepath = "[basepath]";
+        public static string SRC = "[src]";
         public static string Index = "[index]";
         public static string EXT = "[ext]";
     }

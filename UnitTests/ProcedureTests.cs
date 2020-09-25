@@ -12,6 +12,17 @@ namespace UnitTests
     public class ProcedureTests
     {
         //DECLARE @KVTABLE
+         
+        [TestMethod]
+        public void ModelTemplateCompile()
+        {  
+            ModelTemplateCompile compiler = new ModelTemplateCompile();
+            string compiled = compiler.Compile("[model:AuditLog template:C:\\_som\\_src\\model\\templateProp.cs]");
+            Cache.Write(compiled);
+            Cache.CacheEdit();
+            Assert.IsNotNull(compiled);
+        }
+
         [TestMethod]
         public void Path_Compiles_To_Output()
         { 
@@ -48,6 +59,15 @@ namespace UnitTests
             string actual = extract.Compile(parseme);
             string expected = "222\n333\n-target-\n444\n555";
             Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void BlockExact()
+        {
+            string parseme = "1\n2\n3\n-target-\n1\n2\n3\n-target-\n4\n5\n3";
+            BlockExtractor extract = new BlockExtractor("-target-", "2", "1");
+            string actual = extract.Compile(parseme);
+ 
+            Assert.AreNotEqual("", actual);
         }
         [TestMethod]
         public void LineExtractExact()
