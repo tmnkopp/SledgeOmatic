@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOM.Procedures
+namespace SOM.Compilers 
 {
     public enum CompileMode
     {
@@ -23,7 +23,7 @@ namespace SOM.Procedures
         {
             Source = AppSettings.SourceDir;
             Dest = AppSettings.DestDir;
-            FileFilter = "*_*";
+            FileFilter = "*";
         }
         public override void Compile()
         { 
@@ -41,7 +41,11 @@ namespace SOM.Procedures
         public CompileMode CompileMode;
         
         private string content = "";
-
+        public BaseCompiler()
+        {
+            ContentCompilers = new List<ICompiler>();
+            FilenameCompilers = new List<ICompiler>();
+        }
         public virtual void Compile()
         {
             DirectoryInfo DI = new DirectoryInfo($"{Source}");
@@ -56,9 +60,7 @@ namespace SOM.Procedures
                 {
                     foreach (ICompiler proc in FilenameCompilers)
                         newFileName = proc.Compile(newFileName).RemoveWhiteAndBreaks();
-                }
-
-
+                } 
                 CommitFile(content, $"{Dest}\\{newFileName}"); 
             } 
         }

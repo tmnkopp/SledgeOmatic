@@ -36,5 +36,5 @@ namespace SOM.Models
         {
             return this.OrdinalPosition == 1;
         }
-    }
+    }   
 }

@@ -15,22 +15,25 @@ namespace SOM.Procedures
     public abstract class BaseRegexCompile : ICompiler
     {
         public Dictionary<string, string> KeyVals = new Dictionary<string, string>();
-        public virtual string Compile(string compileme)
+        public virtual string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
-            string[] lines = compileme.Split('\n');
+            string[] lines = content.Split('\n');
             foreach (var line in lines)
             {
                 bool matched = false;
-                foreach (var item in KeyVals)
-                {
-                    string pattern = item.Key;
-                    Match match = Regex.Match(line, pattern);
+                foreach (var KeyValItem in KeyVals)
+                { 
+                    Match match = Regex.Match(line, KeyValItem.Key);
                     if (match.Success)
                     {
-                        string replacewith = item.Value.Replace("$0", match.Value);
-                        result.AppendFormat("{0}\n", line.Replace(match.Value, replacewith));
                         matched = true;
+                        string matchval = match.Groups[0].Value;
+                        if (match.Groups.Count > 1) 
+                            matchval = match.Groups[1].Value;
+                      
+                        string replacewith = KeyValItem.Value.Replace("$0", matchval); 
+                        result.AppendFormat("{0}\n", line.Replace(matchval, replacewith)); 
                     }
                 }
                 if (!matched)
@@ -62,7 +65,7 @@ namespace SOM.Procedures
             this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         } 
     }
-    public class  RegexCompile : BaseRegexCompile
+    public class RegexCompile : BaseRegexCompile
     {
         public RegexCompile(string Expression, string Replacement)
         {

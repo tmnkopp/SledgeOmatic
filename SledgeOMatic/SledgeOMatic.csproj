@@ -160,9 +160,10 @@
     <Compile Include="Models\AppModel.cs" />
     <Compile Include="Parsers\BaseParser.cs" />
     <Compile Include="Parsers\ParseBuilder.cs" />
+    <Compile Include="Procedures\Compilers\ModuloCompile.cs" />
     <Compile Include="Procedures\Compilers\IndexCompile.cs" />
     <Compile Include="Procedures\Compilers\ICompiler.cs" />
-    <Compile Include="Procedures\Compilers\ModelCompile.cs" />
+    <Compile Include="Procedures\Compilers\ModelTemplateCompile.cs" />
     <Compile Include="Procedures\Compilers\KeyValCompile.cs" />
     <Compile Include="Procedures\Compilers\InjectableCompile.cs" />
     <Compile Include="Procedures\Compilers\PathCompile.cs" />

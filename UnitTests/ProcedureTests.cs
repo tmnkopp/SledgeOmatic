@@ -12,6 +12,17 @@ namespace UnitTests
     public class ProcedureTests
     {
         //DECLARE @KVTABLE
+         
+        [TestMethod]
+        public void ModelTemplateCompile()
+        {  
+            ModelTemplateCompile compiler = new ModelTemplateCompile();
+            string compiled = compiler.Compile("[model:AuditLog template:C:\\_som\\_src\\model\\templateProp.cs]");
+            Cache.Write(compiled);
+            Cache.CacheEdit();
+            Assert.IsNotNull(compiled);
+        }
+
         [TestMethod]
         public void Path_Compiles_To_Output()
         { 
