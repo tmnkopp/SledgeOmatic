@@ -11,9 +11,10 @@ namespace UnitTests
     public class ModelEnumeratorTests
     { 
         [TestMethod]
-        public void TypeEnumerator()
+        public void TypeEnumerator_Enumerates()
         {
             string typename = "Compiler.Models.Invoice";
+            //TODO: Unit test this
             Assert.IsNotNull(typename);
         } 
     }

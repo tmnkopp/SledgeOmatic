@@ -36,15 +36,15 @@ namespace SOM.Compilers
         public string Source = "";
         public string Dest = "";
         public string FileFilter = "*";
-        public List<ICompiler> ContentCompilers;
-        public List<ICompiler> FilenameCompilers;
+        public List<IInterpreter> ContentCompilers;
+        public List<IInterpreter> FilenameCompilers;
         public CompileMode CompileMode;
         
         private string content = "";
         public BaseCompiler()
         {
-            ContentCompilers = new List<ICompiler>();
-            FilenameCompilers = new List<ICompiler>();
+            ContentCompilers = new List<IInterpreter>();
+            FilenameCompilers = new List<IInterpreter>();
         }
         public virtual void Compile()
         {
@@ -52,15 +52,13 @@ namespace SOM.Compilers
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
             {
                 content = new FileReader(file.FullName).Read().ToString();
-                foreach (ICompiler proc in ContentCompilers)
-                    content = proc.Compile(content);
+                foreach (IInterpreter proc in ContentCompilers)
+                    content = proc.Interpret(content);
 
-                string newFileName = file.Name;
-                if (FilenameCompilers != null)
-                {
-                    foreach (ICompiler proc in FilenameCompilers)
-                        newFileName = proc.Compile(newFileName).RemoveWhiteAndBreaks();
-                } 
+                string newFileName = file.Name; 
+                foreach (IInterpreter proc in FilenameCompilers)
+                    newFileName = proc.Interpret(newFileName).RemoveWhiteAndBreaks();
+       
                 CommitFile(content, $"{Dest}\\{newFileName}"); 
             } 
         }
@@ -69,7 +67,7 @@ namespace SOM.Compilers
             if (CompileMode == CompileMode.ForceCommit)
                 FileSys.Utils.DirectoryCreator(FileName, AppSettings.BasePath);
 
-            if (CompileMode == CompileMode.Commit)
+            if (CompileMode == CompileMode.Commit || CompileMode == CompileMode.ForceCommit)
             {
                 FileWriter fw = new FileWriter($"{FileName}");
                 fw.Write(Content);

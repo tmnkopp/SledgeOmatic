@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SOM.Extentions;
+using SOM.Parsers;
+
 namespace SOM.Procedures
 {
-    public class ContextExtractor : ICompiler
+    public class ContextExtractor : IParseStrategy
     {
         private string _extractTarget;
         private int _fromWhere;
@@ -17,7 +19,13 @@ namespace SOM.Procedures
             _fromWhere = FromWhere;
             _toWhere = ToWhere;
         }
-        public string Compile(string content)
+        private ParseResultMode _ParseResultMode = Parsers.ParseResultMode.Default;
+        public ParseResultMode ParseResultMode
+        {
+            get { return _ParseResultMode; }
+            set { _ParseResultMode = value; }
+        }
+        public string Parse(string content)
         {
             StringBuilder result = new StringBuilder();
             string[] postFixes = $"~{content}".Split(new[] { _extractTarget }, StringSplitOptions.None);

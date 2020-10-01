@@ -57,10 +57,12 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ModelEnumeratorTests.cs" />
+    <Compile Include="IncrementTests.cs" />
     <Compile Include="RegExCompilerTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="ProcedureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ParseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

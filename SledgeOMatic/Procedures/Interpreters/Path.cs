@@ -9,12 +9,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 namespace SOM.Procedures
 {
-    public class PathCompile : ICompiler
+    public class PathInterpreter : IInterpreter
     {  
-        public string Compile(string compileme)
+        public string Interpret(string content)
         {
             StringBuilder result = new StringBuilder();
-            string[] lines = compileme.Split('\n'); 
+            string[] lines = content.Split('\n'); 
             foreach (var line in lines)
             {
                 string pattern = "\\[\\w:.+\\]";
@@ -29,10 +29,6 @@ namespace SOM.Procedures
                 } 
             }
             return result.ToString();       
-        }
-        public override string ToString()
-        {
-            return $"{base.ToString()}";
-        }
+        } 
     }
 }

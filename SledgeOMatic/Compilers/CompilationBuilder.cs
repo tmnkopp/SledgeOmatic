@@ -48,17 +48,17 @@ namespace SOM.Procedures
             compiler.FileFilter = FileFilter;
             return this;
         }
-        public CompilationBuilder<T> AddContentCompiler( ICompiler Compiler )
+        public CompilationBuilder<T> AddContentCompiler( IInterpreter Compiler )
         {
             compiler.ContentCompilers.Add(Compiler);
             return this;
         }
-        public CompilationBuilder<T> ContentCompilers(List<ICompiler> ContentCompilers)
+        public CompilationBuilder<T> ContentCompilers(List<IInterpreter> ContentCompilers)
         {
             compiler.ContentCompilers = ContentCompilers;
             return this;
         }
-        public CompilationBuilder<T> FilenameCompilers(List<ICompiler> FilenameCompilers)
+        public CompilationBuilder<T> FilenameCompilers(List<IInterpreter> FilenameCompilers)
         {
             compiler.FilenameCompilers = FilenameCompilers;
             return this;

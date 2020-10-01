@@ -15,12 +15,9 @@ using System.Reflection;
 using System.IO; 
 namespace SOM.Procedures 
 {
-    public class ModelTemplateCompile : BaseModelCompiler, ICompiler 
-    { 
-        public ModelTemplateCompile()
-        { 
-        }
-        public string Compile(string content)
+    public class ModelTemplateInterpreter : BaseModelInterpreter, IInterpreter 
+    {  
+        public string Interpret(string content)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = content.Split('\n');
@@ -45,12 +42,9 @@ namespace SOM.Procedures
             return result.ToString();
         }
     } 
-    public abstract class BaseModelCompiler
+    public abstract class BaseModelInterpreter
     {  
-        protected BaseTypeEnumerator<AppModelItem> _AppModelItems; 
-        public BaseModelCompiler()
-        {  
-        }  
+        protected BaseTypeEnumerator<AppModelItem> _AppModelItems;  
         protected IEnumerable<AppModelItem> GetModelItems(string ModelName)
         {
             BaseTypeEnumerator<AppModelItem> itemEnumerator;
@@ -66,7 +60,7 @@ namespace SOM.Procedures
         } 
     }
 
-    public class ModelItemCompiler : ICompiler
+    public class ModelItemCompiler : IInterpreter
     {
         AppModel _AppModel = new AppModel();
         string _modelname = "";
@@ -76,7 +70,7 @@ namespace SOM.Procedures
             _modelname = ModelName;
             _format = Format;
         }
-        public string Compile(string content)
+        public string Interpret(string content)
         {
             AppModel _AppModel = JsonConvert.DeserializeObject<AppModel>(_modelname);
             StringBuilder _result = new StringBuilder();

@@ -9,17 +9,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 namespace SOM.Procedures
 {
-    public class InjectableCompile : ICompiler
+    public class InjectableInterpreter : IInterpreter
     {  
         private StringBuilder result = new StringBuilder();
         private List<string> Injectables; 
-        public InjectableCompile()
+        public InjectableInterpreter()
         {
             Injectables = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
                 .Where(x => typeof(Injectable).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                 .Select(x => x.Name).ToList(); 
         }
-        public string Compile(string content)
+        public string Interpret(string content)
         { 
             string[] lines = content.Split('\n'); 
             foreach (var line in lines)

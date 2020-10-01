@@ -5,11 +5,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SOM.Extentions;
-using SOM.Procedures.Parsers;
+using SOM.Parsers;
+using SOM.Procedures ;
 
 namespace SOM.Procedures
 {
-    public class LineExtractor : ICompiler, IParseStrategy
+    public class LineExtractor : IParseStrategy
     {
         private string _extractTarget;
         private int _numberOfLines = 4; 
@@ -18,15 +19,13 @@ namespace SOM.Procedures
             _extractTarget = ExtractTarget;
             _numberOfLines = NumberOfLines; 
         }
-        public string Compile(string content)
+        private ParseResultMode _ParseResultMode = Parsers.ParseResultMode.Default;
+        public ParseResultMode ParseResultMode
         {
-            StringBuilder _result = new StringBuilder();
-            foreach (string item in Parse(content))
-                _result.Append($"{item}"); 
-            return _result.ToString().TrimTrailingNewline();
+            get { return _ParseResultMode; }
+            set { _ParseResultMode = value; }
         }
-
-        public IEnumerable<string> Parse(string content)
+        public string Parse(string content)
         {
             StringBuilder _result = new StringBuilder();
             content = content.Replace("\r", "\n").Replace("\n\n", "\n");
@@ -38,18 +37,25 @@ namespace SOM.Procedures
                 Match match = Regex.Match(lines[lineIndex], _extractTarget);
                 if (match.Success)
                 {
-                    _result.Clear();
-                    findingCnt++; 
+                    //_result.Clear();
+                    findingCnt++;
+                    int cursor = lineIndex;
                     for (int takeIndex = lineIndex - _numberOfLines; takeIndex <= lineIndex + _numberOfLines; takeIndex++)
                     {
                         if (takeIndex < lines.Length && takeIndex > 0)
                         {
-                            _result.Append($"{lines[takeIndex]} [LN {takeIndex.ToString()}]\n"); 
+                            if (ParseResultMode == ParseResultMode.Verbose)  {
+                                _result.Append($"{lines[takeIndex]} [LN {takeIndex.ToString()}]\n");
+                            } else {
+                                _result.Append($"{lines[takeIndex]}\n");
+                            }    
                         }
+                        cursor = takeIndex;
                     }
-                    yield return _result.ToString();
+                    lineIndex = cursor + 1;  
                 }
             }
-        }
+            return _result.ToString().TrimTrailingNewline();
+        }   
     }
 }

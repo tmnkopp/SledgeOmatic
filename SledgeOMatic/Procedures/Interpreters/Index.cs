@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
-    public class IndexCompile : ICompiler
+    public class Indexer : IInterpreter
     {
         private int _seed = 0;
         private int _reset = 1;
         private string _indexName = "[index]";
-
-        public IndexCompile(int Seed, int Reset, string IndexName)
-        {
-            _seed = Seed-1;
-            _reset = Reset;
-            _indexName = IndexName;
-        }
-        public string Compile(string content)
+ 
+        public string Interpret(string content)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = content.Split('\n');
@@ -35,10 +29,6 @@ namespace SOM.Procedures
             if (_reset <= 1)
                 return index;
             return (_seed+1) + ((index) % _reset);
-        }
-        public override string ToString()
-        {
-            return $"{base.ToString()} -{(_seed + 1).ToString()} -{_reset.ToString()} -{_indexName.ToString()}";
-        }
+        } 
     }
 }

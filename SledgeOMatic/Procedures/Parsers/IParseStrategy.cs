@@ -1,13 +1,15 @@
-﻿using System;
+﻿using SOM.Parsers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOM.Procedures.Parsers
+namespace SOM.Procedures
 {
     public interface IParseStrategy
-    {
-        IEnumerable<string> Parse(string content);
+    { 
+        string Parse(string content);
+        ParseResultMode ParseResultMode { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SOM.Extentions;
-using SOM.Procedures.Parsers;
+using SOM.Parsers;
+using SOM.Procedures ;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures
 {
-    public class BlockExtractor : ICompiler, IParseStrategy
+    public class BlockExtractor :  IParseStrategy
     {
         StringBuilder result = new StringBuilder();
         private string _extractTarget;
@@ -25,25 +26,23 @@ namespace SOM.Procedures
             }
             set { _id = value; }
         }
+        private ParseResultMode _ParseResultMode = Parsers.ParseResultMode.Default; 
+        public ParseResultMode ParseResultMode
+        {
+            get { return _ParseResultMode; }
+            set { _ParseResultMode = value; }
+        }
 
         public BlockExtractor( string ExtractTarget, string FromWhere, string ToWhere)
         { 
             _extractTarget = ExtractTarget;
             _fromWhere = FromWhere;
             _toWhere = ToWhere; 
-        }
 
-        public string Compile(string content)
+        } 
+        public string Parse(string content)
         {
-            foreach (string item in Parse(content))
-                result.Append($"{item}");
-            return result.ToString().TrimTrailingNewline();
-        }
-
-        public IEnumerable<string> Parse(string content)
-        {
-            StringBuilder result = new StringBuilder();
-
+            StringBuilder result = new StringBuilder(); 
             if (content.Contains(_fromWhere) && Regex.Match(content, _extractTarget).Success)
             {
                 string[] FromSplits = content.Split(new[] { _fromWhere }, StringSplitOptions.None);
@@ -58,16 +57,12 @@ namespace SOM.Procedures
                         if (toPos > FromSplit.Length)
                             toPos = FromSplit.Length;
 
-                        yield return string.Format("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
+                        result.AppendFormat("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
                   
                     }
                 }
             }
-        }
-         
-        public override string ToString()
-        {
-            return $"{base.ToString()}-{ID.ToString()}";
-        }
+            return result.ToString();
+        } 
     }
 }

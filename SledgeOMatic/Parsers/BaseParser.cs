@@ -12,13 +12,21 @@ using System.Threading.Tasks;
 
 namespace SOM.Parsers
 {
-  
+    public enum ParseResultMode
+    {
+        Debug, 
+        Verbose,
+        Default
+    }
+
     public abstract class BaseParser
     {
-        public List<ICompiler> Compilers = new List<ICompiler>(); 
-        public List<string> PathExclusions = new List<string>();
-        public Func<string, string> Fromatter = (r) => (r);
+        public List<IParseStrategy> Parsers;
+        public List<IInterpreter> Compilers;
+        public List<string> PathExclusions; 
         public string Path { get; set; } 
+        public ParseResultMode ParseResultMode { get; set; }
+
         private string _FileFilter=""; 
         public string FileFilter {
             get {
@@ -29,8 +37,13 @@ namespace SOM.Parsers
             set { _FileFilter = value; }
         }
             
-        public Dictionary<string, string> Dict = new Dictionary<string, string>(); 
-
+        public Dictionary<string, string> Dict = new Dictionary<string, string>();
+        public BaseParser()
+        {
+            ParseResultMode = ParseResultMode.Default;
+            PathExclusions = new List<string>();
+            Parsers = new List<IParseStrategy>(); 
+        }
         public void Parse()
         { 
             DirectoryInfo DI = new DirectoryInfo($"{this.Path.Replace(FileFilter, "")}");
@@ -40,10 +53,9 @@ namespace SOM.Parsers
                 {
                     FileReader r = new FileReader(file.FullName);
                     string content = r.Read();
- 
-                    foreach (ICompiler proc in this.Compilers)
-                        content = proc.Compile(content); 
-                      
+                    string result = "";
+                    foreach (IParseStrategy proc in this.Parsers)
+                        content=proc.Parse(content); 
                     if (content != "")
                         Dict.Add(file.FullName, $"{content}\n");  
                 } 
@@ -60,13 +72,20 @@ namespace SOM.Parsers
         public override string ToString()
         {
             StringBuilder _results = new StringBuilder();
-            foreach (KeyValuePair<string, string> KVP in this.Dict)
-                _results.Append($"[{KVP.Key}]\n");
-            _results.Append($"\n");
-            foreach (KeyValuePair<string, string> KVP in this.Dict) 
-                _results.Append( $"[{KVP.Key}]\n{KVP.Value}\n" );
-
-            string result = Fromatter(_results.ToString() );
+            if (ParseResultMode == ParseResultMode.Verbose)
+            {
+                foreach (KeyValuePair<string, string> KVP in this.Dict)
+                    _results.Append($"[{KVP.Key}]\n");
+                _results.Append($"\n");
+                foreach (KeyValuePair<string, string> KVP in this.Dict)
+                    _results.Append($"[{KVP.Key}]\n{KVP.Value}\n");
+            }
+            else 
+            {
+                foreach (KeyValuePair<string, string> KVP in this.Dict)
+                    _results.Append($"{KVP.Value}\n");
+            }  
+            string result = _results.ToString();
             return result; 
         }
         private bool IsPathExcluded(string FullFilePath)

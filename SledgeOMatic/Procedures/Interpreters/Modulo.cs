@@ -8,16 +8,13 @@ using SOM.Extentions;
 using System.Text.RegularExpressions; 
 namespace SOM.Procedures
 {
-    public class ModuloCompile : ICompiler
+    public class ModuloInterpreter : IInterpreter
     {  
-        private StringBuilder result = new StringBuilder();
-        public ModuloCompile()
-        {  
-        }
-        public string Compile(string content)
+        private StringBuilder result = new StringBuilder(); 
+        public string Interpret(string content)
         {
             string matchpattern = "";
-            Match match = Regex.Match(content, @".*\[%:(\d) format:(.*).*\].*");
+            Match match = Regex.Match(content, @"\[%:(\d) format:(.*).*\]");
             if (!match.Success) {
                 return content;
             } else {
