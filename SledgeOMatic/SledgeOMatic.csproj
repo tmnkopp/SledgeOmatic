@@ -158,7 +158,7 @@
     <Compile Include="IO\IReader.cs" />
     <Compile Include="IO\IWriter.cs" />
     <Compile Include="Models\AppModel.cs" />
-    <Compile Include="Parsers\BaseParser.cs" />
+    <Compile Include="Parsers\DirectoryParser.cs" />
     <Compile Include="Procedures\Interpreters\Incrementer.cs" />
     <Compile Include="Procedures\Interpreters\Modulo.cs" />
     <Compile Include="Procedures\Interpreters\Index.cs" />
@@ -170,10 +170,9 @@
     <Compile Include="Procedures\Interpreters\Regex.cs" />
     <Compile Include="Procedures\IInjectable.cs" />
     <Compile Include="Procedures\Invoker.cs" />
-    <Compile Include="Procedures\Parsers\BlockExtractor.cs" />
-    <Compile Include="Procedures\Parsers\IParseStrategy.cs" />
+    <Compile Include="Procedures\Parsers\RangeExtractor.cs" />
+    <Compile Include="Procedures\Parsers\IParser.cs" />
     <Compile Include="Procedures\Parsers\LineExtractor.cs" />
-    <Compile Include="Procedures\Parsers\ContextExtractor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

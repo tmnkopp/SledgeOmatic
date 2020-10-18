@@ -11,7 +11,20 @@ namespace SOM.Procedures
 {
     public abstract class BaseKeyValInterpreter : IInterpreter
     { 
-        public Dictionary<string, string> KeyVals { get; set; } 
+        public Dictionary<string, string> KeyVals { get; set; }
+        public BaseKeyValInterpreter()
+        {
+
+        }
+        public BaseKeyValInterpreter(Dictionary<string, string> Dict)
+        {
+            this.KeyVals = Dict;
+        }
+        public BaseKeyValInterpreter(string json)
+        {
+            if (json != "")
+                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        }
         public virtual string Interpret(string content)
         {
             foreach (var item in KeyVals) { 
@@ -24,13 +37,9 @@ namespace SOM.Procedures
             return JsonConvert.SerializeObject(this.KeyVals, Formatting.Indented);
         }
     } 
-    public class KeyValInterpreter : BaseKeyValInterpreter, IInterpreter
-    {
-        public KeyValInterpreter(Dictionary<string, string> Dict)
-        {
-            this.KeyVals = Dict; 
-        }
-        public KeyValInterpreter(string json)
+    public class InterpretKeyVals : BaseKeyValInterpreter, IInterpreter
+    { 
+        public InterpretKeyVals(string json)
         {
             if (json != "")
                 this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json); 

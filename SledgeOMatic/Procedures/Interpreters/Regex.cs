@@ -21,11 +21,15 @@ namespace SOM.Procedures
             string replacementContent = content;
             foreach (var KeyValItem in KeyVals)
             { 
-                Match match = Regex.Match(content, KeyValItem.Key); 
+                Match match = Regex.Match(content, KeyValItem.Key);
                 while (match.Success)
-                { 
-                    string targetReplacement = match.Groups[0].Value;   
-                    replacementContent = replacementContent.Replace(targetReplacement, KeyValItem.Value);
+                {
+                    string matched = match.Groups[0].Value;
+                    string replacement = KeyValItem.Value;
+                    if (match.Groups.Count > 1)  
+                        replacementContent = replacementContent.Replace(match.Groups[1].Value, replacement);
+                    else
+                        replacementContent = replacementContent.Replace(match.Groups[0].Value, replacement);
 
                     content = content.Remove(0, match.Index + match.Length);
                     match = Regex.Match(content, KeyValItem.Key);

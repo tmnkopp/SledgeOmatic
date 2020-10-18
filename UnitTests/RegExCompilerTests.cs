@@ -22,11 +22,23 @@ namespace UnitTests
         [TestMethod]
         public void Group1RegEx_Pass()
         {
-            string content = "12345_FOO_67890";
+            string content = "12345_FOO_67890\n1-FOO-0";
             ReplaceGroup1ByRegex comp = new ReplaceGroup1ByRegex();
+            comp.KeyVals.Add(".*(-\\w*-).*", "-QUX-");
+            comp.KeyVals.Add(".*_(\\w*)_.*", "BAR"); 
             string actual = comp.Interpret(content);
-            string expected = "12345_BAR_67890";
+            string expected = "12345_BAR_67890\n1-QUX-0";
             Assert.AreEqual(expected, actual);
+        }
+        class ReplaceGroup1ByRegex : BaseRegexInterpreter
+        {
+            public ReplaceGroup1ByRegex()
+            { 
+            }
+            public override string Interpret(string content)
+            {
+                return base.Interpret(content);
+            }
         }
         [TestMethod]
         public void ReplaceByRegEx_Pass()
@@ -37,14 +49,7 @@ namespace UnitTests
             string expected = "12345_BAR_67890";
             Assert.AreEqual(expected, actual);
         }
-        class ReplaceGroup1ByRegex : BaseRegexInterpreter {
-            public ReplaceGroup1ByRegex() { 
-                this.KeyVals.Add(".*_(\\w*)_.*", "BAR");
-            }
-            public override string Interpret(string content)  {
-                return base.Interpret(content);
-            }
-        }
+
         class ReplaceByRegex : BaseRegexInterpreter {
             public ReplaceByRegex(){
                 this.KeyVals.Add("FOO", "BAR"); 

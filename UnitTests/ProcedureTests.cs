@@ -10,9 +10,7 @@ namespace UnitTests
 {
     [TestClass]
     public class ProcedureTests
-    {
-        //DECLARE @KVTABLE
- 
+    { 
         [TestMethod]
         public void Incrementer_Increments()
         {
@@ -39,17 +37,7 @@ namespace UnitTests
             string actual = extract.Interpret(parseme);
             string expected = "[passed]\n[passed]\n[passed][passed]\n[passed]";
             Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
-        public void ContextExtractReturnsExpectedResult()
-        {
-            string parseme = "1-2-3-4-5-6-7-8-9-01-2-3-4-5-6-7-8-9-0";
-            ContextExtractor extract = new ContextExtractor("4-5-6", 1, 3);
-            string actual = extract.Parse(parseme);
-            string expected = "-4-5-6-7-\n-4-5-6-7-\n";
-            Assert.AreEqual(expected, actual);
-        }
-
+        } 
         [TestMethod]
         public void KeyValDBReaderNotNull()
         {

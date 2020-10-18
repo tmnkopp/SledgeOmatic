@@ -14,8 +14,7 @@ namespace SOM.Compilers
     {
         Debug,
         Cache,
-        Commit,
-        ForceCommit
+        Commit 
     }
     public class AppSettingsCompiler : BaseCompiler
     {
@@ -39,8 +38,11 @@ namespace SOM.Compilers
         public List<IInterpreter> ContentCompilers;
         public List<IInterpreter> FilenameCompilers;
         public CompileMode CompileMode;
-        
         private string content = "";
+        public Func<string, string> _ContentFormatter = (c)=>(c);
+        public Func<string, string> ContentFormatter {
+            set { _ContentFormatter = value; }
+        }
         public BaseCompiler()
         {
             ContentCompilers = new List<IInterpreter>();
@@ -52,22 +54,20 @@ namespace SOM.Compilers
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
             {
                 content = new FileReader(file.FullName).Read().ToString();
-                foreach (IInterpreter proc in ContentCompilers)
+                foreach (IInterpreter proc in ContentCompilers) {  
                     content = proc.Interpret(content);
-
+                    content = _ContentFormatter(content);
+                }
                 string newFileName = file.Name; 
                 foreach (IInterpreter proc in FilenameCompilers)
                     newFileName = proc.Interpret(newFileName).RemoveWhiteAndBreaks();
-       
+                
                 CommitFile(content, $"{Dest}\\{newFileName}"); 
             } 
         }
         private void CommitFile(string Content, string FileName)
-        {
-            if (CompileMode == CompileMode.ForceCommit)
-                FileSys.Utils.DirectoryCreator(FileName, AppSettings.BasePath);
-
-            if (CompileMode == CompileMode.Commit || CompileMode == CompileMode.ForceCommit)
+        {  
+            if (CompileMode == CompileMode.Commit )
             {
                 FileWriter fw = new FileWriter($"{FileName}");
                 fw.Write(Content);

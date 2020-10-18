@@ -1,6 +1,7 @@
 ﻿using SOM.Extentions;
 using SOM.Parsers;
-using SOM.Procedures ;
+using SOM.Procedures ; 
+using SOM.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,39 +11,20 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures
 {
-    public class BlockExtractor :  IParseStrategy
-    {
-        StringBuilder result = new StringBuilder();
+    public class RangeExtractor : BaseParser, IParser
+    { 
         private string _extractTarget;
         private string _fromWhere;
-        private string _toWhere;
-        private string _id;
-        public string ID
-        {
-            get {
-                if (string.IsNullOrEmpty(_id))
-                    _id = this.GetHashCode().ToString();
-                return _id; 
-            }
-            set { _id = value; }
-        }
-        private ParseResultMode _ParseResultMode = Parsers.ParseResultMode.Default; 
-        public ParseResultMode ParseResultMode
-        {
-            get { return _ParseResultMode; }
-            set { _ParseResultMode = value; }
-        }
-
-        public BlockExtractor( string ExtractTarget, string FromWhere, string ToWhere)
+        private string _toWhere; 
+         
+        public RangeExtractor( string ExtractTarget, string FromWhere, string ToWhere)
         { 
             _extractTarget = ExtractTarget;
             _fromWhere = FromWhere;
-            _toWhere = ToWhere; 
-
-        } 
-        public string Parse(string content)
+            _toWhere = ToWhere;  
+        }
+        public IEnumerable<string> Parse(string content)
         {
-            StringBuilder result = new StringBuilder(); 
             if (content.Contains(_fromWhere) && Regex.Match(content, _extractTarget).Success)
             {
                 string[] FromSplits = content.Split(new[] { _fromWhere }, StringSplitOptions.None);
@@ -56,13 +38,11 @@ namespace SOM.Procedures
 
                         if (toPos > FromSplit.Length)
                             toPos = FromSplit.Length;
+                        yield return string.Format("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
 
-                        result.AppendFormat("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
-                  
                     }
                 }
             }
-            return result.ToString();
-        } 
+        }
     }
 }

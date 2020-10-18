@@ -61,10 +61,8 @@ namespace SOM.Extentions
             string[] lines = input.Split('\n');
             foreach (var line in lines)
             { 
-                if (line.RemoveWhiteAndBreaks().Length > 0)
-                {
-                    result.AppendFormat("{0}\n", line);
-                } 
+                if (line.RemoveWhiteAndBreaks().Length > 0) 
+                    result.AppendFormat("{0}\n", line); 
             }
             return result.ToString();
         }
