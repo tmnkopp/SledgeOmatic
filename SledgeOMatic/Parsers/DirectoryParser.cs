@@ -16,6 +16,8 @@ namespace SOM.Parsers
     public class DirectoryParser   
     {
         #region Props
+        private List<string> _Directories; 
+        public void AddDirectory(string Dir) => _Directories.Add(Dir); 
 
         private Dictionary<string, string> _Results;
         public Dictionary<string, string> Results {
@@ -36,12 +38,7 @@ namespace SOM.Parsers
         public string FileFilter
         {
             get { return Directory.ReverseString().Split(new[] { '\\' })[0].ReverseString(); } 
-        }
-        private string _ContentFilter = "";
-        public string ContentFilter
-        { 
-            set { _ContentFilter = value; }
-        }
+        } 
         #endregion
 
         #region ctor
@@ -63,13 +60,7 @@ namespace SOM.Parsers
             DirectoryInfo DI = new DirectoryInfo($"{this._Directory.Replace(FileFilter, "")}");
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
-                string content = new FileReader(file.FullName).Read();
-                if (_ContentFilter != "")
-                { 
-                    if (!Regex.Match(content, _ContentFilter).Success) 
-                        continue;  
-                }
-
+                string content = new FileReader(file.FullName).Read(); 
                 StringBuilder result = new StringBuilder();
                 foreach (var item in _Parser.Parse(content)) {
                     result.Append( item );
