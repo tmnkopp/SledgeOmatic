@@ -21,7 +21,7 @@ namespace SOM.Procedures
         { 
             _extractTarget = ExtractTarget;
             _fromWhere = FromWhere;
-            _toWhere = ToWhere;  
+            _toWhere = (ToWhere!= "") ? ToWhere : "~~!__!~~"; 
         }
         public IEnumerable<string> Parse(string content)
         {

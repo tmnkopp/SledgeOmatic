@@ -37,9 +37,13 @@ namespace SOM.Procedures
             return JsonConvert.SerializeObject(this.KeyVals, Formatting.Indented);
         }
     } 
-    public class InterpretKeyVals : BaseKeyValInterpreter, IInterpreter
-    { 
-        public InterpretKeyVals(string json)
+    public class KeyValInterpreter : BaseKeyValInterpreter, IInterpreter
+    {
+        public KeyValInterpreter(Dictionary<string, string> KeyVals)
+        {
+            this.KeyVals = KeyVals;
+        }
+        public KeyValInterpreter(string json)
         {
             if (json != "")
                 this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json); 

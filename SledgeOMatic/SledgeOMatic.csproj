@@ -170,6 +170,7 @@
     <Compile Include="Procedures\Interpreters\Regex.cs" />
     <Compile Include="Procedures\IInjectable.cs" />
     <Compile Include="Procedures\Invoker.cs" />
+    <Compile Include="Procedures\Parsers\ExpressionExtractor.cs" />
     <Compile Include="Procedures\Parsers\RangeExtractor.cs" />
     <Compile Include="Procedures\Parsers\IParser.cs" />
     <Compile Include="Procedures\Parsers\LineExtractor.cs" />

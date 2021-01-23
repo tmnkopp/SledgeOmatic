@@ -29,6 +29,7 @@ namespace SOM.Models
         public int AppModelItemId { get; set; }
         public string Name { get; set; }
         public string DataType { get; set; }
+        public string ControlType { get; set; }
         public int OrdinalPosition { get; set; }
         public bool IsNullable { get; set; }
         public int? MaxLen { get; set; } 

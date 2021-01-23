@@ -17,7 +17,13 @@ namespace SOM.Parsers
     {
         #region Props
         private List<string> _Directories; 
-        public void AddDirectory(string Dir) => _Directories.Add(Dir); 
+        public void AddDirectory(string Dir) => _Directories.Add(Dir);
+
+        public Func<string, string> _ContentFormatter = (c) => (c);
+        public Func<string, string> ContentFormatter
+        {
+            set { _ContentFormatter = value; }
+        }
 
         private Dictionary<string, string> _Results;
         public Dictionary<string, string> Results {
@@ -62,8 +68,8 @@ namespace SOM.Parsers
             {
                 string content = new FileReader(file.FullName).Read(); 
                 StringBuilder result = new StringBuilder();
-                foreach (var item in _Parser.Parse(content)) {
-                    result.Append( item );
+                foreach (var item in _Parser.Parse(content)) { 
+                    result.Append(_ContentFormatter(item));
                 }
                 if (result.ToString() != "") 
                     _Results.Add($"{file.FullName}", $"{result.ToString()}"); 
@@ -73,7 +79,15 @@ namespace SOM.Parsers
         {
             ParseDirectory();
             Writer.Write(ToString());
-        } 
+        }
+        public void Inspect()
+        {
+            Cache.Write("");
+            ParseDirectory();
+            Cache.Write(ToString());
+            Cache.CacheEdit();
+        }
+        
         public override string ToString() {
             StringBuilder result = new StringBuilder();
             foreach (KeyValuePair<string, string> kvp in _Results)

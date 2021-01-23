@@ -44,7 +44,44 @@ namespace SOM.Procedures
             }
         }
     }
-
+    public class ViewEnumerator : BaseTypeEnumerator<AppModelItem>
+    {
+        private string _viewname;
+        public ViewEnumerator(string ViewName)
+        {
+            _viewname = ViewName;
+        }
+        public override IEnumerable<AppModelItem> Enumerate()
+        {
+            var con = ConfigurationManager.ConnectionStrings["default"].ToString();
+            using (SqlConnection myConnection = new SqlConnection(con))
+            {
+                string sql = $"SELECT Name, DataType, ControlType FROM {_viewname}";
+                SqlCommand oCmd = new SqlCommand(sql, myConnection);
+                SqlDataReader oReader;
+                myConnection.Open();
+                using (oReader = oCmd.ExecuteReader())
+                {
+                    while (oReader.Read())
+                    {
+                        AppModelItem _AppModelItem = GetAppModelItem(oReader);
+                        yield return GetAppModelItem(oReader);
+                    }
+                    myConnection.Close();
+                }
+            }
+        }
+        private AppModelItem GetAppModelItem(SqlDataReader oReader)
+        {
+            AppModelItem _AppModelItem = new AppModelItem()
+            {
+                Name = oReader["Name"].ToString(),
+                DataType = oReader["DataType"].ToString(),
+                ControlType =  oReader["ControlType"].ToString()
+            }; 
+            return _AppModelItem;
+        }
+    }
     public class TableEnumerator : BaseTypeEnumerator<AppModelItem>
     {
         private string _tablename;
