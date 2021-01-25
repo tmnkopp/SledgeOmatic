@@ -43,7 +43,10 @@ namespace SOM.Parsers
         } 
         public string FileFilter
         {
-            get { return Directory.ReverseString().Split(new[] { '\\' })[0].ReverseString(); } 
+            get {
+                string ret = Directory.ReverseString().Split(new[] { '\\' })[0].ReverseString();
+                return (ret == "") ?  "*.*": ret; 
+            } 
         } 
         #endregion
 
