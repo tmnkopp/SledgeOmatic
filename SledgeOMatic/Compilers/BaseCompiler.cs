@@ -67,7 +67,7 @@ namespace SOM.Compilers
         }
         private void CommitFile(string Content, string FileName)
         {  
-            if (CompileMode == CompileMode.Commit )
+            if (CompileMode == CompileMode.Commit)
             {
                 FileWriter fw = new FileWriter($"{FileName}");
                 fw.Write(Content);

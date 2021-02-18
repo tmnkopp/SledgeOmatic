@@ -109,15 +109,15 @@ namespace SOM.Procedures
                 }
             } 
         } 
-        private AppModelItem GetAppModelItem(SqlDataReader oReader) {
+        private AppModelItem GetAppModelItem(SqlDataReader sdr) {
             AppModelItem _AppModelItem = new AppModelItem()
             {
-                Name = oReader["COLUMN_NAME"].ToString(),
-                DataType = oReader["DATA_TYPE"].ToString(),
-                OrdinalPosition = Convert.ToInt32(oReader["ORDINAL_POSITION"])
-            };
-            if (oReader["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
-                _AppModelItem.MaxLen = Convert.ToInt32(oReader["CHARACTER_MAXIMUM_LENGTH"]); 
+                Name = sdr["COLUMN_NAME"].ToString(),
+                DataType = sdr["DATA_TYPE"].ToString(), 
+                OrdinalPosition = Convert.ToInt32(sdr["ORDINAL_POSITION"])
+            }; 
+            if (sdr["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
+                _AppModelItem.MaxLen = Convert.ToInt32(sdr["CHARACTER_MAXIMUM_LENGTH"]); 
             return _AppModelItem;
         } 
     }

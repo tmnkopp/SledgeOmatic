@@ -18,6 +18,12 @@ namespace SOM.Procedures
     }
     public abstract class BaseParser
     {
+        private string _content = "";
+        public string Content
+        {
+            set { _content = value; }
+            get { return _content; }
+        }
         private ParseResultMode _ParseResultMode = ParseResultMode.Default;
         public ParseResultMode ParseResultMode
         { 

@@ -23,7 +23,7 @@ namespace SOM.Procedures
             string[] lines = content.Split('\n');
             foreach (var line in lines)
             {
-                Match match = Regex.Match(line, @".*\[model:(?<model>.*) path:(?<path>.*).*\]");
+                Match match = Regex.Match(line, @".*som: -m (?<model>.*) -p (?<path>.*).*:som");
                 if (match.Success)
                 {
                     GroupCollection groups = match.Groups;
@@ -31,9 +31,9 @@ namespace SOM.Procedures
                     string path = groups["path"].Value.Replace("~", AppSettings.BasePath);
                     
                     string template = File.ReadAllText(path); 
-                    foreach (var item in base.GetModelItems(model))
+                    foreach (var modelItem in base.GetModelItems(model))
                     {
-                        result.Append(template.Replace("$0", item.Name).Replace("$1", item.DataType));
+                        result.Append(template.Replace("$0", modelItem.Name).Replace("$1", modelItem.DataType));
                     }
                 }  else  {
                     result.Append(line);

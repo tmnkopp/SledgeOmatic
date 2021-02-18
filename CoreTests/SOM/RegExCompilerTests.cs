@@ -13,7 +13,7 @@ namespace UnitTests
         [TestMethod]
         public void ModuloCompile_Pass()
         {
-            string content = "aa[%:2 format:-]\nbb[%:2 format:-]\ncc[%:2 format:-]";
+            string content = "aa som:%2 -f :som\nbb som:%2 -f :som\ncc som:%2 -f :som";
             ModuloInterpreter comp = new ModuloInterpreter();
             string actual = comp.Interpret(content);
             string expected = "aa\nbb-\ncc";

@@ -17,11 +17,11 @@ namespace SOM.Procedures
             string[] lines = content.Split('\n'); 
             foreach (var line in lines)
             {
-                string pattern = "\\[\\w:.+\\]";
+                string pattern = "som:\\w:.+\\:som";
                 Match match = Regex.Match(line, pattern);
                 if (match.Success)
                 {
-                    string filename = match.Value.Replace("[","").Replace("]", "");
+                    string filename = match.Value.Replace("som:", "").Replace(":som", "");
                     FileReader r = new FileReader(filename); 
                     result.AppendFormat("{0}", line.Replace(match.Value, r.Read()));
                 }   else  {

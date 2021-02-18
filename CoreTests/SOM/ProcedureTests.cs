@@ -19,14 +19,24 @@ namespace UnitTests
             string expected = ",2000ASDF\n,2001\n,2002\n\"2003"; 
             Assert.AreEqual(expected, actual);
         }
-                 
+
+        [TestMethod]
+        public void ModuloTemplateCompile()
+        { 
+            //string compiled = compiler.Interpret("som: -m AuditLog -p C:\\_som\\_src\\model\\template.txt:som");
+            string compiled = new ModelTemplateInterpreter().Interpret("som: -m EinsteinPrivate -p ~_src\\_templates\\razor-form-group.cshtml:som");
+            Cache.Inspect(compiled); 
+            compiled = new ModuloInterpreter().Interpret(compiled);
+            Cache.Inspect(compiled);
+            Assert.IsNotNull(compiled);
+        }
         [TestMethod]
         public void ModelTemplateCompile()
         {  
             ModelTemplateInterpreter compiler = new ModelTemplateInterpreter();
-            string compiled = compiler.Interpret("[model:AuditLog path:C:\\_som\\_src\\model\\template.txt]");
-            Cache.Write(compiled);
-            Cache.CacheEdit();
+            //string compiled = compiler.Interpret("som: -m AuditLog -p C:\\_som\\_src\\model\\template.txt:som");
+            string compiled = compiler.Interpret("som: -m EinsteinPrivate -p ~_src\\_templates\\razor-form-group.cshtml:som");
+            Cache.Inspect(compiled); 
             Assert.IsNotNull(compiled);
         } 
         [TestMethod]

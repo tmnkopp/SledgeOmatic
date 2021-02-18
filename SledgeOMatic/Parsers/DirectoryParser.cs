@@ -40,6 +40,12 @@ namespace SOM.Parsers
         {
             get { return _Directory; }
             set { _Directory = value; }
+        }
+        private string _PathExcludePattern = @"\$";
+        public string PathExcludePattern
+        {
+            get { return _PathExcludePattern; }
+            set { _PathExcludePattern = value; }
         } 
         public string FileFilter
         {
@@ -54,13 +60,13 @@ namespace SOM.Parsers
 
         public DirectoryParser()
         {
-            _Results = new Dictionary<string, string>(); 
+            _Results = new Dictionary<string, string>();
+            Cache.Write("");
         }
         public DirectoryParser(string Directory) : this()
         {
             _Directory = Directory;  
-        }
-
+        } 
         #endregion
        
         public void ParseDirectory()
@@ -69,6 +75,15 @@ namespace SOM.Parsers
             DirectoryInfo DI = new DirectoryInfo($"{this._Directory.Replace(FileFilter, "")}");
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
+                if (_Parser.ParseResultMode == ParseResultMode.Debug)
+                    Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
+                
+                if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern)) {  
+                    if (_Parser.ParseResultMode == ParseResultMode.Debug)
+                        Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
+                    continue;
+                }
+
                 string content = new FileReader(file.FullName).Read(); 
                 StringBuilder result = new StringBuilder();
                 foreach (var item in _Parser.Parse(content)) { 
@@ -93,10 +108,17 @@ namespace SOM.Parsers
         
         public override string ToString() {
             StringBuilder result = new StringBuilder();
-            foreach (KeyValuePair<string, string> kvp in _Results)
-                result.Append($"{kvp.Key}\n");
-            foreach (KeyValuePair<string,string> kvp in _Results)
-                result.Append($"{kvp.Key}\n{kvp.Value}\n");
+            if (_Parser.ParseResultMode != ParseResultMode.Default)
+            {
+                foreach (KeyValuePair<string, string> kvp in _Results)
+                    result.Append($"{kvp.Key}\n");
+                foreach (KeyValuePair<string, string> kvp in _Results)
+                    result.Append($"{kvp.Key}\n{kvp.Value}\n");
+            }
+            else {
+                foreach (KeyValuePair<string, string> kvp in _Results)
+                    result.Append($"{kvp.Value}\n");
+            } 
             return result.ToString();
         }  
     }

@@ -14,7 +14,45 @@ namespace UnitTests
      
     [TestClass]
     public class ParseTests
-    { 
+    {
+
+        [TestMethod]
+        public void SomExtractor_Extracts()
+        {
+            string content = @"
+
+	        DECLARE @EXISTS INT  = (SELECT COUNT(*) FROM EinsteinBGP WHERE PK_EinsteinBGP<>ISNULL(@PK_EinsteinBGP,0) AND PK_OrgSubmission=@PK_OrgSubmission
+			    --som:{0}={0}\n
+			    --@
+			    AND ASN=@ASN
+			    AND BGPRoutes=@BGPRoutes
+			    AND BGPPeerIP=@BGPPeerIP
+			    AND NonAdvertised=@NonAdvertised
+			    --:som
+			    )
+		    IF (@EXISTS) > 0
+		    BEGIN
+			    SET @OUT = -11--DUPLICATE	
+			    SET @MODE='ERR' 
+			    RETURN;
+		    END  
+			--som:{0}={0}
+			--@
+			    ASN,BGPRoutes,NonAdvertised,Notes,isActive
+			--:som
+            "; 
+            SomFormatExtractor parser = new SomFormatExtractor("--@");
+            StringBuilder result = new StringBuilder();
+            foreach (var item in parser.Parse(content)) 
+            {
+                Cache.Inspect(string.Format(parser.Formatter, item)); 
+                result.Append(item);
+            } 
+            
+            string expected = "222\n333\n-target-\n444\n555";
+            Assert.AreEqual(expected, result.ToString());
+
+        }
         [TestMethod]
         public void LineExtractor_Extracts()
         {

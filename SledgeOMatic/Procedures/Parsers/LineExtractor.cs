@@ -25,10 +25,12 @@ namespace SOM.Procedures
             content = content.Replace("\r", "\n").Replace("\n\n", "\n");
             content = $"{new string('\n', _numberOfLines)}{content}{new string('\n', _numberOfLines)}";
             string[] lines = content.Split('\n');
-            int findingCnt = 0; 
+            int findingCnt = 0;
+            if (this.ParseResultMode == ParseResultMode.Debug)
+                Console.WriteLine($"debug: _extractTarget {_extractTarget} {Regex.Match(content, _extractTarget).Success}");
             for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
             { 
-                Match match = Regex.Match(lines[lineIndex], _extractTarget);
+                Match match = Regex.Match(lines[lineIndex], _extractTarget); 
                 if (match.Success)
                 {
                     StringBuilder result = new StringBuilder();

@@ -14,7 +14,7 @@ namespace SOM.Procedures
         public string Interpret(string content)
         {
             string matchpattern = "";
-            Match match = Regex.Match(content, @"\[%:(\d) format:(.*).*\]");
+            Match match = Regex.Match(content, @".*som:%(\d) -f (.*).*:som");
             if (!match.Success) {
                 return content;
             } else {
