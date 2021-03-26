@@ -43,7 +43,7 @@ namespace SOM
         }
         private static ServiceProvider RegisterServices(string[] args)
         { 
-            var p = @"C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\Debug\netcoreapp3.1\";
+            var p = @"C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\";
 
             IConfiguration configuration = new ConfigurationBuilder()
                   .SetBasePath(p)

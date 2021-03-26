@@ -35,8 +35,7 @@ namespace CoreTests
             compiler.Source = "C:\\_som\\T\\";
             compiler.Dest = "C:\\_som\\T\\";
             compiler.CompileMode = CompileMode.Commit;
-            compiler.FileFilter = "unittest.html";
-            //compiler.ContentFormatter = (n) => (n.Replace("dbmodel", "aspnet_Membership"));
+            compiler.FileFilter = "unittest.html"; 
             compiler.FileNameFormatter = (n) => (n.Replace("unittest", "unittest_compiled"));
             compiler.ContentCompilers.Add(
                 new SomSchemaInterpreter(schema)
@@ -72,9 +71,7 @@ namespace CoreTests
 
         [TestMethod]
         public void IG_Compiles()
-        {
-            Cache.Write("");
-
+        { 
             Compiler compiler = new Compiler();
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
@@ -111,11 +108,11 @@ namespace CoreTests
             Compiler compiler = new Compiler(); 
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
-            compiler.CompileMode = CompileMode.Cache;
-            compiler.FileFilter = "*DB_Update*sql"; 
+            compiler.CompileMode = CompileMode.Cache; 
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
             compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));
+            compiler.FileFilter = "*DB_Update*sql";
             compiler.Compile();   
             compiler.FileFilter = "*frmVal*";
             compiler.Compile();
