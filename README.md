@@ -8,9 +8,9 @@
 
 SOM takes sucky repetitive code tasks and un-sucks them. 
 
-A code scaffolder, code refactor-er, code generator, code compiler, repetitive task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. 
+A code scaffolder, code generator, code compiler, code refactor-er, repetitive task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. 
 
-SOM adheres to fluent developer friendly endpoints. Key value refactor substitutions, for instance, can be easily expressed through JSON, CSV, C# Dictionaries, or SQL generated queries. Custom markup language refactors code inline. 
+SOM adheres to fluent developer friendly endpoints. Key value refactor substitutions, for instance, can be easily expressed through JSON, CSV, C# Dictionaries, or SQL generated tables. Custom markup language refactors code inline. 
 
 Compilation steps are made manageable using builder patterns. Compilations are debuggable, with compilation Modes including debug, verbose, cached and commit allowing the code to be inspected and tested prior to committing the compilation. 
 
@@ -42,18 +42,50 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
 ```
 
 ## SOML (SOMarkup Language)
+
+####  PYTHON
 ``` 
+    # python
 
     # som!schema -m aspnet_Roles -f {0}
 
     # schema!som
-    #
+    
     # som!schema -t ~T\PY\TRY_{1}.py 
     
-    # schema!som
-
+    # schema!som 
 ```
 
+####  SQL
+```  
+    ALTER PROCEDURE [dbo].[aspnet_Membership_CREATE]
+    -- som!schema -m aspnet_Membership -f @{0} {1}({2})
+
+    -- schema!som
+    AS
+    BEGIN
+    SELECT  @NewUserId = UserId FROM aspnet_Users WHERE LOWER(@UserName) = LoweredUserName 
+    IF ( @NewUserId IS NULL )
+    BEGIN
+        SET @NewUserId = @UserId
+        EXEC @ReturnValue = dbo.aspnet_Users_CreateUser @ApplicationId OUTPUT
+        SET @NewUserCreated = 1
+    END
+    -- som!schema -t ~T\SQL\IF_NULL_ELSE_{1}.sql
+    
+    -- schema!som
+    END
+```
+####  C# / RAZOR
+```
+    @* som!schema -t ~T\CS\FORM_ELEMENT_{1}.cshtml *@
+        <div class="form-group">
+                <label asp-for="{3}.{0}" class="control-label"></label>
+                <input asp-for="{3}.{0}" class="form-control" />
+                <span asp-validation-for="{3}.{0}" class="text-danger"></span>
+        </div>
+    @* schema!som *@
+```
 ## C# Compilation
 ```csharp
     
