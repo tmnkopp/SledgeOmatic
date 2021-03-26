@@ -21,6 +21,7 @@ namespace SOM.Procedures
         public string Interpret(string content)
         {
             StringBuilder result = new StringBuilder();
+
             Match match = Regex.Match(content, _pattern);
             string replacementContent = content;
             while (match.Success)

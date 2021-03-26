@@ -12,11 +12,18 @@ using System.Data.SqlClient;
 using SOM.Models;
 using System.Text.RegularExpressions;
 using System.Reflection;
-using System.IO; 
+using System.IO;
+using Microsoft.Extensions.Configuration;
+
 namespace SOM.Procedures 
 {
     public class ModelTemplateInterpreter : BaseModelInterpreter, IInterpreter 
-    {  
+    {
+        private readonly IConfiguration _config;
+        public ModelTemplateInterpreter(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
         public string Interpret(string content)
         {
             StringBuilder result = new StringBuilder();
@@ -31,7 +38,7 @@ namespace SOM.Procedures
                     string path = groups["path"].Value.Replace("~", AppSettings.BasePath);
                     
                     string template = File.ReadAllText(path); 
-                    foreach (var modelItem in base.GetModelItems(model))
+                    foreach (var modelItem in base.GetModelItems(model, _config))
                     {
                         result.Append(template.Replace("$0", modelItem.Name).Replace("$1", modelItem.DataType));
                     }
@@ -45,13 +52,13 @@ namespace SOM.Procedures
     public abstract class BaseModelInterpreter
     {  
         protected BaseTypeEnumerator<AppModelItem> _AppModelItems;  
-        protected IEnumerable<AppModelItem> GetModelItems(string ModelName)
+        protected IEnumerable<AppModelItem> GetModelItems(string ModelName, IConfiguration _config)
         {
             BaseTypeEnumerator<AppModelItem> itemEnumerator;
             if (ModelName.Contains("."))
                 itemEnumerator = new TypeEnumerator(Type.GetType(ModelName));
             else
-                itemEnumerator = new TableEnumerator(ModelName);
+                itemEnumerator = new TableEnumerator(ModelName, _config);
 
             foreach (var item in itemEnumerator.Enumerate())
             {

@@ -29,8 +29,8 @@ namespace SOM.Parsers
         public Dictionary<string, string> Results {
             get { return _Results; } 
         }
-        private IParser _Parser;
-        public IParser Parser
+        private IParser<string> _Parser;
+        public IParser<string> Parser
         { 
             set { _Parser = value; }
             get { return _Parser; }
@@ -54,9 +54,8 @@ namespace SOM.Parsers
                 return (ret == "") ?  "*.*": ret; 
             } 
         } 
-        #endregion
-
-        #region ctor
+        #endregion 
+        #region Ctor
 
         public DirectoryParser()
         {
@@ -75,11 +74,11 @@ namespace SOM.Parsers
             DirectoryInfo DI = new DirectoryInfo($"{this._Directory.Replace(FileFilter, "")}");
             foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
-                if (_Parser.ParseResultMode == ParseResultMode.Debug)
+                if (_Parser.ParseMode == ParseMode.Debug)
                     Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
                 
                 if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern)) {  
-                    if (_Parser.ParseResultMode == ParseResultMode.Debug)
+                    if (_Parser.ParseMode == ParseMode.Debug)
                         Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
                     continue;
                 }
@@ -108,7 +107,7 @@ namespace SOM.Parsers
         
         public override string ToString() {
             StringBuilder result = new StringBuilder();
-            if (_Parser.ParseResultMode != ParseResultMode.Default)
+            if (_Parser.ParseMode != ParseMode.Default)
             {
                 foreach (KeyValuePair<string, string> kvp in _Results)
                     result.Append($"{kvp.Key}\n");

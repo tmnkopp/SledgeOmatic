@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,6 +10,14 @@ using System.Threading.Tasks;
 
 namespace SOM.Data
 { 
+    public static class DataExtensions
+    {
+        public static bool HasColumn(this SqlDataReader dr, string columnName)
+        {
+            var fieldNames = Enumerable.Range(0, dr.FieldCount).Select(i => dr.GetName(i)).ToArray();
+            return fieldNames.Contains(columnName);
+        }
+    }
     public abstract class DBReader<T>
     {
         public virtual T Data { get; set; }
@@ -16,20 +25,16 @@ namespace SOM.Data
         
         public SqlDataReader oReader { get; set; } 
         public virtual void ExecuteSql(string sSql)
-        {
+        {  
             var con = ConfigurationManager.ConnectionStrings["default"].ToString();
             using (SqlConnection myConnection = new SqlConnection(con))
             {
                 SqlCommand oCmd = new SqlCommand(sSql, myConnection);
                 myConnection.Open();
-                using (oReader = oCmd.ExecuteReader())
-                {
-                    while (oReader.Read())
-                    { 
-                        UnloadReader();
-                    }
-                    myConnection.Close();
-                }
+                using (oReader = oCmd.ExecuteReader()) 
+                    while (oReader.Read()) 
+                        UnloadReader(); 
+                    myConnection.Close(); 
             }
         } 
 

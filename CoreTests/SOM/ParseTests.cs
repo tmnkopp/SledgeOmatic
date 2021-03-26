@@ -41,11 +41,10 @@ namespace UnitTests
 			    ASN,BGPRoutes,NonAdvertised,Notes,isActive
 			--:som
             "; 
-            SomFormatExtractor parser = new SomFormatExtractor("--@");
+            SomTagParser parser = new SomTagParser(ParseTag.SCHEMA);
             StringBuilder result = new StringBuilder();
             foreach (var item in parser.Parse(content)) 
-            {
-                Cache.Inspect(string.Format(parser.Formatter, item)); 
+            { 
                 result.Append(item);
             } 
             

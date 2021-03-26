@@ -2,14 +2,49 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>SOM</RootNamespace>
+    <AssemblyName>SOM</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <StartupObject>SOM.Program</StartupObject>
+    <Description></Description>
+    <PackageReleaseNotes>compile -e '\$|pycache'</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Bootstrapper.cs" />
+    <Compile Remove="Compilers\CompilationBuilder.cs" />
+    <Compile Remove="IO\Utils.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NuGet.Build" Version="2.12.1" />
     <PackageReference Include="NuGetPowerTools" Version="0.29.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="YamlDotNet" Version="9.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\netcoreapp3.1\" />
   </ItemGroup>
 
 </Project>

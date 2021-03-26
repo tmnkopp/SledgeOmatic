@@ -11,34 +11,7 @@ namespace UnitTests
     [TestClass]
     public class ProcedureTests
     { 
-        [TestMethod]
-        public void Incrementer_Increments()
-        {
-            Incrementer compiler = new Incrementer("[\"|,](\\d{4}).*", 1000); 
-            string actual = compiler.Interpret(",1000ASDF\n,1001\n,1002\n\"1003");
-            string expected = ",2000ASDF\n,2001\n,2002\n\"2003"; 
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void ModuloTemplateCompile()
-        { 
-            //string compiled = compiler.Interpret("som: -m AuditLog -p C:\\_som\\_src\\model\\template.txt:som");
-            string compiled = new ModelTemplateInterpreter().Interpret("som: -m EinsteinPrivate -p ~_src\\_templates\\razor-form-group.cshtml:som");
-            Cache.Inspect(compiled); 
-            compiled = new ModuloInterpreter().Interpret(compiled);
-            Cache.Inspect(compiled);
-            Assert.IsNotNull(compiled);
-        }
-        [TestMethod]
-        public void ModelTemplateCompile()
-        {  
-            ModelTemplateInterpreter compiler = new ModelTemplateInterpreter();
-            //string compiled = compiler.Interpret("som: -m AuditLog -p C:\\_som\\_src\\model\\template.txt:som");
-            string compiled = compiler.Interpret("som: -m EinsteinPrivate -p ~_src\\_templates\\razor-form-group.cshtml:som");
-            Cache.Inspect(compiled); 
-            Assert.IsNotNull(compiled);
-        } 
+ 
         [TestMethod]
         public void RegExExpectedResult()
         { 
@@ -48,13 +21,6 @@ namespace UnitTests
             string expected = "[passed]\n[passed]\n[passed][passed]\n[passed]";
             Assert.AreEqual(expected, actual);
         } 
-        [TestMethod]
-        public void KeyValDBReaderNotNull()
-        {
-            SqlKeyValInterpreter KVCompile = new SqlKeyValInterpreter( $"{Placeholder.Basepath}_unittest.sql"); 
-            string actual = KVCompile.Interpret("[UNITTEST]");
-            string expected = "passed";
-            Assert.AreEqual(expected, actual);
-        }
+ 
     }
 }

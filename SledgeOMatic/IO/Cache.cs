@@ -19,10 +19,22 @@ namespace SOM.IO
             FileWriter w = new FileWriter(AppSettings.Cache);
             w.Write(content);
         }
+        public static void WriteLine(string content)
+        {
+            Cache.Append($"{content}\n");
+        }
+        public static void Debug(string content)
+        {
+            Cache.Append($"\ndebug: {content}");
+        }
         public static void Append(string content)
         {
             FileWriter w = new FileWriter(AppSettings.Cache);
             w.Write(Cache.Read() + content);
+        }
+        public static void Inspect()
+        {
+            Cache.CacheEdit();
         }
         public static void Inspect(string content)
         {
@@ -32,7 +44,7 @@ namespace SOM.IO
         public static void CacheEdit() {
             Process p = new Process();
             p.StartInfo.FileName = ConfigurationManager.AppSettings["CodeViewer"].ToString();
-            p.StartInfo.Arguments = AppSettings.Cache;
+            p.StartInfo.Arguments = AppSettings.Cache; 
             p.Start();
         }
     }

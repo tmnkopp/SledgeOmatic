@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures 
 {
-    public class ExpressionExtractor : BaseParser, IParser
+    public class ExpressionExtractor : BaseParser, IParser<string>
     {
         private List<string> _patterns = new List<string>();
         public ExpressionExtractor(List<string> Patterns)
@@ -29,7 +29,7 @@ namespace SOM.Procedures
                     if (match.Success)
                     {
                         StringBuilder result = new StringBuilder();
-                        if (ParseResultMode == ParseResultMode.Default)
+                        if (ParseMode == ParseMode.Default)
                             result.Append(line + "\n");
                         else
                             result.Append($"{line}[LN {linecnt.ToString()}]\n");

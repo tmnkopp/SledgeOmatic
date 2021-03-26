@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOM.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace SOM.Extentions
 { 
+
     public static class StringExtentions
-    {
+    { 
         public static string RemoveAsChars(this string stringParam, string removeChars)
         {
             var chars = removeChars.ToCharArray();
@@ -23,36 +25,35 @@ namespace SOM.Extentions
         }
         public static string RemoveDuplicate(this string input, string Remove)
         {
-            do
-            {
+            do  {
                 input = input.Replace($"{Remove}{Remove}", $"{Remove}");
             } while (input.Contains($"{Remove}{Remove}"));
             return input;
         }
         public static string ReplaceWhitespace(this string input, string ReplaceWith)
         {
-            do
-            {
+            do  {
                 input = input.Replace(" ", ReplaceWith);
             } while (input.Contains(" ")); 
             return input;
         }
+        public static string ToValidSchemaName(this string input)
+        { 
+            return (input==null) ? input : input.RemoveAsChars(" \n\t\r!@#$%^&*()-=+';:<>,.?/").Trim();
+        }
         public static string TrimLines(this string input )
         {
-            StringBuilder result = new StringBuilder();
-            string[] lines = input.Split('\n');
-            foreach (var line in lines)
-            {
+            StringBuilder result = new StringBuilder(); 
+            foreach (var line in input.Split('\n'))  {
                 result.AppendFormat("{0}\n", line);
             }
             return result.ToString();
         }
         public static string TrimTrailingNewline(this string input)
         {
-            if (input.EndsWith("\n") || input.EndsWith("\r"))
-            {
+            if (input.EndsWith("\n") || input.EndsWith("\r")) 
                 input = input.Substring(0, input.Length - 1);
-            }
+            
             return input;
         }
         public static string RemoveEmptyLines(this string input)
@@ -68,8 +69,7 @@ namespace SOM.Extentions
         }
         public static string RemoveWhiteAndBreaks(this string input)
         {
-            do
-            {
+            do  {
                 input = input.Replace(" ", "");
             } while (input.Contains(" "));
             input = input.Replace("\n", "").Replace("\r", "").Replace("\t", "");
@@ -104,8 +104,7 @@ namespace SOM.Extentions
             {
                 output = output.Replace($"<{tag}>", "");
                 output = output.Replace($"</{tag}>", "");
-            }
-
+            } 
             return output;
         }
     }

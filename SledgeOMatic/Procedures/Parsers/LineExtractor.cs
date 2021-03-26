@@ -10,7 +10,7 @@ using SOM.Procedures ;
 
 namespace SOM.Procedures
 {
-    public class LineExtractor : BaseParser, IParser
+    public class LineExtractor : BaseParser, IParser<string>
     {
         private string _extractTarget;
         private int _numberOfLines = 4; 
@@ -26,7 +26,7 @@ namespace SOM.Procedures
             content = $"{new string('\n', _numberOfLines)}{content}{new string('\n', _numberOfLines)}";
             string[] lines = content.Split('\n');
             int findingCnt = 0;
-            if (this.ParseResultMode == ParseResultMode.Debug)
+            if (this.ParseMode == ParseMode.Debug)
                 Console.WriteLine($"debug: _extractTarget {_extractTarget} {Regex.Match(content, _extractTarget).Success}");
             for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
             { 
@@ -40,7 +40,7 @@ namespace SOM.Procedures
                     {
                         if (takeIndex < lines.Length && takeIndex > 0)
                         { 
-                            if ( ParseResultMode == ParseResultMode.Default)
+                            if ( ParseMode == ParseMode.Default)
                                 result.Append( lines[takeIndex] + "\n"  );
                             else
                                 result.Append($"{lines[takeIndex]}[LN {takeIndex.ToString()}]\n");  

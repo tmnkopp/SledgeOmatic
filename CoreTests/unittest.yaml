@@ -1,0 +1,9 @@
+ContentCompilers:
+- NumericKeyReplacer:  ['c:\_som\_src\_compile\keyval.sql']
+- KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
+Source: 'c:\_som\_src\_compile'
+Dest: 'c:\_som\_src\_compile\_compiled'
+FileFilter: '*aspx*' 
+FilenameCompilers: 
+- KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
+Compile:

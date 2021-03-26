@@ -20,10 +20,9 @@ namespace SOM.IO
         }
     }
     public class FileReader : IReader
-    {
-
+    { 
         private string _filename = AppSettings.FileIn;
-        private string _basepath = AppSettings.BasePath;
+        private string _basepath = AppSettings.BasePath; 
         public FileReader( )
         { 
         }
@@ -33,13 +32,13 @@ namespace SOM.IO
         }
         public string Read()
         {
-            _filename = String.Format("{0}", _filename.Replace(Placeholder.Basepath, _basepath));
+            _filename = _filename.Replace(Placeholder.Basepath, _basepath).Trim(); 
             try {
                 using (TextReader tr = File.OpenText(_filename)) 
                     return tr.ReadToEnd(); 
             }
             catch (Exception e)  {
-                Console.WriteLine($"SOM.IO FileReader Read {_filename} {e.StackTrace} {e.Source} {e.Message}"); 
+                Console.WriteLine($"SOM.IO FileReader Read(): {_filename} {e.StackTrace} {e.Source} {e.Message}"); 
             }
             return ""; 
         } 

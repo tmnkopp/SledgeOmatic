@@ -40,10 +40,8 @@ namespace SOM.IO
         }
     }
     public class FileWriter :  IWriter
-    {
-  
-        private string _filename = AppSettings.FileOut;
-        private string _basepath = AppSettings.BasePath;
+    { 
+        private string _filename = AppSettings.FileOut; 
         public FileWriter()
         {
         }
@@ -52,13 +50,9 @@ namespace SOM.IO
             _filename = Path;
         }
         public void Write(string writeme , bool Create)
-        {
-            if (Create)
-            {        
-                using (StreamWriter w = File.AppendText($"{_filename}"))
-                { 
-                }
-            }
+        { 
+            if (Create) 
+                using (StreamWriter w = File.AppendText($"{_filename}")) { } 
             Write(writeme); 
         }
         public void Write(string writeme)
@@ -74,10 +68,8 @@ namespace SOM.IO
             catch (Exception)
             {
                 Console.WriteLine($"\n\nbad path {_filename}\n\n");
-                throw new InvalidProgramException();
-                
-            }
-            
+                throw new InvalidProgramException(); 
+            } 
         }
     }
 }

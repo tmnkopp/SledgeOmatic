@@ -7,55 +7,118 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
+
 namespace SOM.Procedures
 {
-    public abstract class BaseKeyValInterpreter : IInterpreter
-    { 
-        public Dictionary<string, string> KeyVals { get; set; }
-        public BaseKeyValInterpreter()
+    #region Base
+    public abstract class BaseKeyValReplacer 
+    {
+        protected Dictionary<string, string> KeyVals { get; set; }
+        public BaseKeyValReplacer()
         {
-
         }
-        public BaseKeyValInterpreter(Dictionary<string, string> Dict)
+        protected bool IsValidJson(string strInput)
         {
-            this.KeyVals = Dict;
-        }
-        public BaseKeyValInterpreter(string json)
-        {
-            if (json != "")
-                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            if (string.IsNullOrWhiteSpace(strInput)) { return false; }
+            strInput = strInput.Trim();
+            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || //For object
+                (strInput.StartsWith("[") && strInput.EndsWith("]"))) //For array
+            {
+                try
+                {
+                    var obj = JToken.Parse(strInput);
+                    return true;
+                }
+                catch (JsonReaderException jex)
+                {
+                    Console.WriteLine(jex.Message);
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
         public virtual string Interpret(string content)
         {
-            foreach (var item in KeyVals) { 
-                    content = content.Replace(item.Key, item.Value); 
+            foreach (var item in KeyVals)
+            {
+                content = content.Replace(item.Key, item.Value);
             }
-            return content;        
+            return content;
         }
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this.KeyVals, Formatting.Indented);
         }
-    } 
-    public class KeyValInterpreter : BaseKeyValInterpreter, IInterpreter
-    {
-        public KeyValInterpreter(Dictionary<string, string> KeyVals)
-        {
-            this.KeyVals = KeyVals;
-        }
-        public KeyValInterpreter(string json)
-        {
-            if (json != "")
-                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(json); 
-        }
     }
-    public class SqlKeyValInterpreter : BaseKeyValInterpreter, IInterpreter  { 
-        public SqlKeyValInterpreter(string sqlFile)
+    #endregion
+
+    public class NumericKeyReplacer : KeyValReplacer
+    { 
+        public NumericKeyReplacer(string Source) : base(Source) {  } 
+        public override string Interpret(string content)
+        {
+            StringBuilder result = new StringBuilder();
+            foreach (var line in content.Split("\n"))
+            {
+                string target = line;
+                foreach (var item in KeyVals)
+                {
+                    string pattern = "(\\(|\\\"|,|\\s|=)(" + item.Key + ")(,|\\s|\\)|\\\")"; 
+                    while (Regex.IsMatch(target, pattern))
+                    {
+                        target = Regex.Replace(target, pattern,  
+                            m => m.Groups[1].Value
+                             + item.Value
+                             + m.Groups[3].Value
+                            , RegexOptions.Singleline); 
+                    }; 
+                }
+                result.Append(target);
+            } 
+            return result.ToString();
+        }
+    } 
+    public class KeyValReplacer : BaseKeyValReplacer, IInterpreter
+    {
+        public KeyValReplacer()
         { 
-            IReader r = new FileReader(sqlFile);
-            KeyValDBReader dbreader = new KeyValDBReader(r.Read()); 
-            dbreader.ExecuteRead(); 
-            base.KeyVals = dbreader.Data;
-        }  
+        } 
+        public KeyValReplacer(string Source)
+        {
+            if (Source.EndsWith(".json"))
+            {
+                base.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Reader.Read(Source));
+            }
+            if (Source.EndsWith(".sql"))
+            {
+                IReader reader = new FileReader(Source);
+                string sql = reader.Read();
+                KeyValDBReader dbreader = new KeyValDBReader(sql);
+                dbreader.ExecuteRead();
+                base.KeyVals = dbreader.Data;
+            }
+            if (base.IsValidJson(Source))
+            {
+                base.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Source);
+            }
+        }
+        public KeyValReplacer(Dictionary<string, string> Dict)
+        {
+            base.KeyVals = Dict;
+        }
+        public override string Interpret(string content)
+        {
+            return base.Interpret(content);
+        }
     } 
 }
