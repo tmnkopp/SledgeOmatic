@@ -40,20 +40,28 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
 ## SOML (SOMarkup Language)
 
 ####  PYTHON
-``` 
-    # python
-
+``` python
+    # python 
     # som!schema -m aspnet_Roles -f {0}
 
     # schema!som
-    
-    # som!schema -t ~T\PY\TRY_{1}.py 
-    
-    # schema!som 
+
+    # som!schema -m aspnet_Membership -f {0}
+        self._ctx = context 
+    # schema!som    
+    import re
+    import compiler
+    import schema_normalizer
+    class PyCompiler:
+        def __init__(self, context):
+            self._ctx = context 
+            # som!schema -t ~T\PY\TRY_{1}.py 
+            
+            # schema!som 
 ```
 
 ####  SQL
-```  
+``` SQL 
     ALTER PROCEDURE [dbo].[aspnet_Membership_CREATE]
     -- som!schema -m aspnet_Membership -f @{0} {1}({2})
 
@@ -73,7 +81,7 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
     END
 ```
 ####  C# / RAZOR
-```
+``` CSHTML
     @* som!schema -t ~T\CS\FORM_ELEMENT_{1}.cshtml *@
         <div class="form-group">
                 <label asp-for="{3}.{0}" class="control-label"></label>
