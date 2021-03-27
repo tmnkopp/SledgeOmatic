@@ -21,7 +21,7 @@ namespace SOM.IO
     }
     public class FileReader : IReader
     { 
-        private string _filename = AppSettings.FileIn;
+        private string _filename = AppSettings.Cache;
         private string _basepath = AppSettings.BasePath; 
         public FileReader( )
         { 

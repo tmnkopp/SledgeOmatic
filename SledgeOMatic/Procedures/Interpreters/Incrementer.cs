@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
 {
-    public class Incrementer : IInterpreter
+    public class Incrementer : ICompilable
     {
         private int _increment = 0;
         private string _pattern = "";
@@ -18,10 +18,8 @@ namespace SOM.Procedures
             _pattern = NumericCapturePattern;
             _increment = Increment;
         }
-        public string Interpret(string content)
-        {
-            StringBuilder result = new StringBuilder();
-
+        public string Compile(string content)
+        { 
             Match match = Regex.Match(content, _pattern);
             string replacementContent = content;
             while (match.Success)

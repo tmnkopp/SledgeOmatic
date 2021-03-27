@@ -66,9 +66,7 @@ namespace CoreTests
             compiler.Compile();
 
             Assert.IsNotNull(Cache.Read());
-        }
-
-
+        } 
         [TestMethod]
         public void IG_Compiles()
         { 
@@ -87,8 +85,7 @@ namespace CoreTests
 
         [TestMethod]
         public void RMA_Compiles()
-        {
-            Cache.Write(""); 
+        { 
             Compiler compiler = new Compiler();
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
@@ -97,14 +94,12 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
             compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));  
             compiler.FileFilter = "*aspx*";
-            compiler.Compile();
-            Cache.Inspect();
+            compiler.Compile(); 
             Assert.IsNotNull(Cache.Read());
         } 
         [TestMethod]
         public void CIO_Compiles()
-        {
-            Cache.Write(""); 
+        { 
             Compiler compiler = new Compiler(); 
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
@@ -117,8 +112,7 @@ namespace CoreTests
             compiler.FileFilter = "*frmVal*";
             compiler.Compile();
             compiler.FileFilter = "*aspx*"; 
-            compiler.Compile(); 
-            Cache.Inspect();
+            compiler.Compile();  
             Assert.IsNotNull(Cache.Read());
         } 
 

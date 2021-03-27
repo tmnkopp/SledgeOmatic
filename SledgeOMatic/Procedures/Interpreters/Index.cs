@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
-    public class Indexer : IInterpreter
+    public class Indexer : ICompilable
     {
         private int _seed = 0;
         private int _reset = 1;
         private string _indexName = "[index]";
  
-        public string Interpret(string content)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = content.Split('\n');

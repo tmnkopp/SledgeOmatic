@@ -47,7 +47,7 @@ namespace SOM.Procedures
                 return false;
             }
         }
-        public virtual string Interpret(string content)
+        public virtual string Compile(string content)
         {
             foreach (var item in KeyVals)
             {
@@ -65,7 +65,7 @@ namespace SOM.Procedures
     public class NumericKeyReplacer : KeyValReplacer
     { 
         public NumericKeyReplacer(string Source) : base(Source) {  } 
-        public override string Interpret(string content)
+        public override string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
             foreach (var line in content.Split("\n"))
@@ -88,7 +88,7 @@ namespace SOM.Procedures
             return result.ToString();
         }
     } 
-    public class KeyValReplacer : BaseKeyValReplacer, IInterpreter
+    public class KeyValReplacer : BaseKeyValReplacer, ICompilable
     {
         public KeyValReplacer()
         { 
@@ -116,9 +116,9 @@ namespace SOM.Procedures
         {
             base.KeyVals = Dict;
         }
-        public override string Interpret(string content)
+        public override string Compile(string content)
         {
-            return base.Interpret(content);
+            return base.Compile(content);
         }
     } 
 }

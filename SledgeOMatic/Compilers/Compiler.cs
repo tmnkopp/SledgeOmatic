@@ -26,8 +26,8 @@ namespace SOM.Compilers
         public string FileFilter { get; set; }
 
         public CompileMode CompileMode { get; set; }
-        public List<IInterpreter> ContentCompilers { get; set; }
-        public List<IInterpreter> FilenameCompilers { get; set; }
+        public List<ICompilable> ContentCompilers { get; set; }
+        public List<ICompilable> FilenameCompilers { get; set; }
         
         Func<string, string> ContentFormatter { set; }
         Func<string, string> FileNameFormatter { set; } 
@@ -50,8 +50,8 @@ namespace SOM.Compilers
             }
             set { _fileFilter = value; }
         }
-        public List<IInterpreter> ContentCompilers { get; set; }
-        public List<IInterpreter> FilenameCompilers { get; set; }
+        public List<ICompilable> ContentCompilers { get; set; }
+        public List<ICompilable> FilenameCompilers { get; set; }
         public CompileMode CompileMode { get; set; }
         #endregion
 
@@ -85,8 +85,8 @@ namespace SOM.Compilers
         #region CTOR
         public Compiler()
         { 
-            ContentCompilers = new List<IInterpreter>();
-            FilenameCompilers = new List<IInterpreter>();
+            ContentCompilers = new List<ICompilable>();
+            FilenameCompilers = new List<ICompilable>();
         }
         #endregion
 
@@ -105,9 +105,9 @@ namespace SOM.Compilers
         }
         protected virtual string CompileContent(string content)
         {
-            foreach (IInterpreter proc in ContentCompilers)
+            foreach (ICompilable proc in ContentCompilers)
             {
-                content = proc.Interpret(content);
+                content = proc.Compile(content);
             }
             content = _ContentFormatter(content);
             return content;
@@ -115,8 +115,8 @@ namespace SOM.Compilers
         protected virtual string CompileFileName(string Filename)
         {
             string newFileName = Filename;
-            foreach (IInterpreter proc in FilenameCompilers)
-                newFileName = proc.Interpret(newFileName).RemoveWhiteAndBreaks();
+            foreach (ICompilable proc in FilenameCompilers)
+                newFileName = proc.Compile(newFileName).RemoveWhiteAndBreaks();
             return _FileNameFormatter(Filename);
         }
         private void CommitFile(string Content, string FileName)

@@ -12,10 +12,18 @@ using SOM.Extentions;
 
 namespace SOM.Procedures
 {
-    public abstract class BaseRegexInterpreter 
+    public class RegexInterpreter :  ICompilable
     {
         public Dictionary<string, string> KeyVals = new Dictionary<string, string>();
-        public virtual string Interpret(string content)
+        public RegexInterpreter(string Expression, string Replacement)
+        {
+            this.KeyVals.Add(Expression, Replacement);
+        }
+        public RegexInterpreter(string JSON)
+        {
+            this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(JSON);
+        }  
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
             string replacementContent = content;
@@ -41,30 +49,6 @@ namespace SOM.Procedures
         {
             return JsonConvert.SerializeObject(  this.KeyVals  );
         }
-    }
-    public class SqlRegexInterpreter : BaseRegexInterpreter , IInterpreter
-    { 
-        public SqlRegexInterpreter(string SqlFile)
-        {
-            IReader r = new FileReader(SqlFile);
-            KeyValDBReader dbreader = new KeyValDBReader(r.Read());
-            dbreader.ExecuteRead();
-            this.KeyVals = dbreader.Data; 
-        } 
     } 
-    public class RegexInterpreter : BaseRegexInterpreter, IInterpreter
-    {
-        public RegexInterpreter(string Expression, string Replacement)
-        {
-            this.KeyVals.Add(Expression, Replacement);
-        }
-        public RegexInterpreter(string JSON)
-        {
-            this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(JSON);
-        }
-        public RegexInterpreter(Dictionary<string, string> KeyVals)
-        {
-            this.KeyVals = KeyVals;
-        }
-    }
+
 }

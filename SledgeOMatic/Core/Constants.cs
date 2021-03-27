@@ -6,16 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks; 
 namespace SOM 
-{ 
+{
     public static class AppSettings
-    { 
+    {
+        
         public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString(); 
-        public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();        
-        public static string CompileFrom = ConfigurationManager.AppSettings["CompileFrom"].ToString(); 
-        public static string CompileTo = ConfigurationManager.AppSettings["CompileTo"].ToString();
-        public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString();
-        public static string FileIn = AppSettings.BasePath + "_input.txt";
-        public static string FileOut = AppSettings.BasePath + "_output.txt";
+        public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();         
+        public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString(); 
         public static string Cache = AppSettings.BasePath + "_cache.txt";    
     }
     public static class Placeholder

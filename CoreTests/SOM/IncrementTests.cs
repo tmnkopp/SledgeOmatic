@@ -13,12 +13,23 @@ namespace UnitTests
 {
     [TestClass]
     public class IncrementTests
-    { 
+    {  
+        [TestMethod]
+        public void Regex_Increments()
+        {
+            string search = "-123- 1234 12345 12 aaa";
+            var matched = Regex.Match(search, @"(?<=\D|^|\s)(\d{2})(?=\D|$|\s)");
+            if (matched.Success)
+            {
+                var g = matched.Groups[0];
+            }
+            Assert.IsTrue(matched.Success);
+        }
         [TestMethod]
         public void Increment_Increments()
         {
             Incrementer compiler = new Incrementer("[\"|,](\\d{4})[^\\d]", 1000); 
-            string actual = compiler.Interpret(test);
+            string actual = compiler.Compile(test);
             string expected = @"FOO
 ""2000
 ""2001

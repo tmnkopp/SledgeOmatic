@@ -4,32 +4,28 @@
 *What in the hell could it possibly be?* 
 *It's Sledge-O-Matic.*
 
-# What is Sledge-O-Matic?
+![alt text](https://the80port.com/cdn/logos/som75-2.png "som")
+# Sledge-O-Matic?
 
 SOM takes sucky repetitive code tasks and un-sucks them. 
 
-A code scaffolder, code generator, code compiler, code refactor-er, repetitive task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. 
+A code scaffolder, code generator, code compiler, code refactor-er, repetitive task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. SOM adheres to fluent developer friendly endpoints. Key value refactor substitutions, for instance, can be easily expressed through JSON, CSV, C# Dictionaries, or SQL generated tables. Custom markup language refactors code inline. 
 
-SOM adheres to fluent developer friendly endpoints. Key value refactor substitutions, for instance, can be easily expressed through JSON, CSV, C# Dictionaries, or SQL generated tables. Custom markup language refactors code inline. 
+Compilation steps are made manageable using builder patterns. Compilations are debuggable, with compilation Modes including debug, verbose, cached and commit allowing the code to be inspected and tested prior to committing the compilation. Compilations may be configured and executed via command line using no code/ low code YAML configuration scripts. 
 
-Compilation steps are made manageable using builder patterns. Compilations are debuggable, with compilation Modes including debug, verbose, cached and commit allowing the code to be inspected and tested prior to committing the compilation. 
-
-Compilations may be configured and executed via command line using no code/ low code YAML configuration scripts. 
-
-SOML: Compilations and code refactorings may be configured inline using SOML (SOMarkup Language). SOML tags can be introduced into any codebase to execute inline code compile instructions. 
-
-Angular frontend consuming an API is available for browser based code generation and refactoring. 
+SOML: Compilations and code refactorings may be configured inline using SOML (SOMarkup Language). SOML tags can be introduced into any codebase to execute inline code compile instructions. Angular frontend consuming an API is available for browser based code generation and refactoring. 
 
 Sledge-O-Matic is actively maintained by an overworked but dedicated coder determined to unsuck coding tasks. 
 
 ## Command Line Code Compilation
 ```
+    
     > som compile -m Commit -v -s c:\srcdir\ -d d:\destdir\
-
+    
 ```
 ## YAML config Compilations
 
-```YAML
+``` YAML
     ContentCompilers:
     - NumericKeyReplacer:  ['c:\_som\_src\_compile\keyval.sql']
     - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 

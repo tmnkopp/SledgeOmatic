@@ -71,7 +71,7 @@ namespace SOM
                                     oparms.Add(parm.ToString());
                                 }
                             }
-                            var typ = assmsom.GetTypes().Where(t => t.Name == stype && typeof(IInterpreter).IsAssignableFrom(t)).FirstOrDefault();
+                            var typ = assmsom.GetTypes().Where(t => t.Name == stype && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
                             Type gtyp = Type.GetType($"{typ.FullName}, SOM");
                             var obj = Activator.CreateInstance(gtyp, oparms.ToArray());
                             pi.PropertyType.GetMethod("Add").Invoke(pi.GetValue(compiler), new object[] { obj });

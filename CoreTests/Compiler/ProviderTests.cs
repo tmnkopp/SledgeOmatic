@@ -65,7 +65,7 @@ namespace CoreTests
                                     oparms.Add(parm.ToString());
                                 }
                             }
-                            var typ = assmsom.GetTypes().Where(t => t.Name == stype && typeof(IInterpreter).IsAssignableFrom(t)).FirstOrDefault();
+                            var typ = assmsom.GetTypes().Where(t => t.Name == stype && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
                             Type gtyp = Type.GetType($"{typ.FullName}, SOM");
                             var obj = Activator.CreateInstance(gtyp, oparms.ToArray());
                             pi.PropertyType.GetMethod("Add").Invoke(pi.GetValue(compiler), new object[] { obj });
@@ -100,7 +100,7 @@ namespace CoreTests
                 }
             };
 
-            var t = Assm.GetTypes().Where(t => t.Name.Contains("SomSchemaInterpreter") && typeof(IInterpreter).IsAssignableFrom(t))
+            var t = Assm.GetTypes().Where(t => t.Name.Contains("SomSchemaInterpreter") && typeof(ICompilable).IsAssignableFrom(t))
                 .FirstOrDefault() ;
 
             var type = Type.GetType($"{t.FullName}, {t.Namespace}");

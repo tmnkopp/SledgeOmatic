@@ -17,14 +17,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace SOM.Procedures 
 {
-    public class ModelTemplateInterpreter : BaseModelInterpreter, IInterpreter 
+    public class ModelTemplateInterpreter : BaseModelInterpreter, ICompilable 
     {
         private readonly IConfiguration _config;
         public ModelTemplateInterpreter(IConfiguration configuration)
         {
             _config = configuration;
         }
-        public string Interpret(string content)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
             string[] lines = content.Split('\n');
@@ -67,7 +67,7 @@ namespace SOM.Procedures
         } 
     }
 
-    public class ModelItemCompiler : IInterpreter
+    public class ModelItemCompiler : ICompilable
     {
         AppModel _AppModel = new AppModel();
         string _modelname = "";
@@ -77,7 +77,7 @@ namespace SOM.Procedures
             _modelname = ModelName;
             _format = Format;
         }
-        public string Interpret(string content)
+        public string Compile(string content)
         {
             AppModel _AppModel = JsonConvert.DeserializeObject<AppModel>(_modelname);
             StringBuilder _result = new StringBuilder();

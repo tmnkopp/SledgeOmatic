@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text; 
 namespace SOM.Procedures
 {
-    public class SomSchemaInterpreter : IInterpreter
+    public class SomSchemaInterpreter : ICompilable
     {
         private ISchemaProvider _SchemaProvider;
         private string _InitModel; 
@@ -28,7 +28,7 @@ namespace SOM.Procedures
         {
             set { schemaItemFilter = value; }
         }
-        public string Interpret(string content)
+        public string Compile(string content)
         {
             IParser<CommandParseResult> _Parser = new SomTagParser(ParseTag.SCHEMA); 
             foreach (var parseresult in _Parser.Parse(content))

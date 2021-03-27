@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures
 {
-    public interface IInterpreter
+    public interface ICompilable
     {
-         string Interpret(string content);
+         string Compile(string content);
     } 
 }

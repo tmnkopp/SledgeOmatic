@@ -83,7 +83,7 @@ namespace SOM.Parsers
                     continue;
                 }
 
-                string content = new FileReader(file.FullName).Read(); 
+                string content = Reader.Read(file.FullName); 
                 StringBuilder result = new StringBuilder();
                 foreach (var item in _Parser.Parse(content)) { 
                     result.Append(_ContentFormatter(item));
@@ -98,11 +98,9 @@ namespace SOM.Parsers
             Writer.Write(ToString());
         }
         public void Inspect()
-        {
-            Cache.Write("");
-            ParseDirectory();
-            Cache.Write(ToString());
-            Cache.CacheEdit();
+        { 
+            ParseDirectory(); 
+            Cache.Inspect(ToString());
         }
         
         public override string ToString() {

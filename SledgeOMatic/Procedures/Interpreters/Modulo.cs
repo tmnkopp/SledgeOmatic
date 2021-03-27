@@ -8,9 +8,9 @@ using SOM.Extentions;
 using System.Text.RegularExpressions; 
 namespace SOM.Procedures
 {
-    public class ModuloInterpreter : IInterpreter
+    public class ModuloInterpreter : ICompilable
     {   
-        public string Interpret(string content)
+        public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
             string matchpattern = "";

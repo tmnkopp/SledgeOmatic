@@ -10,9 +10,8 @@ namespace SOM.IO
 {
     public static class Cache
     { 
-        public static string Read() {
-            FileReader r = new FileReader(AppSettings.Cache);
-            return r.Read();
+        public static string Read() { 
+            return Reader.Read(AppSettings.Cache);
         }
         public static void Write(string content)
         { 
