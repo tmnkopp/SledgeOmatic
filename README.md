@@ -5,7 +5,7 @@
 *It's Sledge-O-Matic.*
 
 ![alt text](https://the80port.com/cdn/logos/som75-2.png "som")
-# Sledge-O-Matic?
+# Sledge-O-Matic
 
 SOM takes sucky repetitive code tasks and un-sucks them. 
 
