@@ -37,27 +37,43 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
     Compile:
 ```
 
+
 ## SOML (SOMarkup Language)
 
 ####  PYTHON
 ``` python
-    # python 
-    # som!schema -m aspnet_Roles -f {0}
-
-    # schema!som
-
-    # som!schema -m aspnet_Membership -f {0}
-        self._ctx = context 
-    # schema!som    
-    import re
+    # python     
     import compiler
     import schema_normalizer
     class PyCompiler:
         def __init__(self, context):
             self._ctx = context 
             # som!schema -t ~T\PY\TRY_{1}.py 
-            
+
             # schema!som 
+    # som!schema -m aspnet_Membership -f {0}
+        self._ctx = context  
+    # schema!som              
+```
+
+####  TypeScript
+``` TypeScript 
+    export class MembershipModel {
+        constructor(
+        // som!schema -m aspnet_Membership -f {0}?:{1}
+            public ModelId?:number
+        // schema!som                 
+        ){}
+    }//export class
+    export class RolesModel {
+      constructor(
+        // som!schema -m aspnet_Roles -f {0}?:{1}
+            public ModelId?:number
+        // schema!som    
+      ){} 
+    }//export class 
+     
+ 
 ```
 
 ####  SQL
@@ -129,6 +145,52 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
  
 ```
 
+## Schema Compile With Events
+
+
+```csharp
+
+           ISchemaProvider schema = new SchemaProvider("aspnet_Membership"); 
+
+            Compiler compiler = new Compiler();
+            compiler.Source = "C:\\_som\\T\\";
+            compiler.Dest = "C:\\_som\\T\\";
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.FileFilter = "unittest.html";
+            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-compile.json"));    
+            compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\post-compile.json"));            
+            compiler.FileNameFormatter = (n) => (n.Replace("unittest", "unittest_compiled"));
+            compiler.ContentCompilers.Add(
+                new SomSchemaInterpreter(schema)
+                {
+                    SchemaItemFilter = app => true,
+                    SchemaItemProjector = (app) =>
+                    {
+                        app.StringFormatter = (i, f) => f.Replace("{0}", i.Name).Replace("{1}", i.DataType);
+                        app.DataType = Regex.Replace(app.DataType, "(.*unique.*)", "int");
+                        return app;
+                    }
+                });
+            compiler.Compile(); 
+            compiler.Source = compiler.Dest;
+            compiler.OnCompiled += (s, a) =>
+            {
+                ProcessStartInfo startinfo = new ProcessStartInfo();
+                startinfo.FileName = System.Environment.GetEnvironmentVariable("bom");
+                startinfo.UseShellExecute = true;
+                startinfo.Arguments = @"exe -t TestAutomator";
+                Process p = Process.Start(startinfo);
+            };
+            compiler.ContentCompilers.Clear(); 
+            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-compile.json"));   
+            compiler.ContentCompilers.Add(new Incrementer("(?<!\\d)\\d{5}(?!\\d)", 1250)); 
+            compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\post-compile.json"));  
+            compiler.ContentCompilers.Add(new Incrementer("(?<!\\d)\\d{3}(?!\\d)", 250));
+            compiler.Compile();
+
+```
 
 
 

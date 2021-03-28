@@ -49,15 +49,14 @@ namespace CoreTests
                     }
                 });
             compiler.Compile();
-
-            return; 
+             
             compiler.Source = compiler.Dest;
             compiler.OnCompiled += (s, a) =>
             {
                 ProcessStartInfo startinfo = new ProcessStartInfo();
                 startinfo.FileName = System.Environment.GetEnvironmentVariable("bom");
                 startinfo.UseShellExecute = true;
-                startinfo.Arguments = @"exe -t Ein";
+                startinfo.Arguments = @"exe -t TestAutomator";
                 Process p = Process.Start(startinfo);
             };
             compiler.ContentCompilers.Clear();
