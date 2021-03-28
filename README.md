@@ -7,23 +7,37 @@
 ![alt text](https://the80port.com/cdn/logos/som75-2.png "som")
 # Sledge-O-Matic
 
-SOM takes sucky repetitive code tasks and un-sucks them. 
+Sledge-O-Matic takes the suck out of sucky repetitive code tasks. 
 
-A code scaffolder, code generator, code compiler, code refactor-er, repetitive task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. SOM adheres to fluent developer friendly endpoints. Key value refactor substitutions, for instance, can be easily expressed through JSON, CSV, C# Dictionaries, or SQL generated tables. Custom markup language refactors code inline. 
+A code scaffolder, code generator, code compiler, code refactor-er, task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. SOM uses developer friendly configurations. Key value refactor substitutions, for instance, can be configured through JSON, CSV, C# Dictionaries, SQL scripts, and more. Custom markup language (*soml*) can be used to refactor code inline. 
 
 Compilation steps are made manageable using builder patterns. Compilations are debuggable, with compilation Modes including debug, verbose, cached and commit allowing the code to be inspected and tested prior to committing the compilation. Compilations may be configured and executed via command line using no code/ low code YAML configuration scripts. 
 
-SOML: Compilations and code refactorings may be configured inline using SOML (SOMarkup Language). SOML tags can be introduced into any codebase to execute inline code compile instructions. Angular frontend consuming an API is available for browser based code generation and refactoring. 
+SOML: Compilations and code refactorings may be configured inline using SOML (**S**ledge-**O**-**M**atic/markup **L**anguage). SOML tags can be introduced into any codebase to execute inline code compile instructions. Angular frontend consuming an API is available for browser based code generation and refactoring. 
 
-Sledge-O-Matic is actively maintained by an overworked but dedicated coder determined to unsuck coding tasks. 
+***
+
+Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects actively maintained by a busy but dedicated coder determined to unsuck sucky coding tasks.   
+
+[SOM Angular Dashboard](https://github.com/tmnkopp/SOMDash) for GUI based Sledge-O-Matic-ing 
+
+[Browse-O-matic](https://github.com/tmnkopp/BrowseOmatic) for automated testing your Sledge-O-Matic-ed code 
+
+ 
+ 
+***
+# Features
 
 ## Command Line Code Compilation
+
+ 
+
 ```
     
     > som compile -m Commit -v -s c:\srcdir\ -d d:\destdir\
     
 ```
-## YAML config Compilations
+## Compilations Config
 
 ``` YAML
     ContentCompilers:
@@ -38,7 +52,32 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
 ```
 
 
-## SOML (SOMarkup Language)
+# SOML **S**ledge-**O**-**M**atic/markup **L**anguage
+ 
+
+Sledge-O-Matic supports in-line code compilation using SOML tags (som!  !som). 
+ 
+`som!schema` for example will generate code based on a model and inject it directly into code. Formatting the injected code can be done inline or by using code templates. 
+
+The following will inject all fields from the aspnet_Membership table into the code and format them as SQL parameters. 
+
+```
+som!schema -m aspnet_Membership -f @{0} {1}({2}),
+
+schema!som
+
+```
+For more complicated formatting, simply reference a file
+
+```
+
+som!schema -m aspnet_Membership -t ~T\SQL\MyCustomTemplate_{1}.sql
+
+schema!som 
+
+```
+
+SOML integrates with any codebase.
 
 ####  PYTHON
 ``` python
@@ -106,13 +145,38 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
         </div>
     @* schema!som *@
 ```
-## C# Compilation
+## Custom Compilers
+
+Create custom Sledge-O-Matic compilers by extending `ICompilable`
+
+```csharp
+
+namespace SOM.Procedures
+{
+    public interface ICompilable
+    {
+         string Compile(string content);
+    }
+    public class MyCustomCompiler : ICompilable
+    {
+        public string Compile(string content)
+        {
+            // DO STUFF TO CODE 
+            return content;
+        }
+    }
+}
+
+```
+
+## Compilation Examples
+
 ```csharp
     
     Compiler compiler = new Compiler(); 
     compiler.Source = "c:\\_som\\_src";
     compiler.Dest = "c:\\_som\\_dest";
-    compiler.CompileMode = CompileMode.Commit; 
+    compiler.CompileMode = CompileMode.Debug; 
     compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-replace.json"));
     compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));  
     compiler.FileNameFormatter = (n) => (n.Replace("2020_Q4.sql", "2021_Q1.sql")); 
@@ -120,11 +184,25 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
     compiler.Compile();  
 ```
 
+Expressing in YAML
+
+``` YAML
+    Source: 'c:\path\to\source'
+    Dest: 'c:\path\to\compile\dest'
+    ContentCompilers:
+    - NumericKeyReplacer:  ['c:\_som\_src\_compile\keyval.sql']
+    - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json']  
+    FileFilter: '*my_sprocs*.sql*' 
+    FilenameCompilers: 
+    - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
+    Compile:
+```
+
 ```csharp
     
     Compiler compiler = new Compiler(); 
-    compiler.Source = "c:\\_som\\_src\\_compile";
-    compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
+    compiler.Source = "C:\Path\To\Source\Files";
+    compiler.Dest = "C:\Path\To\Save\ReCompiled\Files";
     compiler.CompileMode = CompileMode.Cache; 
     compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-replace.json"));
     compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
@@ -145,16 +223,61 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
  
 ```
 
-## Schema Compile With Events
+## Compile + Build + Publish + Browser Test
+```
+    
+    > som compile -m Commit -v -s c:\srcdir\ -d d:\destdir\ -b -t Run_Browser_Tests
+    
+```
+ 
+OnCompiled executing an automated in-browser test routine using [Browse-O-matic](https://github.com/tmnkopp/BrowseOmatic) after the code is generated. 
 
+```csharp 
+            Compiler compiler = new Compiler();
+            compiler.Source = "C:\Path\To\Source\Files";
+            compiler.Dest = "C:\Path\To\Save\ReCompiled\Files";
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.OnCompiled += (s, a) =>
+            {
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "dotnet build",
+                    Arguments = "-runtime rhel.7.4-x64"
+                };
+                Process.Start(psi);
+            };             
+            compiler.OnCompiled += (s, a) =>
+            {
+                ProcessStartInfo startinfo = new ProcessStartInfo();
+                startinfo.FileName = System.Environment.GetEnvironmentVariable("bom");
+                startinfo.UseShellExecute = true;
+                startinfo.Arguments = @"exe -t Run_Browser_Tests";
+                Process p = Process.Start(startinfo);
+            };
+            compiler.FileFilter = "*asp*";
+            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-compile.json"));    
+            compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\post-compile.json"));            
+            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021")); 
+            compiler.Compile();   
+
+```
+
+## Schema Compile + Build + Publish + Browser Test
+
+```
+    
+    > som compile -m Commit -v -b -t Run_Automated_Tests
+    
+```
 
 ```csharp
 
            ISchemaProvider schema = new SchemaProvider("aspnet_Membership"); 
 
             Compiler compiler = new Compiler();
-            compiler.Source = "C:\\_som\\T\\";
-            compiler.Dest = "C:\\_som\\T\\";
+            compiler.Source = "C:\Path\To\Source\Files";
+            compiler.Dest = "C:\Path\To\Save\ReCompiled\Files";
             compiler.CompileMode = CompileMode.Commit;
             compiler.FileFilter = "unittest.html";
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-compile.json"));    
@@ -176,10 +299,15 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
             compiler.Source = compiler.Dest;
             compiler.OnCompiled += (s, a) =>
             {
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "dotnet build" 
+                };                
+                Process.Start(psi);
                 ProcessStartInfo startinfo = new ProcessStartInfo();
                 startinfo.FileName = System.Environment.GetEnvironmentVariable("bom");
                 startinfo.UseShellExecute = true;
-                startinfo.Arguments = @"exe -t TestAutomator";
+                startinfo.Arguments = @"exe -t Run_Automated_Tests";
                 Process p = Process.Start(startinfo);
             };
             compiler.ContentCompilers.Clear(); 
@@ -192,5 +320,8 @@ Sledge-O-Matic is actively maintained by an overworked but dedicated coder deter
 
 ```
 
+ 
 
+[SOM Angular Dashboard](https://github.com/tmnkopp/SOMDash) for GUI based Sledge-O-Matic-ing 
 
+[Browse-O-matic](https://github.com/tmnkopp/BrowseOmatic) for automated testing your Sledge-O-Matic-ed code 
