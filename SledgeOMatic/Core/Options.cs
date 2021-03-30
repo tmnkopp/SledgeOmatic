@@ -16,6 +16,8 @@ namespace SOM
     {
         [Option('t', "Task")]
         public string Task { get; set; }
+        [Option('p', "Path", Default="")]
+        public string Path { get; set; }
         [Option('m', "CompileMode", Default = CompileMode.Cache)]
         public CompileMode CompileMode { get; set; }
         [Option('v', "Verbose", HelpText = "Print details during execution.")]

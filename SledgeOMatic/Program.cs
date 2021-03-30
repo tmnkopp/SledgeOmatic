@@ -42,11 +42,30 @@ namespace SOM
                 errs => 1);
         }
         private static ServiceProvider RegisterServices(string[] args)
-        { 
-            var p = @"C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\";
-
+        {
+            string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            if (string.IsNullOrEmpty(envar))
+            {
+                Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User);
+                envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            }
+            var exeassmloc = Assembly.GetExecutingAssembly().Location.ToLower().Replace("som.dll", "");
+            var loc = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User)?.ToLower().Replace("som.exe", "");
+            if (exeassmloc.Contains("\\appdata\\") && loc != null)
+            {
+                try
+                {
+                    File.Delete($"{exeassmloc}appsettings.json");
+                    File.Copy($"{loc}appsettings.json", $"{exeassmloc}appsettings.json");
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+          
             IConfiguration configuration = new ConfigurationBuilder()
-                  .SetBasePath(p)
+                  .SetBasePath(exeassmloc)
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddEnvironmentVariables()
                   .AddCommandLine(args)

@@ -37,7 +37,15 @@ namespace SOM
             this.logger = logger;
         }
         public void Process(CompileOptions o) 
-        { 
+        {
+            if (o.Path.ToString().EndsWith("yaml"))
+            {
+                if (!o.Path.Contains(":\\"))
+                    o.Path = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", o.Path);
+                config.GetSection("AppSettings:CompileConfig").Value = o.Path.ToString();
+                logger.LogInformation("{o}", config.GetSection("AppSettings:CompileConfig").Value); 
+            }
+
             compiler.CompileMode = o.CompileMode;
             compiler.OnCompiled += (o, e) =>
             {
@@ -46,6 +54,7 @@ namespace SOM
                 p.StartInfo.Arguments = $"cd {e.Dest}";
                 p.Start();
             }; 
+
             Assembly assmsom = Assembly.GetExecutingAssembly();
             var yaml = new YamlStream();
             using (TextReader tr = File.OpenText(config.GetSection("AppSettings:CompileConfig").Value))
@@ -65,11 +74,16 @@ namespace SOM
                             string stype = "";
                             foreach (var prop in (YamlMappingNode)propitems)
                             {
-                                stype = prop.Key.ToString();
-                                foreach (var parm in ((YamlSequenceNode)prop.Value).Children)
+                                stype = prop.Key.ToString(); 
+                                if (prop.Value.GetType() == typeof(YamlSequenceNode))
                                 {
-                                    oparms.Add(parm.ToString());
+                                    foreach (var parm in ((YamlSequenceNode)prop.Value).Children) 
+                                        oparms.Add(parm.ToString()); 
                                 }
+                                if (prop.Value.GetType() == typeof(YamlScalarNode))
+                                {
+                                    oparms.Add(prop.Value.ToString()); 
+                                } 
                             }
                             var typ = assmsom.GetTypes().Where(t => t.Name == stype && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
                             Type gtyp = Type.GetType($"{typ.FullName}, SOM");

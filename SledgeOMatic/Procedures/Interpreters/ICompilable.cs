@@ -9,5 +9,13 @@ namespace SOM.Procedures
     public interface ICompilable
     {
          string Compile(string content);
-    } 
+    }
+    public class MyCustomCompiler : ICompilable
+    {
+        public string Compile(string content)
+        {
+            // DO STUFF TO CODE 
+            return content;
+        }
+    }
 }
