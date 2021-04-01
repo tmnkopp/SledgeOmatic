@@ -24,18 +24,60 @@ namespace CoreTests
 { 
     [TestClass]
     public class CompilerTests
-    {
+    { 
+        [TestMethod]
+        public void IG_Compiles()
+        { 
+            Compiler compiler = new Compiler();
+            compiler.OnPreCompile += (s, a) =>
+            {
+                System.IO.Directory.CreateDirectory(@"C:\_som\_src\_compile\IG\compiled");
+            };
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2020";
+            compiler.Dest = @"C:\_som\_src\_compile\IG\compiled";
+            compiler.CompileMode = CompileMode.Cache; 
+            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"C:\_som\_src\_compile\IG\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
+            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021")); 
+            compiler.FileFilter = "*_IG_*aspx*";
+            compiler.Compile();
+            Cache.Inspect();
+            Assert.IsNotNull(Cache.Read());
+        }
+        [TestMethod]
+        public void BOD_Compiles()
+        {
+            Compiler compiler = new Compiler();
+            compiler.Source = @"c:\_som\_src\_compile\BOD\"; 
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
+            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
+            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021"));
+            compiler.ContentFormatter = (n) => (n.Replace("2020", "2021"));
+            compiler.FileFilter = "*frmVal*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-33\CSwebdev\database\Sprocs";
+            compiler.Compile();
+            compiler.FileFilter = "*DB_Update*sql";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-33\CSwebdev\database";
+            compiler.Compile(); 
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2020";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-33\CSwebdev\code\CyberScope\HVA\2021"; 
+            compiler.FileFilter = "*aspx*";
+            compiler.Compile();
+            Cache.Inspect();
+        }
+
         [TestMethod]
         public void Schema_Compiles()
         {
             Cache.Write("");
-            ISchemaProvider schema = new SchemaProvider("aspnet_Membership"); 
+            ISchemaProvider schema = new SchemaProvider("aspnet_Membership");
 
             Compiler compiler = new Compiler();
             compiler.Source = "C:\\_som\\T\\";
             compiler.Dest = "C:\\_som\\T\\";
             compiler.CompileMode = CompileMode.Commit;
-            compiler.FileFilter = "unittest.html"; 
+            compiler.FileFilter = "unittest.html";
             compiler.FileNameFormatter = (n) => (n.Replace("unittest", "unittest_compiled"));
             compiler.ContentCompilers.Add(
                 new SomSchemaInterpreter(schema)
@@ -49,7 +91,7 @@ namespace CoreTests
                     }
                 });
             compiler.Compile();
-             
+
             compiler.Source = compiler.Dest;
             compiler.OnCompiled += (s, a) =>
             {
@@ -64,21 +106,6 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new Incrementer("(?<!\\d)\\d{3}(?!\\d)", 250));
             compiler.Compile();
 
-            Assert.IsNotNull(Cache.Read());
-        } 
-        [TestMethod]
-        public void IG_Compiles()
-        { 
-            Compiler compiler = new Compiler();
-            compiler.Source = "c:\\_som\\_src\\_compile";
-            compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
-            compiler.CompileMode = CompileMode.Cache; 
-            compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
-            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
-            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021")); 
-            compiler.FileFilter = "*aspx*";
-            compiler.Compile();
-            Cache.Inspect();
             Assert.IsNotNull(Cache.Read());
         }
 
@@ -114,8 +141,6 @@ namespace CoreTests
             compiler.Compile();  
             Assert.IsNotNull(Cache.Read());
         } 
-
-         
     } 
 }
 

@@ -60,7 +60,7 @@ namespace SOM.Compilers
         public event EventHandler<CompilerEventArgs> OnCompiled;
         protected virtual void PreCompile(CompilerEventArgs e)
         {
-            Cache.Write("");
+            
             OnPreCompile?.Invoke(this, e);
         }
         protected virtual void Compiled(CompilerEventArgs e)
@@ -87,6 +87,7 @@ namespace SOM.Compilers
         { 
             ContentCompilers = new List<ICompilable>();
             FilenameCompilers = new List<ICompilable>();
+            Cache.Write("");
         }
         #endregion
 
