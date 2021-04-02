@@ -31,7 +31,7 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.OnPreCompile += (s, a) =>
             {
-                System.IO.Directory.CreateDirectory(@"C:\_som\_src\_compile\IG\compiled");
+                System.IO.Directory.CreateDirectory(@"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\CSwebdev\code\CyberScope\HVA\2021");
             };
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2020";
             compiler.Dest = @"C:\_som\_src\_compile\IG\compiled";
@@ -47,7 +47,12 @@ namespace CoreTests
         [TestMethod]
         public void BOD_Compiles()
         {
-            Compiler compiler = new Compiler();
+            string DestRoot = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\";
+            Compiler compiler = new Compiler(); 
+            compiler.OnPreCompile += (s, a) =>
+            {
+                System.IO.Directory.CreateDirectory(DestRoot + @"code\CyberScope\HVA\2021");
+            }; 
             compiler.Source = @"c:\_som\_src\_compile\BOD\"; 
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
@@ -55,13 +60,13 @@ namespace CoreTests
             compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021"));
             compiler.ContentFormatter = (n) => (n.Replace("2020", "2021"));
             compiler.FileFilter = "*frmVal*";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-33\CSwebdev\database\Sprocs";
+            compiler.Dest = DestRoot + @"database\Sprocs";
             compiler.Compile();
             compiler.FileFilter = "*DB_Update*sql";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-33\CSwebdev\database";
+            compiler.Dest = DestRoot + @"database";
             compiler.Compile(); 
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2020";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-33\CSwebdev\code\CyberScope\HVA\2021"; 
+            compiler.Dest = DestRoot +  @"code\CyberScope\HVA\2021"; 
             compiler.FileFilter = "*aspx*";
             compiler.Compile();
             Cache.Inspect();

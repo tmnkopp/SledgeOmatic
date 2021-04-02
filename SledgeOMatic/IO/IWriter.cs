@@ -31,7 +31,8 @@ namespace SOM.IO
             Write(writeme); 
         }
         public void Write(string writeme)
-        { 
+        {
+            _filename = _filename.Replace("\\\\", "\\");
             try
             {
                 do
@@ -40,10 +41,10 @@ namespace SOM.IO
                 } while (writeme.EndsWith("\n"));
                 File.WriteAllText($"{_filename}", writeme);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine($"\n\nbad path {_filename}\n\n");
-                throw new InvalidProgramException(); 
+                Console.WriteLine($"\n\n{_filename} {ex.Message}\n\n");
+                throw new Exception(); 
             } 
         }
     }
