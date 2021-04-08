@@ -31,15 +31,20 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.OnPreCompile += (s, a) =>
             {
-                System.IO.Directory.CreateDirectory(@"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\CSwebdev\code\CyberScope\HVA\2021");
+                System.IO.Directory.CreateDirectory(@"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021");
             };
-            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2020";
+            compiler.Source = @"C:\_som\_src\_compile\IG";
             compiler.Dest = @"C:\_som\_src\_compile\IG\compiled";
             compiler.CompileMode = CompileMode.Cache; 
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"C:\_som\_src\_compile\IG\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
-            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021")); 
+            compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
+            compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
             compiler.FileFilter = "*_IG_*aspx*";
+            compiler.Compile();
+            compiler.FileFilter = "*DB_Update*sql"; 
+            compiler.Compile();
+            compiler.FileFilter = "*frmVal*";
             compiler.Compile();
             Cache.Inspect();
             Assert.IsNotNull(Cache.Read());
