@@ -14,28 +14,7 @@ using SOM.Data;
 using Microsoft.Extensions.Configuration;
 
 namespace SOM.Compilers 
-{
-    public enum CompileMode {
-        Debug, Cache, Commit 
-    }
-
-    public interface ICompiler
-    {
-        public string Source { get; set; }
-        public string Dest { get; set; } 
-        public string FileFilter { get; set; }
-
-        public CompileMode CompileMode { get; set; }
-        public List<ICompilable> ContentCompilers { get; set; }
-        public List<ICompilable> FilenameCompilers { get; set; }
-        
-        Func<string, string> ContentFormatter { set; }
-        Func<string, string> FileNameFormatter { set; } 
-        event EventHandler<CompilerEventArgs> OnCompiled;
-        event EventHandler<CompilerEventArgs> OnPreCompile; 
-        void Compile();
-    }
- 
+{ 
     public class Compiler : ICompiler
     {
         #region Props
@@ -56,13 +35,17 @@ namespace SOM.Compilers
         #endregion
 
         #region Events
-        public event EventHandler<CompilerEventArgs> OnPreCompile;
-        public event EventHandler<CompilerEventArgs> OnCompiled;
+        public event EventHandler<CompilerEventArgs> OnPreCompile; 
         protected virtual void PreCompile(CompilerEventArgs e)
-        {
-            
+        { 
             OnPreCompile?.Invoke(this, e);
         }
+        public event EventHandler<CompilerEventArgs> OnCompiling;
+        protected virtual void Compiling(CompilerEventArgs e)
+        { 
+            OnCompiling?.Invoke(this, e);
+        }
+        public event EventHandler<CompilerEventArgs> OnCompiled;
         protected virtual void Compiled(CompilerEventArgs e)
         {
             OnCompiled?.Invoke(this, e);
@@ -91,17 +74,29 @@ namespace SOM.Compilers
         }
         #endregion
 
+        #region Methods
+
+       
+        public void Compile(string FileFilter)
+        {
+            this.FileFilter = FileFilter;
+            Compile();
+        }
         public virtual void Compile()
         {
             var args = new CompilerEventArgs(Source, Dest); 
             PreCompile(args);
             DirectoryInfo DI = new DirectoryInfo($"{Source}");
-            foreach (var file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
+            foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
             {
                 var CompiledContent = CompileContent(Reader.Read(file.FullName));
                 var CompiledFileName = CompileFileName(file.Name);
+                args.File = file;
+                args.ContentCompiled = CompiledContent;
+                Compiling(args);
                 CommitFile(CompiledContent, $"{Dest}\\{CompiledFileName}");
             }
+            args = new CompilerEventArgs(Source, Dest);
             Compiled(args); 
         }
         protected virtual string CompileContent(string content)
@@ -129,5 +124,6 @@ namespace SOM.Compilers
             if (CompileMode == CompileMode.Cache)
                 Cache.Append($"{Content}\n");
         }
+        #endregion
     }
 }

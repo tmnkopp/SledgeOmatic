@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.IO;
 namespace SOM.Compilers
 {
     public class CompilerEventArgs : EventArgs
@@ -14,5 +14,7 @@ namespace SOM.Compilers
         public bool IsSuccessful { get; set; }
         public string Dest { get; set; } 
         public string Source { get; set; } 
+        public string ContentCompiled { get; set; } 
+        public FileInfo File { get; set; } 
     } 
 }

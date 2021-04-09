@@ -28,11 +28,7 @@ namespace CoreTests
         [TestMethod]
         public void IG_Compiles()
         { 
-            Compiler compiler = new Compiler();
-            compiler.OnPreCompile += (s, a) =>
-            {
-                System.IO.Directory.CreateDirectory(@"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021");
-            };
+            Compiler compiler = new Compiler(); 
             compiler.Source = @"C:\_som\_src\_compile\IG";
             compiler.Dest = @"C:\_som\_src\_compile\IG\compiled";
             compiler.CompileMode = CompileMode.Cache; 
@@ -40,14 +36,12 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
             compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
             compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
-            compiler.FileFilter = "*_IG_*aspx*";
-            compiler.Compile();
-            compiler.FileFilter = "*DB_Update*sql"; 
-            compiler.Compile();
-            compiler.FileFilter = "*frmVal*";
-            compiler.Compile();
+             
+            compiler.Compile("*DB_Update*sql");
             Cache.Inspect();
-            Assert.IsNotNull(Cache.Read());
+            // compiler.Compile("*frmVal*"); 
+            // compiler.Compile("*_IG_*aspx*"); 
+            // compiler.Compile("*DB_Update*sql"); 
         }
         [TestMethod]
         public void BOD_Compiles()
