@@ -30,7 +30,7 @@ namespace SOM.Data
             using (SqlConnection myConnection = new SqlConnection(con))
             {
                 SqlCommand oCmd = new SqlCommand(sSql, myConnection);
-                myConnection.Open();
+                myConnection.Open(); 
                 using (oReader = oCmd.ExecuteReader()) 
                     while (oReader.Read()) 
                         UnloadReader(); 

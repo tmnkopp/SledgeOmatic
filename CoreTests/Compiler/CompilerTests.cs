@@ -1,4 +1,4 @@
-using CommandLine;
+﻿using CommandLine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SOM;
 using SOM.Compilers;
@@ -24,25 +24,61 @@ namespace CoreTests
 { 
     [TestClass]
     public class CompilerTests
-    { 
+    {
         [TestMethod]
         public void IG_Compiles()
         { 
-            Compiler compiler = new Compiler(); 
+            Compiler compiler = new Compiler();
             compiler.Source = @"C:\_som\_src\_compile\IG";
-            compiler.Dest = @"C:\_som\_src\_compile\IG\compiled";
-            compiler.CompileMode = CompileMode.Cache; 
+            compiler.Dest = @"C:\_som\_src\_compile\IG\_compiled";
+            compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"C:\_som\_src\_compile\IG\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
+            compiler.FileNameFormatter = (n) => (n.Replace("2020_", "2021_"));
+            compiler.ContentFormatter = (n) => (n.Replace("2020_", "2021_"));
+
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs\";
+            compiler.Compile("*frmVal*"); 
+            //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021\";
+            //compiler.Compile("*_IG_*aspx*");   
+            //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\"; 
+            //compiler.Compile("*DB_Update*sql");
+
+            compiler.OnCompiled += (s, a) =>
+            {
+                if (((Compiler)s).CompileMode == CompileMode.Commit)
+                {  
+                    ProcessStartInfo psi = new ProcessStartInfo( )
+                    {
+                        FileName = @"powershell.exe",
+                        Arguments = @"& 'C:\_som\_src\_compile\IG\post_compile.ps1'",
+                        UseShellExecute = false,
+                        CreateNoWindow = true 
+                    }; 
+                    Process process = new Process();
+                    process.StartInfo = psi;
+                    process.Start();
+                } 
+            }; 
+        }
+  
+        [TestMethod]
+        public void Compiler_Compiles()
+        {
+            Compiler compiler = new Compiler();
+            compiler.Source = @"C:\_som\_src\_compile\IG";
+            compiler.Dest = @"C:\_som\_src\_compile\IG\_compiled";
+            compiler.CompileMode = CompileMode.Commit; 
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
             compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
             compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
-             
-            compiler.Compile("*DB_Update*sql");
+            compiler.Compile("*2020_A_IG_1*aspx*");
+            compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1B"));
+            compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1B"));
+            compiler.Compile("*2020_A_IG_1*aspx*");
             Cache.Inspect();
-            // compiler.Compile("*frmVal*"); 
-            // compiler.Compile("*_IG_*aspx*"); 
-            // compiler.Compile("*DB_Update*sql"); 
         }
+    
         [TestMethod]
         public void BOD_Compiles()
         {

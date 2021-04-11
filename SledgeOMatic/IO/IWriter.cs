@@ -39,7 +39,7 @@ namespace SOM.IO
                 {
                     writeme = writeme.TrimTrailingNewline();
                 } while (writeme.EndsWith("\n"));
-                File.WriteAllText($"{_filename}", writeme);
+                File.WriteAllText($"{_filename}", writeme, Encoding.Unicode);
             }
             catch (Exception ex)
             {

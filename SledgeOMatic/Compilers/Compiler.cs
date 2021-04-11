@@ -92,6 +92,7 @@ namespace SOM.Compilers
                 var CompiledContent = CompileContent(Reader.Read(file.FullName));
                 var CompiledFileName = CompileFileName(file.Name);
                 args.File = file;
+                args.CompiledFileName = CompiledFileName;
                 args.ContentCompiled = CompiledContent;
                 Compiling(args);
                 CommitFile(CompiledContent, $"{Dest}\\{CompiledFileName}");
