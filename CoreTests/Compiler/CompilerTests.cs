@@ -37,29 +37,12 @@ namespace CoreTests
             compiler.FileNameFormatter = (n) => (n.Replace("2020_", "2021_"));
             compiler.ContentFormatter = (n) => (n.Replace("2020_", "2021_"));
 
-            compiler.OnCompiled += (s, a) =>
-            {
-                if (((Compiler)s).CompileMode == CompileMode.Commit)
-                {
-                    ProcessStartInfo psi = new ProcessStartInfo()
-                    {
-                        FileName = @"explorer.exe",
-                        Arguments = @" " + compiler.Dest,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    };
-                    Process process = new Process();
-                    process.StartInfo = psi;
-                    process.Start();
-                }
-            };
-
             //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs\";
-            //compiler.Compile("*frmVal*"); 
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021\";
-            compiler.Compile("*_IG_*aspx*");
-            //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\";
-            //compiler.Compile("*DB_Update*sql");
+            //compiler.Compile("*frmVal*");
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021\"; //
+            compiler.Compile("*_IG_2B*aspx*"); //
+            //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\"; //
+            //compiler.Compile("*DB_Update*sql"); //
 
 
         }

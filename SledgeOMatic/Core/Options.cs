@@ -23,6 +23,7 @@ namespace SOM
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
     }
+
     [Serializable]
     [Verb("parse", HelpText = "Parse Runner.")]
     public class ParseOptions
@@ -41,4 +42,12 @@ namespace SOM
         [Option('e', "PathExcludePattern")]
         public string PathExcludePattern { get; set; }
     }
+
+    [Serializable]
+    [Verb("config", HelpText = "Config Runner.")]
+    public class ConfigOptions
+    {
+        [Option('v', "Verbose", HelpText = "Print details during execution.")]
+        public bool Verbose { get; set; }
+    } 
 }

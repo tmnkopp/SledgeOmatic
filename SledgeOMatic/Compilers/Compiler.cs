@@ -89,8 +89,7 @@ namespace SOM.Compilers
         #endregion
 
         #region Methods
-
-       
+         
         public void Compile(string FileFilter)
         {
             this.FileFilter = FileFilter;

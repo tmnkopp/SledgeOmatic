@@ -1,10 +1,9 @@
-Source: 'c:\_som\_src\_compile'
-Dest: 'c:\_som\_src\_compile\_compiled'
-ContentCompilers:
-- KeyValReplacer:  'c:\_som\_src\_compile\replace.json'
-- NumericKeyReplacer:  ['c:\_som\_src\_compile\keyval.sql']
-- KeyValReplacer:  'c:\_som\_src\_compile\replace.json'
-FileFilter: '*asp*' 
+Source: 'C:\_som\_src\_compile\IG'
+Dest: 'C:\_som\_src\_compile\IG\_compiled'
+ContentCompilers: 
+- NumericKeyReplacer:  ['C:\_som\_src\_compile\IG\keyval.sql']
+- KeyValReplacer:  'C:\_som\_src\_compile\IG\post-compile.json'
+FileFilter: '*_IG_2B*asp*' 
 FilenameCompilers: 
-- KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
+- KeyValReplacer:  ['c:\_som\_src\_compile\IG\post-compile.json'] 
 Compile:
