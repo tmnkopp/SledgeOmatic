@@ -49,6 +49,20 @@ namespace SOM.Compilers
         protected virtual void Compiled(CompilerEventArgs e)
         {
             OnCompiled?.Invoke(this, e);
+            string onCompiledPs = $"{this.Source}\\OnCompiled.ps1";
+            if (this.CompileMode == CompileMode.Commit && File.Exists(onCompiledPs))
+            {
+                ProcessStartInfo psi = new ProcessStartInfo()
+                {
+                    FileName = @"powershell.exe",
+                    Arguments = $"& '{onCompiledPs}'",
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                Process process = new Process();
+                process.StartInfo = psi;
+                process.Start();
+            }
         }
         #endregion
 
