@@ -25,6 +25,30 @@ namespace CoreTests
     [TestClass]
     public class CompilerTests
     {
+
+
+        [TestMethod]
+        public void BOD_Compiles()
+        { 
+            Compiler compiler = new Compiler(); 
+            compiler.Source = @"c:\_som\_src\_compile\BOD\";
+            compiler.CompileMode = CompileMode.Cache;
+            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
+            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
+            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json")); 
+            compiler.FileFilter = "*frmVal*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs";
+            compiler.Compile();
+            compiler.FileFilter = "*DB_Update*sql";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database";
+            compiler.Compile();
+            compiler.FileFilter = "*aspx*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\HVA\2021"; 
+            compiler.Compile();
+            Cache.Inspect();
+        }
+
         [TestMethod]
         public void IG_Compiles()
         { 
@@ -40,9 +64,9 @@ namespace CoreTests
             //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs\";
             //compiler.Compile("*frmVal*");
             compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021\"; //
-            compiler.Compile("*_IG_2B*aspx*"); //
-            //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\"; //
-            //compiler.Compile("*DB_Update*sql"); //
+            compiler.Compile("*_IG_*aspx*"); //
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\"; //
+            compiler.Compile("*DB_Update*sql"); //
 
 
         }
@@ -63,34 +87,7 @@ namespace CoreTests
             compiler.Compile("*2020_A_IG_1*aspx*");
             Cache.Inspect();
         }
-    
-        [TestMethod]
-        public void BOD_Compiles()
-        {
-            string DestRoot = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\";
-            Compiler compiler = new Compiler(); 
-            compiler.OnPreCompile += (s, a) =>
-            {
-                System.IO.Directory.CreateDirectory(DestRoot + @"code\CyberScope\HVA\2021");
-            }; 
-            compiler.Source = @"c:\_som\_src\_compile\BOD\"; 
-            compiler.CompileMode = CompileMode.Commit;
-            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
-            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
-            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021"));
-            compiler.ContentFormatter = (n) => (n.Replace("2020", "2021"));
-            compiler.FileFilter = "*frmVal*";
-            compiler.Dest = DestRoot + @"database\Sprocs";
-            compiler.Compile();
-            compiler.FileFilter = "*DB_Update*sql";
-            compiler.Dest = DestRoot + @"database";
-            compiler.Compile(); 
-            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2020";
-            compiler.Dest = DestRoot +  @"code\CyberScope\HVA\2021"; 
-            compiler.FileFilter = "*aspx*";
-            compiler.Compile();
-            Cache.Inspect();
-        }
+
 
         [TestMethod]
         public void Schema_Compiles()
