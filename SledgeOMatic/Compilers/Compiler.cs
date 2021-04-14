@@ -108,6 +108,7 @@ namespace SOM.Compilers
                 args.CompiledFileName = CompiledFileName;
                 args.ContentCompiled = CompiledContent;
                 Compiling(args);
+ 
                 CommitFile(CompiledContent, $"{Dest}\\{CompiledFileName}");
             }
             args = new CompilerEventArgs(Source, Dest);
@@ -115,18 +116,14 @@ namespace SOM.Compilers
         }
         protected virtual string CompileContent(string content)
         {
-            foreach (ICompilable proc in ContentCompilers)
-            {
-                content = proc.Compile(content);
-            }
-            content = _ContentFormatter(content);
-            return content;
+            foreach (ICompilable proc in ContentCompilers) 
+                content = proc.Compile(content); 
+            return _ContentFormatter(content);
         }
         protected virtual string CompileFileName(string Filename)
-        {
-            string newFileName = Filename;
+        { 
             foreach (ICompilable proc in FilenameCompilers)
-                newFileName = proc.Compile(newFileName).RemoveWhiteAndBreaks();
+                Filename = proc.Compile(Filename).RemoveWhiteAndBreaks();
             return _FileNameFormatter(Filename);
         }
         private void CommitFile(string Content, string FileName)

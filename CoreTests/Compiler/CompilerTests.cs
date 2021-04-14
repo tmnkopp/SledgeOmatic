@@ -18,21 +18,18 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
-using System.Text.RegularExpressions;
-
+using System.Text.RegularExpressions; 
 namespace CoreTests
 { 
     [TestClass]
     public class CompilerTests
-    {
-
-
+    { 
         [TestMethod]
         public void BOD_Compiles()
         { 
             Compiler compiler = new Compiler(); 
             compiler.Source = @"c:\_som\_src\_compile\BOD\";
-            compiler.CompileMode = CompileMode.Cache;
+            compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
@@ -45,8 +42,7 @@ namespace CoreTests
             compiler.Compile();
             compiler.FileFilter = "*aspx*";
             compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\HVA\2021"; 
-            compiler.Compile();
-            Cache.Inspect();
+            compiler.Compile(); 
         }
 
         [TestMethod]
