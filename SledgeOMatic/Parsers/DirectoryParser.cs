@@ -55,6 +55,7 @@ namespace SOM.Parsers
             } 
         } 
         #endregion 
+
         #region Ctor
 
         public DirectoryParser()
@@ -65,9 +66,12 @@ namespace SOM.Parsers
         public DirectoryParser(string Directory) : this()
         {
             _Directory = Directory;  
-        } 
+        }
         #endregion
-       
+
+        #region METHODS
+
+
         public void ParseDirectory()
         {
             _Results.Clear();
@@ -76,20 +80,22 @@ namespace SOM.Parsers
             {
                 if (_Parser.ParseMode == ParseMode.Debug)
                     Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
-                
-                if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern)) {  
+
+                if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
+                {
                     if (_Parser.ParseMode == ParseMode.Debug)
                         Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
                     continue;
                 }
 
-                string content = Reader.Read(file.FullName); 
+                string content = Reader.Read(file.FullName);
                 StringBuilder result = new StringBuilder();
-                foreach (var item in _Parser.Parse(content)) { 
+                foreach (var item in _Parser.Parse(content))
+                {
                     result.Append(_ContentFormatter(item));
                 }
-                if (result.ToString() != "") 
-                    _Results.Add($"{file.FullName}", $"{result.ToString()}"); 
+                if (result.ToString() != "")
+                    _Results.Add($"{file.FullName}", $"{result.ToString()}");
             }
         }
         public void ParseTo(IWriter Writer)
@@ -98,12 +104,13 @@ namespace SOM.Parsers
             Writer.Write(ToString());
         }
         public void Inspect()
-        { 
-            ParseDirectory(); 
+        {
+            ParseDirectory();
             Cache.Inspect(ToString());
         }
-        
-        public override string ToString() {
+
+        public override string ToString()
+        {
             StringBuilder result = new StringBuilder();
             if (_Parser.ParseMode != ParseMode.Default)
             {
@@ -112,12 +119,16 @@ namespace SOM.Parsers
                 foreach (KeyValuePair<string, string> kvp in _Results)
                     result.Append($"{kvp.Key}\n{kvp.Value}\n");
             }
-            else {
+            else
+            {
                 foreach (KeyValuePair<string, string> kvp in _Results)
                     result.Append($"{kvp.Value}\n");
-            } 
+            }
             return result.ToString();
-        }  
+        }
+
+
+        #endregion
     }
 }
 

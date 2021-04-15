@@ -33,16 +33,17 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
-            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json")); 
-            compiler.FileFilter = "*frmVal*";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs";
+            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
+            // compiler.FileFilter = "*frmVal*";
+            // compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs";
+            // compiler.Compile(); 
+            // compiler.FileFilter = "*aspx*";
+            // compiler.FileFilter = "*DB_Update*sql";
+            // compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\HVA\2021"; 
+            // compiler.Compile();
+            compiler.FileFilter = "*asp*";
+            compiler.Dest = @"c:\_som\_src\_compile\BOD\compiled";
             compiler.Compile();
-            compiler.FileFilter = "*DB_Update*sql";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database";
-            compiler.Compile();
-            compiler.FileFilter = "*aspx*";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\HVA\2021"; 
-            compiler.Compile(); 
         }
 
         [TestMethod]
