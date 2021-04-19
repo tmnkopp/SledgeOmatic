@@ -24,12 +24,28 @@ namespace CoreTests
     [TestClass]
     public class CompilerTests
     { 
+
+
+        [TestMethod]
+        public void BOD1_Compiles()
+        { 
+            Compiler compiler = new Compiler(); 
+            compiler.Source = @"c:\_som\_src\_compile\BOD\";
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.FileNameFormatter = (n) => (n.Replace("A_HVA_1", "A_HVA_1B"));
+            compiler.ContentFormatter = (n) => (n.Replace("A_HVA_1", "A_HVA_1B"));
+            compiler.FileFilter = "*A_HVA_1*";
+            compiler.Dest = @"c:\_som\_src\_compile\BOD\compiled";
+            compiler.Compile();
+            Cache.Inspect();
+        }
+
         [TestMethod]
         public void BOD_Compiles()
         { 
             Compiler compiler = new Compiler(); 
             compiler.Source = @"c:\_som\_src\_compile\BOD\";
-            compiler.CompileMode = CompileMode.Commit;
+            compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
