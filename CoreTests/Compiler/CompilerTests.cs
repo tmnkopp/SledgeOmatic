@@ -11,6 +11,7 @@ using SOMAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,18 +19,16 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
-using System.Text.RegularExpressions; 
+using System.Text.RegularExpressions;
 namespace CoreTests
-{ 
+{
     [TestClass]
     public class CompilerTests
     { 
-
-
         [TestMethod]
         public void BOD1_Compiles()
-        { 
-            Compiler compiler = new Compiler(); 
+        {
+            Compiler compiler = new Compiler();
             compiler.Source = @"c:\_som\_src\_compile\BOD\";
             compiler.CompileMode = CompileMode.Commit;
             compiler.FileNameFormatter = (n) => (n.Replace("A_HVA_1", "A_HVA_1B"));
@@ -42,8 +41,8 @@ namespace CoreTests
 
         [TestMethod]
         public void BOD_Compiles()
-        { 
-            Compiler compiler = new Compiler(); 
+        {
+            Compiler compiler = new Compiler();
             compiler.Source = @"c:\_som\_src\_compile\BOD\";
             compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
@@ -54,17 +53,19 @@ namespace CoreTests
             // compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs";
             // compiler.Compile(); 
             // compiler.FileFilter = "*aspx*";
-            // compiler.FileFilter = "*DB_Update*sql";
-            // compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\HVA\2021"; 
+            compiler.FileFilter = "*DB_Update*sql";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database";
             // compiler.Compile();
-            compiler.FileFilter = "*asp*";
-            compiler.Dest = @"c:\_som\_src\_compile\BOD\compiled";
+            //compiler.FileFilter = "*asp*";
+            // compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021";
+            //compiler.Dest = @"c:\_som\_src\_compile\BOD\compiled";
             compiler.Compile();
+            Cache.Inspect();
         }
 
         [TestMethod]
         public void IG_Compiles()
-        { 
+        {
             Compiler compiler = new Compiler();
             compiler.Source = @"C:\_som\_src\_compile\IG";
             compiler.Dest = @"C:\_som\_src\_compile\IG\_compiled";
@@ -90,7 +91,7 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.Source = @"C:\_som\_src\_compile\IG";
             compiler.Dest = @"C:\_som\_src\_compile\IG\_compiled";
-            compiler.CompileMode = CompileMode.Commit; 
+            compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
             compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
             compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
@@ -146,37 +147,38 @@ namespace CoreTests
 
         [TestMethod]
         public void RMA_Compiles()
-        { 
+        {
             Compiler compiler = new Compiler();
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
-            compiler.CompileMode = CompileMode.Commit; 
+            compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
-            compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));  
+            compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));
             compiler.FileFilter = "*aspx*";
-            compiler.Compile(); 
+            compiler.Compile();
             Assert.IsNotNull(Cache.Read());
-        } 
+        }
         [TestMethod]
         public void CIO_Compiles()
-        { 
-            Compiler compiler = new Compiler(); 
+        {
+            Compiler compiler = new Compiler();
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
-            compiler.CompileMode = CompileMode.Cache; 
+            compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
             compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));
             compiler.FileFilter = "*DB_Update*sql";
-            compiler.Compile();   
+            compiler.Compile();
             compiler.FileFilter = "*frmVal*";
             compiler.Compile();
-            compiler.FileFilter = "*aspx*"; 
-            compiler.Compile();  
+            compiler.FileFilter = "*aspx*";
+            compiler.Compile();
             Assert.IsNotNull(Cache.Read());
-        } 
-    } 
+        }
+    }
+     
 }
 
 

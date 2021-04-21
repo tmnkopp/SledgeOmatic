@@ -25,7 +25,7 @@ namespace CoreTests
             compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new MetricTagger(metrics));
             compiler.FileFilter = "*.aspx";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\HVA\2021";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021";
             compiler.Compile();
             Cache.Inspect();
         }
