@@ -44,7 +44,7 @@ namespace SOM.Parsers
         private string _PathExcludePattern = @"\$";
         public string PathExcludePattern
         {
-            get { return _PathExcludePattern; }
+            get { return _PathExcludePattern ?? "~~~~"; }
             set { _PathExcludePattern = value; }
         } 
         public string FileFilter
