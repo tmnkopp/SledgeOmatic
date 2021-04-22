@@ -23,7 +23,7 @@ using System.Text.RegularExpressions;
 namespace CoreTests
 { 
     [TestClass]
-    public class ProcessSrart
+    public class ProcessStartTests
     {
         [TestMethod]
         public void VSCode_VsCodes()
