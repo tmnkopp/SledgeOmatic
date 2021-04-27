@@ -11,9 +11,9 @@ namespace SOM.Procedures
     public class ExpressionExtractor : BaseParser, IParser<string>
     {
         private List<string> _patterns = new List<string>();
-        public ExpressionExtractor(List<string> Patterns)
+        public ExpressionExtractor(string Patterns)
         {
-            _patterns = Patterns;
+            _patterns = Patterns.Split(",").ToList();
         }
         public IEnumerable<string> Parse(string content)
         {

@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "parse -m Default -p LineExtractor"
+      "commandLineArgs": "parse -m Default"
     }
   }
 }
