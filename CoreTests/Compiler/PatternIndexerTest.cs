@@ -12,10 +12,10 @@ namespace CoreTests
     {
         [TestMethod]
         public void PatternIndexer_Indexes()
-        { 
-            var s = Reader.Read(@"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\DB_Update7.34_BOD_2021.sql");
-            ICompilable comp = new PatternIndexer("QGroup, (\\d{1,2}),",  1); 
-            var c = comp.Compile(s);
+        {
+            string c = Reader.Read(@"C:\_som\_cache.txt"); 
+            c = new PatternIndexer("QGroup, (\\d{1,2}),",  1).Compile(c); 
+            //c = new PatternIndexer("(\\d{5}), @FormName", 22800).Compile(c); 
             Cache.Inspect(c); 
 
         }
