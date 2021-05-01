@@ -24,14 +24,12 @@ namespace SOM.Procedures
             StringBuilder result = new StringBuilder();
             string[] lines = content.Split('\n'); 
             foreach (var line in lines) {
-                string rslt = Regex.Replace(line, this.Pattern, (Match m) => (
-                //"FOO"
-                m.Groups[0].Value.Replace(m.Groups[1].Value, (this.seed++).ToString())
+                string rslt = Regex.Replace(line, this.Pattern, (Match m) => ( 
+                    m.Groups[0].Value.Replace(m.Groups[1].Value, (this.seed++).ToString())
                 ));
                 result.AppendFormat("{0}\n", rslt);
             }
             return result.ToString().TrimTrailingNewline();
-        }
-       
+        } 
     }
 }
