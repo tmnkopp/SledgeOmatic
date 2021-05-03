@@ -11,6 +11,14 @@ namespace CoreTests
     public class PatternIndexerTest
     {
         [TestMethod]
+        public void CacheRefactor_Refactors()
+        {
+            string c = Reader.Read(@"C:\_som\_cache.txt"); 
+            //c = new PatternIndexer("(\\d{5}), @FormName", 22800).Compile(c); 
+            Cache.Inspect(c);
+
+        }
+        [TestMethod]
         public void PatternIndexer_Indexes()
         {
             string c = Reader.Read(@"C:\_som\_cache.txt"); 
