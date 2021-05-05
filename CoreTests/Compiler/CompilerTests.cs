@@ -24,17 +24,24 @@ namespace CoreTests
 {
     [TestClass]
     public class CompilerTests
-    { 
+    {
+      
+        public string replacer(string s) {
+            s = s.Replace("4_1_2", "4_1_3");
+            s = s.Replace("4_1_1", "4_1_2");
+            s = s.Replace("6_2_2", "6_2_5");
+            s = s.Replace("6_2_1", "6_2_4");
+            return s; 
+        }
         [TestMethod]
         public void BOD1_Compiles()
         {
             Compiler compiler = new Compiler();
-            compiler.Source = @"c:\_som\_src\_compile\BOD\";
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
             compiler.CompileMode = CompileMode.Commit;
-            compiler.FileNameFormatter = (n) => (n.Replace("A_HVA_1", "A_HVA_1B"));
-            compiler.ContentFormatter = (n) => (n.Replace("A_HVA_1", "A_HVA_1B"));
-            compiler.FileFilter = "*A_HVA_1*";
-            compiler.Dest = @"c:\_som\_src\_compile\BOD\compiled";
+            compiler.ContentFormatter = (n) => (n=replacer(n)); 
+            compiler.FileFilter = "*_1A*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
             compiler.Compile();
             Cache.Inspect();
         }
