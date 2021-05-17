@@ -27,20 +27,21 @@ namespace CoreTests
     {
       
         public string replacer(string s) {
-            s = s.Replace("4_1_2", "4_1_3");
-            s = s.Replace("4_1_1", "4_1_2");
-            s = s.Replace("6_2_2", "6_2_5");
-            s = s.Replace("6_2_1", "6_2_4");
+            for (int i = 24; i <= 33; i++) { 
+                s = s.Replace($"{i}_", $"{i-1}_");
+                s = s.Replace($"Metric{i}", $"Metric{i-1}");
+            }
+                 
             return s; 
         }
         [TestMethod]
         public void BOD1_Compiles()
         {
-            Compiler compiler = new Compiler();
+            Compiler compiler = new Compiler(); 
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentFormatter = (n) => (n=replacer(n)); 
-            compiler.FileFilter = "*_1A*";
+            compiler.FileFilter = "*_1B*";
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
             compiler.Compile();
             Cache.Inspect();
@@ -55,17 +56,9 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
-            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
-            // compiler.FileFilter = "*frmVal*";
-            // compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs";
-            // compiler.Compile(); 
-            // compiler.FileFilter = "*aspx*";
+            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json")); 
             compiler.FileFilter = "*DB_Update*sql";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database";
-            // compiler.Compile();
-            //compiler.FileFilter = "*asp*";
-            // compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021";
-            //compiler.Dest = @"c:\_som\_src\_compile\BOD\compiled";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database"; 
             compiler.Compile();
             Cache.Inspect();
         }
