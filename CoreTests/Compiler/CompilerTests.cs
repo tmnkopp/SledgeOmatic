@@ -26,12 +26,16 @@ namespace CoreTests
     public class CompilerTests
     {
       
-        public string replacer(string s) {
+        public string replacer(string s) { 
+           // s = s.Replace($"@ANS_1B_16", $"@ANS_1B_15_3");
+            //s = s.Replace($"@ANS_1B_17", $"@ANS_1B_15_4");
+           
             for (int i = 24; i <= 33; i++) { 
-                s = s.Replace($"{i}_", $"{i-1}_");
-                s = s.Replace($"Metric{i}", $"Metric{i-1}");
+                s = s.Replace($"@ANS_1B_{i}", $"@ANS_1B_{i-1}");
+                //s = s.Replace($"Metric{i}", $"Metric{i-1}");
+                //s = s.Replace($" for {i}", $" for {i - 1}");
             }
-                 
+
             return s; 
         }
         [TestMethod]
@@ -39,10 +43,14 @@ namespace CoreTests
         {
             Compiler compiler = new Compiler(); 
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
-            compiler.CompileMode = CompileMode.Commit;
+            compiler.CompileMode = CompileMode.Cache;
             compiler.ContentFormatter = (n) => (n=replacer(n)); 
-            compiler.FileFilter = "*_1B*";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
+            //compiler.FileFilter = "*_1B*";
+            //compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
+            //compiler.Compile();
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\sprocs\"; 
+            compiler.FileFilter = "*frmVal_2021HVA*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\sprocs\";
             compiler.Compile();
             Cache.Inspect();
         }
