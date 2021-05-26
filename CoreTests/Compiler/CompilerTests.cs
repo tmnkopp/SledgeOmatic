@@ -27,16 +27,24 @@ namespace CoreTests
     {
       
         public string replacer(string s) { 
-           // s = s.Replace($"@ANS_1B_16", $"@ANS_1B_15_3");
-            //s = s.Replace($"@ANS_1B_17", $"@ANS_1B_15_4");
-           
-            for (int i = 24; i <= 33; i++) { 
-                s = s.Replace($"@ANS_1B_{i}", $"@ANS_1B_{i-1}");
-                //s = s.Replace($"Metric{i}", $"Metric{i-1}");
-                //s = s.Replace($" for {i}", $" for {i - 1}");
-            }
-
+            s = s.Replace($"EinsteinPrivate", $"SolarWindNetwork"); 
+            s = s.Replace($"@Name", $"@NetworkName"); 
             return s; 
+        }
+        //D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\HVAList.ascx
+        //D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\EinsteinPrivate_CRUD.sql
+        [TestMethod]
+        public void SW_Compiles()
+        {
+            Compiler compiler = new Compiler();
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.ContentFormatter = (n) => (n = replacer(n));
+            compiler.FileNameFormatter = (n) => (n = replacer(n));
+            compiler.FileFilter = "*EinsteinPrivate_CRUD.sql*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
+            compiler.Compile();
+            Cache.Inspect();
         }
         [TestMethod]
         public void BOD1_Compiles()
