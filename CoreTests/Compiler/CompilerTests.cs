@@ -27,37 +27,37 @@ namespace CoreTests
     {
       
         public string replacer(string s) { 
-            s = s.Replace($"EinsteinPrivate", $"SolarWindNetwork"); 
-            s = s.Replace($"@Name", $"@NetworkName"); 
+            s = s.Replace($"SolarWindNetwork", $"SWNPOC");  
+            s = s.Replace($"wte", $"txt");  
             return s; 
-        }
-        //D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\HVAList.ascx
-        //D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\EinsteinPrivate_CRUD.sql
+        } 
         [TestMethod]
         public void SW_Compiles()
         {
             Compiler compiler = new Compiler();
-            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\";
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentFormatter = (n) => (n = replacer(n));
             compiler.FileNameFormatter = (n) => (n = replacer(n));
-            compiler.FileFilter = "*EinsteinPrivate_CRUD.sql*";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
+            compiler.FileFilter = "*CBPOC*";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\";
             compiler.Compile();
             Cache.Inspect();
         }
         [TestMethod]
-        public void BOD1_Compiles()
+        public void SWN_Compiles()
         {
-            Compiler compiler = new Compiler(); 
-            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
-            compiler.CompileMode = CompileMode.Cache;
-            compiler.ContentFormatter = (n) => (n=replacer(n)); 
-            //compiler.FileFilter = "*_1B*";
-            //compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021\";
-            //compiler.Compile();
+            Compiler compiler = new Compiler();  
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.ContentFormatter = (s) =>
+            {
+                s = s.Replace($"SolarWindNetwork", $"SWNPOC");
+                s = s.Replace($"SolarWindNetwork", $"SWNPOC");
+                return s;
+            };
+            compiler.FileNameFormatter = (s) => (s=s.Replace($"SolarWindNetwork", $"SWNPOC"));
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\sprocs\"; 
-            compiler.FileFilter = "*frmVal_2021HVA*";
+            compiler.FileFilter = "*SolarWindNetwork_CRUD*";
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\sprocs\";
             compiler.Compile();
             Cache.Inspect();
