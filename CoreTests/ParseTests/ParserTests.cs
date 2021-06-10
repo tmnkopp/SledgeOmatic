@@ -19,11 +19,10 @@ namespace UnitTests
         public void LineExtractor_Extracts()
         { 
             DirectoryParser parser = new DirectoryParser();
-            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\sprocs\\*";
-            parser.Parser = new LineExtractor("INSERT INTO AuditLog", 6);
+            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\code\\CyberScope\\CustomControls\\*ascx.vb";
+            parser.Parser = new LineExtractor("Expand", 5);
             parser.Parser.ParseMode = ParseMode.Verbose; 
-            parser.Inspect();
- 
+            parser.Inspect(); 
             Assert.IsNotNull(parser);
         }
 
