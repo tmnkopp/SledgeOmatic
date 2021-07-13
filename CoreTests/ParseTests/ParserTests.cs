@@ -19,8 +19,8 @@ namespace UnitTests
         public void LineExtractor_Extracts()
         { 
             DirectoryParser parser = new DirectoryParser();
-            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\code\\CyberScope\\CustomControls\\*ascx.vb";
-            parser.Parser = new LineExtractor("Generate PDF for Final FISMA Report", 5);
+            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\code\\CyberScope\\CustomControls\\*.*";
+            parser.Parser = new LineExtractor("InPlace", 5);
             parser.Parser.ParseMode = ParseMode.Verbose; 
             parser.Inspect(); 
             Assert.IsNotNull(parser);
