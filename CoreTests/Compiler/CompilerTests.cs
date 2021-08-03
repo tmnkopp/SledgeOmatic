@@ -25,7 +25,26 @@ namespace CoreTests
     [TestClass]
     public class CompilerTests
     {
-      
+
+        [TestMethod]
+        public void SAOP_Compiles()
+        {
+            Compiler compiler = new Compiler();
+            compiler.Source = @"c:\_som\_src\_compile\SAOP\";
+            compiler.CompileMode = CompileMode.Cache;
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
+            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\keyval.sql"));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
+            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\";
+            compiler.FileFilter = "*DB_Update*";
+            compiler.Compile();
+            //compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\";
+            //compiler.Compile("*aspx*");
+            Cache.Inspect();
+        }
+
+
         public string replacer(string s) { 
             s = s.Replace($"SolarWindNetwork", $"SWNPOC");  
             s = s.Replace($"wte", $"txt");  
@@ -63,6 +82,7 @@ namespace CoreTests
             Cache.Inspect();
         }
 
+
         [TestMethod]
         public void BOD_Compiles()
         {
@@ -76,6 +96,8 @@ namespace CoreTests
             compiler.FileFilter = "*DB_Update*sql";
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database"; 
             compiler.Compile();
+            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021\"; //
+            compiler.Compile("*_IG_*aspx*"); //
             Cache.Inspect();
         }
 

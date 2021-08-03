@@ -26,13 +26,4 @@ namespace UnitTests
             Assert.AreEqual(expected, content);
         } 
     }
-}
-
-
-
-
-
-/* 
-                .RemoveDuplicate(" ")  
-     
-*/
+} 
