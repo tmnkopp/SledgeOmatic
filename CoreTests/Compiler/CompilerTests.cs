@@ -39,8 +39,8 @@ namespace CoreTests
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\";
             compiler.FileFilter = "*DB_Update*";
             compiler.Compile();
-            //compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\";
-            //compiler.Compile("*aspx*");
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\";
+            compiler.Compile("*aspx*");
             Cache.Inspect();
         }
 

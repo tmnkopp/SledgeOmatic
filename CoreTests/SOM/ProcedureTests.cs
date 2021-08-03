@@ -25,16 +25,30 @@ namespace UnitTests
             Assert.AreEqual(expected, act);
         } 
     }
-    public class RegexReplacer : KeyValReplacer, ICompilable
+    public class PatternReplacer : KeyValReplacer
     {
-        public RegexReplacer(string Source) : base(Source) { }
+        public PatternReplacer(string Source) : base(Source) { }
         public override string Compile(string content)
-        {  
-            foreach (var KeyValItem in KeyVals)
-            { 
-                content = Regex.Replace(content, KeyValItem.Key, KeyValItem.Value);
+        {
+            StringBuilder result = new StringBuilder();
+            foreach (var line in content.Split("\n"))
+            {
+                string target = line;
+                foreach (var item in KeyVals)
+                {
+                    string pattern = item.Key;
+                    while (Regex.IsMatch(target, pattern))
+                    {
+                        target = Regex.Replace(target, pattern,
+                            m => m.Groups[1].Value
+                             + item.Value
+                             + m.Groups[3].Value
+                            , RegexOptions.Singleline);
+                    };
+                }
+                result.Append(target);
             }
-            return content.TrimTrailingNewline();
-        } 
+            return result.ToString();
+        }
     }
 }
