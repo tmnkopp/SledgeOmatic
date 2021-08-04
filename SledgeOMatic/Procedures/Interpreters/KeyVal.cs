@@ -61,7 +61,7 @@ namespace SOM.Procedures
         }
     }
     #endregion
-
+  
     public class NumericKeyReplacer : KeyValReplacer
     { 
         public NumericKeyReplacer(string Source) : base(Source) {  } 
@@ -72,14 +72,12 @@ namespace SOM.Procedures
             {
                 string target = line;
                 foreach (var item in KeyVals)
-                {
-                    string pattern = "(\\(|\\\"|,|\\s|=)(" + item.Key + ")(,|\\s|\\)|\\\")"; 
-                    while (Regex.IsMatch(target, pattern))
+                { 
+                    string pattern = "([^\\d])(" + item.Key + ")([^\\d])"; 
+                    if (Regex.IsMatch(target, pattern))
                     {
                         target = Regex.Replace(target, pattern,  
-                            m => m.Groups[1].Value
-                             + item.Value
-                             + m.Groups[3].Value 
+                            m => $"{m.Groups[1].Value}{item.Value}{m.Groups[3].Value}"  
                             , RegexOptions.Singleline); 
                     }; 
                 }

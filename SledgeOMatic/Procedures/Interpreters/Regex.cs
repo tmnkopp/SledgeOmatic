@@ -17,12 +17,28 @@ namespace SOM.Procedures
         public RegexReplacer(string Source) : base(Source) { }
         public override string Compile(string content)
         {
-            foreach (var KeyValItem in KeyVals)
-            {
-                content = Regex.Replace(content, KeyValItem.Key, KeyValItem.Value);
+            StringBuilder result = new StringBuilder();
+            foreach (var line in content.Split("\n"))   {
+                string replacement = line;
+                foreach (var item in KeyVals) { 
+                    var match = Regex.Match(replacement, item.Key);
+                    if (match.Success)
+                    { 
+                        replacement = Regex.Replace(
+                              replacement
+                            , item.Key
+                            , m => {
+                                if (m.Groups.Count > 2)
+                                    return $"{ m.Groups[1]}{item.Value}{m.Groups[3]}";
+                                else
+                                    return item.Value;
+                                }
+                            , RegexOptions.Singleline); 
+                    } 
+                }
+                result.Append(replacement);
             }
-            return content.TrimTrailingNewline();
+            return result.ToString(); 
         }
-    }
-
+    } 
 }

@@ -33,16 +33,17 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.Source = @"c:\_som\_src\_compile\SAOP\src\";
             compiler.CompileMode = CompileMode.Cache; 
-            // compiler.ContentPreFormatter = (c) =>
-            // {
-            //     return c; // return Regex.Replace(c, @"[^\u0009\u000A\u000D\u0020-\u007E]", "*");
-            // };
-            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
+            compiler.ContentPreFormatter = (c) =>
+            {
+                //return Regex.Replace(c, @"[^\u0009\u000A\u000D\u0020-\u007E]", "*");
+                return Regex.Replace(c, @"[“|”]", "'");
+            };
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\saop\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\gapkeyval.json"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
             compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
-            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\"; 
-            compiler.Compile("*aspx*");
+            compiler.Dest = @"c:\_som\_src\_compile\_compiled"; 
+            compiler.Compile("*2020_A_SAOP_1*");
             Cache.Inspect();
         }
 
