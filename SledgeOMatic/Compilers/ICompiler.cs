@@ -18,7 +18,7 @@ namespace SOM.Compilers
 
         #region Func
 
-        Func<string, string> ContentFormatter { set; }
+        Func<string, string> ContentPostFormatter { set; }
         Func<string, string> FileNameFormatter { set; }
 
         #endregion

@@ -79,7 +79,7 @@ namespace SOM.Procedures
                         target = Regex.Replace(target, pattern,  
                             m => m.Groups[1].Value
                              + item.Value
-                             + m.Groups[3].Value
+                             + m.Groups[3].Value 
                             , RegexOptions.Singleline); 
                     }; 
                 }

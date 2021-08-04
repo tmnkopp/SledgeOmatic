@@ -35,10 +35,10 @@ namespace SOM.IO
             _filename = _filename.Replace("\\\\", "\\");
             try
             {
-                do
-                {
-                    writeme = writeme.TrimTrailingNewline();
-                } while (writeme.EndsWith("\n"));
+               // do
+               // {
+               //     writeme = writeme.TrimTrailingNewline();
+               // } while (writeme.EndsWith("\n"));
                 File.WriteAllText($"{_filename}", writeme, Encoding.Unicode);
             }
             catch (Exception ex)

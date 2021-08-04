@@ -22,30 +22,40 @@ using System.Text;
 using System.Text.RegularExpressions;
 namespace CoreTests
 {
+  
     [TestClass]
     public class CompilerTests
     {
-        
+         
         [TestMethod]
         public void SAOP2020_Compiles()
         {
             Compiler compiler = new Compiler();
-            compiler.Source = @"c:\_som\_src\_compile\SAOP\";
-            compiler.CompileMode = CompileMode.Commit;
+            compiler.Source = @"c:\_som\_src\_compile\SAOP\src\";
+            compiler.CompileMode = CompileMode.Cache; 
+            // compiler.ContentPreFormatter = (c) =>
+            // {
+            //     return c; // return Regex.Replace(c, @"[^\u0009\u000A\u000D\u0020-\u007E]", "*");
+            // };
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\gapkeyval.json"));
-            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
             compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\"; 
             compiler.Compile("*aspx*");
             Cache.Inspect();
         }
 
+        private void Compiler_OnPreCompile(object sender, CompilerEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         [TestMethod]
         public void SAOP_Compiles()
         {
             Compiler compiler = new Compiler();
-            compiler.Source = @"c:\_som\_src\_compile\SAOP\";
+            compiler.Source = @"c:\_som\_src\_compile\SAOP\src\";
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\keyval.sql"));
@@ -72,7 +82,7 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\";
             compiler.CompileMode = CompileMode.Commit;
-            compiler.ContentFormatter = (n) => (n = replacer(n));
+            compiler.ContentPostFormatter = (n) => (n = replacer(n));
             compiler.FileNameFormatter = (n) => (n = replacer(n));
             compiler.FileFilter = "*CBPOC*";
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\";
@@ -84,7 +94,7 @@ namespace CoreTests
         {
             Compiler compiler = new Compiler();  
             compiler.CompileMode = CompileMode.Commit;
-            compiler.ContentFormatter = (s) =>
+            compiler.ContentPostFormatter = (s) =>
             {
                 s = s.Replace($"SolarWindNetwork", $"SWNPOC");
                 s = s.Replace($"SolarWindNetwork", $"SWNPOC");
@@ -127,7 +137,7 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"C:\_som\_src\_compile\IG\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
             compiler.FileNameFormatter = (n) => (n.Replace("2020_", "2021_"));
-            compiler.ContentFormatter = (n) => (n.Replace("2020_", "2021_"));
+            compiler.ContentPostFormatter = (n) => (n.Replace("2020_", "2021_"));
 
             //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs\";
             //compiler.Compile("*frmVal*");
@@ -148,10 +158,10 @@ namespace CoreTests
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
             compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
-            compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
+            compiler.ContentPostFormatter = (n) => (n.Replace("IG_1", "IG_1A"));
             compiler.Compile("*2020_A_IG_1*aspx*");
             compiler.FileNameFormatter = (n) => (n.Replace("IG_1", "IG_1B"));
-            compiler.ContentFormatter = (n) => (n.Replace("IG_1", "IG_1B"));
+            compiler.ContentPostFormatter = (n) => (n.Replace("IG_1", "IG_1B"));
             compiler.Compile("*2020_A_IG_1*aspx*");
             Cache.Inspect();
         }

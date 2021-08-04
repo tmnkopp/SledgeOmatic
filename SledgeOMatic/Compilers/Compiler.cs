@@ -34,7 +34,7 @@ namespace SOM.Compilers
         public CompileMode CompileMode { get; set; }
         #endregion
 
-        #region Events
+        #region Events 
         public event EventHandler<CompilerEventArgs> OnPreCompile; 
         protected virtual void PreCompile(CompilerEventArgs e)
         { 
@@ -67,10 +67,15 @@ namespace SOM.Compilers
         #endregion
 
         #region Formatters
-        private Func<string, string> _ContentFormatter = (c) => (c);
-        public Func<string, string> ContentFormatter
+        private Func<string, string> _ContentPreFormatter = (c) => (c);
+        public Func<string, string> ContentPreFormatter
         {
-            set { _ContentFormatter = value; }
+            set { _ContentPreFormatter = value; }
+        }
+        private Func<string, string> _ContentPostFormatter = (c) => (c);
+        public Func<string, string> ContentPostFormatter
+        {
+            set { _ContentPostFormatter = value; }
         }
         private Func<string, string> _FileNameFormatter = (c) => (c);
         public Func<string, string> FileNameFormatter
@@ -88,8 +93,7 @@ namespace SOM.Compilers
         }
         #endregion
 
-        #region Methods
-         
+        #region Methods 
         public void Compile(string FileFilter)
         {
             this.FileFilter = FileFilter;
@@ -102,7 +106,9 @@ namespace SOM.Compilers
             DirectoryInfo DI = new DirectoryInfo($"{Source}");
             foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
             {
-                var CompiledContent = CompileContent(Reader.Read(file.FullName));
+                string content = Reader.Read(file.FullName);
+                content = _ContentPreFormatter(content);
+                var CompiledContent = CompileContent(content);
                 var CompiledFileName = CompileFileName(file.Name);
                 args.File = file;
                 args.CompiledFileName = CompiledFileName;
@@ -118,7 +124,7 @@ namespace SOM.Compilers
         {
             foreach (ICompilable proc in ContentCompilers) 
                 content = proc.Compile(content); 
-            return _ContentFormatter(content);
+            return _ContentPostFormatter(content);
         }
         protected virtual string CompileFileName(string Filename)
         { 
