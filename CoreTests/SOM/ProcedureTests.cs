@@ -37,14 +37,11 @@ namespace UnitTests
                 foreach (var item in KeyVals)
                 {
                     string pattern = item.Key;
-                    while (Regex.IsMatch(target, pattern))
-                    {
-                        target = Regex.Replace(target, pattern,
-                            m => m.Groups[1].Value
-                             + item.Value
-                             + m.Groups[3].Value
-                            , RegexOptions.Singleline);
-                    };
+                    target = Regex.Replace(target, pattern,
+                        m => m.Groups[1].Value
+                         + item.Value
+                         + m.Groups[3].Value
+                        , RegexOptions.Singleline);
                 }
                 result.Append(target);
             }

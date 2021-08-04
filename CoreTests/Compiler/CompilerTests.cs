@@ -25,23 +25,39 @@ namespace CoreTests
     [TestClass]
     public class CompilerTests
     {
+        
+        [TestMethod]
+        public void SAOP2020_Compiles()
+        {
+            Compiler compiler = new Compiler();
+            compiler.Source = @"c:\_som\_src\_compile\SAOP\";
+            compiler.CompileMode = CompileMode.Commit;
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
+            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\gapkeyval.json"));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
+            compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\"; 
+            compiler.Compile("*aspx*");
+            Cache.Inspect();
+        }
 
         [TestMethod]
         public void SAOP_Compiles()
         {
             Compiler compiler = new Compiler();
             compiler.Source = @"c:\_som\_src\_compile\SAOP\";
-            compiler.CompileMode = CompileMode.Cache;
+            compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
             compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
             compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\";
-            compiler.FileFilter = "*DB_Update*";
+            compiler.FileFilter = "*DBUpdate*";
             compiler.Compile();
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021\";
-            compiler.Compile("*aspx*");
-            Cache.Inspect();
+            compiler.FileFilter = "*aspx*";
+            compiler.Compile();
+            //Cache.Inspect();
         }
 
 
