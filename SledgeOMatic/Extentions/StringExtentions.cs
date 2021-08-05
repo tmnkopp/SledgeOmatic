@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SOM.Extentions
@@ -36,18 +37,22 @@ namespace SOM.Extentions
                 input = input.Replace(" ", ReplaceWith);
             } while (input.Contains(" ")); 
             return input;
-        }
+        } 
         public static string ToValidSchemaName(this string input)
         { 
             return (input==null) ? input : input.RemoveAsChars(" \n\t\r!@#$%^&*()-=+';:<>,.?/").Trim();
         }
         public static string TrimLines(this string input )
         {
-            StringBuilder result = new StringBuilder(); 
+            StringBuilder sb = new StringBuilder(); 
             foreach (var line in input.Split('\n'))  {
-                result.AppendFormat("{0}\n", line);
+                var result = Regex.Replace(line, "\r", "");
+                if (!string.IsNullOrEmpty(result))
+                {
+                    sb.AppendFormat("{0}\n", result);
+                }  
             }
-            return result.ToString();
+            return sb.ToString();
         }
         public static string TrimTrailingNewline(this string input)
         {

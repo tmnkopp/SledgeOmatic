@@ -23,11 +23,15 @@
         $message = $message + $m  
         $message = $message + $m
         cd 'C:\Users\Tim\source\repos\SledgeOMatic';  
-        git add .; git commit -m 'resolves #8'; git push;
+        git add .; git commit -m 'resolves #7 #8'; git push;
         # Write-Host 'foo'
     }  
     #explorer.exe C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\
     explorer.exe C:\_som\
 } 
 Deploy -with " release  " 
+
+$exe = [System.Environment]::GetEnvironmentVariable('som', 'User')   
+& $exe compile -m Cache -p saop.yaml
+
 

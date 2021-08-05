@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -m Debug"
+      "commandLineArgs": "compile -m Debug -p saop.yaml"
     }
   }
 }

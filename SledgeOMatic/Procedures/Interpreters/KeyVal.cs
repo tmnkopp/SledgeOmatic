@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
-
+using SOM.Extentions;
 namespace SOM.Procedures
 {
     #region Base
@@ -67,7 +67,7 @@ namespace SOM.Procedures
         public NumericKeyReplacer(string Source) : base(Source) {  } 
         public override string Compile(string content)
         {
-            StringBuilder result = new StringBuilder();
+            StringBuilder result = new StringBuilder(); 
             foreach (var line in content.Split("\n"))
             {
                 string target = line;
@@ -81,7 +81,8 @@ namespace SOM.Procedures
                             , RegexOptions.Singleline); 
                     }; 
                 }
-                result.Append(target);
+                target = Regex.Replace(target, "\r|\n", "");
+                result.AppendLine(target);
             } 
             return result.ToString();
         }
