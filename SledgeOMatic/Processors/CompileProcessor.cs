@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 
 namespace SOM 
@@ -80,12 +81,21 @@ namespace SOM
                 }
                 MethodInfo[] mlist = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == rootitem.Key.ToString().ToLower()).ToArray();
                 if (mlist.Count() > 0)
-                {  
-                    oparms = new List<object>();
+                {
+                    oparms = new List<object>(); 
                     foreach (MethodInfo m in mlist) 
                         if (m.Name == rootitem.Key.ToString() && m.GetParameters().Count() == oparms.Count()) 
                             m.Invoke(compiler, oparms.ToArray());  
-                } 
+                }
+                if (Regex.IsMatch(rootitem.Key.ToString().ToLower(), $"compilation"))
+                {
+                    foreach (var propitem in ((YamlSequenceNode)rootitem.Value).Children)
+                    {
+                        oparms = GetParms((YamlMappingNode)propitem); 
+                        MethodInfo m = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == "compile" && m.GetParameters().Count()==2).FirstOrDefault();
+                        m.Invoke(compiler, oparms.ToArray());
+                    } 
+                }
             } 
             if (o.CompileMode != CompileMode.Commit) Cache.Inspect(); 
         }
