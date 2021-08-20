@@ -25,7 +25,7 @@ namespace SOM.Compilers
         {
             get
             {
-                return _fileFilter ?? Source.Split("\\").SkipWhile(s => !s.Contains("*")).FirstOrDefault() ?? "*";
+                return _fileFilter ?? Dest.Split("\\").SkipWhile(s => !s.Contains("*")).FirstOrDefault() ?? "*";
             }
             set { _fileFilter = value; }
         }
@@ -94,7 +94,7 @@ namespace SOM.Compilers
         #endregion
 
         #region Methods 
-        public void Compile(string Dest, string FileFilter)
+        public void Compile(string FileFilter, string Dest)
         {
             this.Dest = Dest;
             this.FileFilter = FileFilter;
