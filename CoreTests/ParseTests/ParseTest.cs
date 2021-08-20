@@ -11,18 +11,18 @@ using System.Text.RegularExpressions;
 using SOM.Parsers;
 
 namespace UnitTests
-{ 
+{
     [TestClass]
     public class ParserTests
-    { 
+    {
         [TestMethod]
         public void LineExtractor_Extracts()
-        { 
+        {
             DirectoryParser parser = new DirectoryParser();
             parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\*.*";
             parser.Parser = new LineExtractor("Agency Level Questions", 5);
-            parser.Parser.ParseMode = ParseMode.Verbose; 
-            parser.Inspect(); 
+            parser.Parser.ParseMode = ParseMode.Verbose;
+            parser.Inspect();
             Assert.IsNotNull(parser);
         }
 
@@ -36,5 +36,6 @@ namespace UnitTests
                 result.Append(item);
             Assert.AreEqual("2\n3\n-target-\n12\n3\n-target-\n1", result.ToString());
         }
-    } 
+    }
 }
+ 
