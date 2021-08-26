@@ -23,13 +23,13 @@
         $message = $message + $m  
         $message = $message + $m
         cd 'C:\Users\Tim\source\repos\SledgeOMatic';  
-        git add .; git commit -m ('add cmd processor class' + $m) ; git push;
+        git add .; git commit -m ('update config option' + $m) ; git push;
         # Write-Host 'foo'
     }  
     #explorer.exe C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\
     explorer.exe C:\_som\
 } 
-Deploy -with " release  " 
+Deploy -with " release commit " 
 
 # $exe = [System.Environment]::GetEnvironmentVariable('som', 'User')   
 # & $exe compile -m Cache -p saop.yaml

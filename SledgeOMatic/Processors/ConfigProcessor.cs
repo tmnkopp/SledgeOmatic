@@ -35,7 +35,12 @@ namespace SOM
             Console.Clear();
             var cnt = 0;
             Console.Write($"{string.Join("\n", from t in types() let c = cnt++ select $"({c}) {t}")}\n");
-            logger.LogInformation($"{o}", config.GetSection("AppSettings:CompileConfig").Value); 
+            var AppSettings = config.GetSection("AppSettings").GetChildren();
+            foreach (var item in AppSettings) 
+                logger.LogInformation("{k} {v}", item.Key, item.Value);
+        
+            // logger.LogInformation($"CompileConfig: {o}", config.GetSection("AppSettings:CompileConfig").Value);
+            
         }  
         private static List<Type> types()
         { 

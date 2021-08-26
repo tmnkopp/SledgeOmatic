@@ -44,7 +44,7 @@ namespace CoreTests
                 .Build(); 
             //yml contains a string containing your YAML
             var t = deserializer.Deserialize<List<Task>>(yml);
-            var steps = t.taskSteps;
+            var steps = t[0].taskSteps;
         }
         [TestMethod]
         public void Yaml_DeSerializes()

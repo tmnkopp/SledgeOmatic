@@ -11,12 +11,12 @@ using System.Collections.Generic;
 namespace SOM
 {
     [Serializable]
-    [Verb("compile", HelpText = "Command Runner.")]
+    [Verb("compile", HelpText = @"Command Runner: som compile -m Debug -p c:\_som\config.yaml")]
     public class CompileOptions
     {
         [Option('t', "Task")]
         public string Task { get; set; }
-        [Option('p', "Path", Default="")]
+        [Option('p', "Path", Default="", HelpText = "Configuration File Path.")]
         public string Path { get; set; }
         [Option('m', "CompileMode", Default = CompileMode.Cache)]
         public CompileMode CompileMode { get; set; }
