@@ -27,13 +27,7 @@ namespace CoreTests
     {
         [TestMethod]
         public void VSCode_VsCodes()
-        {
-            /* 
-            Process p = new Process();
-            p.StartInfo.FileName = ConfigurationManager.AppSettings["CodeViewer"].ToString();
-            p.StartInfo.Arguments = $"cd {Dest}";
-            p.Start(); 
-             */ 
+        { 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = ConfigurationManager.AppSettings["CodeViewer"].ToString();
             startInfo.Arguments = $"cd {Environment.GetEnvironmentVariable("repo")}";  
@@ -45,10 +39,7 @@ namespace CoreTests
 
         [TestMethod]
         public void ProcessStarter_Starts()
-        {
-            //  System.IO.Directory.CreateDirectory(@"C:\_som\_src\_compile\BOD\compiled");
-            //  C:\_som\_src\_compile\BOD\compiled
-            //  mkdir 
+        { 
             var startInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
