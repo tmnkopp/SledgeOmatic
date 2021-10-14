@@ -26,7 +26,38 @@ namespace CoreTests
     [TestClass]
     public class CompilerTests
     {
-         
+        [TestMethod]
+        public void Einstien_Compiles()
+        {
+            Cache.Write("");
+            ISchemaProvider schema = new SchemaProvider("EinsteinUnannounced");
+
+            Compiler compiler = new Compiler();
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
+            compiler.Dest = "C:\\temp\\";
+            compiler.CompileMode = CompileMode.Cache;
+            compiler.FileFilter = "EinsteinUnannounced_CRUD.sql";
+            compiler.ContentPreFormatter = (c) => {
+                return c.Replace("som:", "som!").Replace(":som", "!som");
+            };
+            compiler.ContentCompilers.Add(
+                new SomSchemaInterpreter(schema)
+                {
+                    SchemaItemFilter = app => true,
+                    SchemaItemProjector = (app) =>
+                    {
+                        app.StringFormatter = (i, f) => f.Replace("{0}", i.Name).Replace("{1}", i.DataType);
+                        app.DataType = Regex.Replace(app.DataType, "(.*unique.*)", "int");
+                        return app;
+                    }
+                });
+            compiler.Compile();
+            Cache.CacheEdit();
+            Assert.IsNotNull(Cache.Read());
+        }
+
+
+
         [TestMethod]
         public void SAOP2020_Compiles()
         {
