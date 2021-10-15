@@ -23,7 +23,7 @@ namespace SOM.Procedures
         public IEnumerable<CommandParseResult> Parse(string content)
         {
             content = $"\n{content}\n";
-            MatchCollection mc = Regex.Matches(content, @"\n.*som!"+ _parsetag + " (.*)", RegexOptions.IgnoreCase);
+            MatchCollection mc = Regex.Matches(content, @"\n.*som!"+ _parsetag + "\\s?(.*)", RegexOptions.IgnoreCase);
             foreach (Match prefix in mc)
             { 
                 string match = content.Substring(prefix.Index, content.Length - prefix.Index);

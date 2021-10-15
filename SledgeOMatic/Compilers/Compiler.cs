@@ -71,11 +71,14 @@ namespace SOM.Compilers
         public Func<string, string> ContentPreFormatter
         {
             set { _ContentPreFormatter = value; }
+            private get { return _ContentPreFormatter; }
         }
+
         private Func<string, string> _ContentPostFormatter = (c) => (c);
         public Func<string, string> ContentPostFormatter
         {
             set { _ContentPostFormatter = value; }
+            private get { return _ContentPostFormatter; }
         }
         private Func<string, string> _FileNameFormatter = (c) => (c);
         public Func<string, string> FileNameFormatter
@@ -113,7 +116,7 @@ namespace SOM.Compilers
             foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
             {
                 string content = Reader.Read(file.FullName);
-                content = _ContentPreFormatter(content);
+                content = ContentPreFormatter(content);
                 var CompiledContent = CompileContent(content);
                 var CompiledFileName = CompileFileName(file.Name);
                 args.File = file;

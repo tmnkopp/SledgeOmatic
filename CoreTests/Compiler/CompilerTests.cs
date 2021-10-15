@@ -33,22 +33,24 @@ namespace CoreTests
             ISchemaProvider schema = new SchemaProvider("EinsteinUnannounced");
 
             Compiler compiler = new Compiler();
-            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\";
             compiler.Dest = "C:\\temp\\";
             compiler.CompileMode = CompileMode.Cache;
-            compiler.FileFilter = "EinsteinUnannounced_CRUD.sql";
+            compiler.FileFilter = "NCEinsteinUnannounced.ascx";
             compiler.ContentPreFormatter = (c) => {
-                return c.Replace("som:", "som!").Replace(":som", "!som");
+                return c.Replace("som:", "som!schema").Replace(":som", "schema!som");
             };
             compiler.ContentCompilers.Add(
                 new SomSchemaInterpreter(schema)
-                {
-                    SchemaItemFilter = app => true,
-                    SchemaItemProjector = (app) =>
-                    {
-                        app.StringFormatter = (i, f) => f.Replace("{0}", i.Name).Replace("{1}", i.DataType);
-                        app.DataType = Regex.Replace(app.DataType, "(.*unique.*)", "int");
-                        return app;
+                { 
+                    SchemaItemProjector = (appModelItem) =>
+                    { 
+                        appModelItem.DataType = Regex.Replace(appModelItem.DataType, $"(.*bit.*)", "int");
+                        return appModelItem;
+                    },
+                    SchemaItemPredicate = (mi) =>
+                    { 
+                        return !Regex.IsMatch(mi.Name, $"K_|UserId|isActive") ;
                     }
                 });
             compiler.Compile();
@@ -208,7 +210,7 @@ namespace CoreTests
             compiler.ContentCompilers.Add(
                 new SomSchemaInterpreter(schema)
                 {
-                    SchemaItemFilter = app => true,
+                    SchemaItemPredicate = app => true,
                     SchemaItemProjector = (app) =>
                     {
                         app.StringFormatter = (i, f) => f.Replace("{0}", i.Name).Replace("{1}", i.DataType);

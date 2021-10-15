@@ -91,7 +91,7 @@ namespace CoreTests
             ISchemaProvider schema = new SchemaProvider("aspnet_Membership");
             var ssm = new SomSchemaInterpreter(schema)
             {
-                SchemaItemFilter = app => true,
+                SchemaItemPredicate = app => true,
                 SchemaItemProjector = (app) =>
                 {
                     app.StringFormatter = (i, f) => f.Replace("{0}", i.Name).Replace("{1}", i.DataType);

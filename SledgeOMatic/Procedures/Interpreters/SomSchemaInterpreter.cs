@@ -23,10 +23,10 @@ namespace SOM.Procedures
         {
             set { schemaItemProjector = value; }
         } 
-        Func<AppModelItem, bool> schemaItemFilter = item => item != null;
-        public Func<AppModelItem, bool> SchemaItemFilter
+        Func<AppModelItem, bool> schemaItemPredicate = item => item != null;
+        public Func<AppModelItem, bool> SchemaItemPredicate
         {
-            set { schemaItemFilter = value; }
+            set { schemaItemPredicate = value; }
         }
         public string Compile(string content)
         {
@@ -37,11 +37,12 @@ namespace SOM.Procedures
                 IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
                     .GetModel(parseresult.Arguments.Model.ToValidSchemaName() ?? _InitModel)
                     .AppModelItems.Select(schemaItemProjector)
-                    .Where(schemaItemFilter).AsEnumerable(); 
+                    .Where(schemaItemPredicate).AsEnumerable(); 
 
                 if (parseresult.Arguments.Template != null)  { 
                     foreach (AppModelItem item in _AppModelItems) { 
                         string path = item.ToStringFormat(parseresult.Arguments.Template);
+                        path = path.Replace("{1}", item.DataType); 
                         if (_Parser.ParseMode == ParseMode.Debug) Cache.Debug($"\n{path}");
                         string fmt = item.ToStringFormat(Reader.Read(path));  
                         result.Append(fmt); 
