@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>SOM</RootNamespace>
     <AssemblyName>SOM</AssemblyName>
-    <OutputType>Library</OutputType>
-    <StartupObject></StartupObject>
+    <OutputType>Exe</OutputType>
+    <StartupObject>SOM.Program</StartupObject>
     <Description></Description>
     <PackageReleaseNotes>compile -e '\$|pycache'</PackageReleaseNotes>
     <ApplicationIcon />
