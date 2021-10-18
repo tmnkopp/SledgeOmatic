@@ -26,6 +26,31 @@ namespace CoreTests
     [TestClass]
     public class CompilerTests
     {
+        //
+        [TestMethod]
+        public void Einstien_REfactors()
+        {
+            int fnum = 7;
+            Cache.Write(""); 
+            Compiler compiler = new Compiler();
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\EINSTEIN\2021\";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\EINSTEIN\2021\";
+            compiler.FileFilter = "*_8.aspx*";
+            compiler.CompileMode = CompileMode.Commit; 
+            compiler.ContentPreFormatter = (c) => {
+                c = Regex.Replace(c, $"2021_A_EINSTEIN_(\\d)", $"2021_A_EINSTEIN_{fnum}");
+                return c;
+            };
+            compiler.FileNameFormatter = (c) =>
+            {
+                c = Regex.Replace(c, $"2021_A_EINSTEIN_(\\d)", $"2021_A_EINSTEIN_{fnum}"); 
+                return c;
+            };
+  
+            compiler.Compile();
+            //Cache.CacheEdit();
+            Assert.IsNotNull(Cache.Read());
+        }
         [TestMethod]
         public void Einstien_Compiles()
         {
