@@ -19,8 +19,8 @@ namespace UnitTests
         public void LineExtractor_Extracts()
         {
             DirectoryParser parser = new DirectoryParser();
-            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\Archive\\*.*";
-            parser.Parser = new LineExtractor("HVAIn", 1);
+            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\Sprocs\\*.sql";
+            parser.Parser = new LineExtractor("Email", 1);
             parser.Parser.ParseMode = ParseMode.Verbose;
             parser.Inspect();
             Assert.IsNotNull(parser);

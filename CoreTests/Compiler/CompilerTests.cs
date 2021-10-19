@@ -58,23 +58,20 @@ namespace CoreTests
             ISchemaProvider schema = new SchemaProvider("EinsteinUnannounced");
 
             Compiler compiler = new Compiler();
-            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\";
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\Sprocs\";
             compiler.Dest = "C:\\temp\\";
             compiler.CompileMode = CompileMode.Cache;
-            compiler.FileFilter = "NCEinsteinUnannounced.ascx";
+            compiler.FileFilter = "EinsteinUnannounced_CRUD.sql";
             compiler.ContentPreFormatter = (c) => {
                 return c.Replace("som:", "som!schema").Replace(":som", "schema!som");
             };
             compiler.ContentCompilers.Add(
-                new SomSchemaInterpreter(schema)
-                { 
-                    SchemaItemProjector = (appModelItem) =>
-                    { 
+                new SomSchemaInterpreter(schema) { 
+                    SchemaItemProjector = (appModelItem) => { 
                         appModelItem.DataType = Regex.Replace(appModelItem.DataType, $"(.*bit.*)", "int");
                         return appModelItem;
                     },
-                    SchemaItemPredicate = (mi) =>
-                    { 
+                    SchemaItemPredicate = (mi) => { 
                         return !Regex.IsMatch(mi.Name, $"K_|UserId|isActive") ;
                     }
                 });
@@ -82,9 +79,7 @@ namespace CoreTests
             Cache.CacheEdit();
             Assert.IsNotNull(Cache.Read());
         }
-
-
-
+         
         [TestMethod]
         public void SAOP2020_Compiles()
         {

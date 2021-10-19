@@ -117,14 +117,16 @@ namespace SOM.Compilers
             {
                 string content = Reader.Read(file.FullName);
                 content = ContentPreFormatter(content);
-                var CompiledContent = CompileContent(content);
+                content = CompileContent(content);
+                content = ContentPostFormatter(content);
                 var CompiledFileName = CompileFileName(file.Name);
+
                 args.File = file;
                 args.CompiledFileName = CompiledFileName;
-                args.ContentCompiled = CompiledContent;
+                args.ContentCompiled = content;
                 Compiling(args);
  
-                CommitFile(CompiledContent, $"{Dest}\\{CompiledFileName}");
+                CommitFile(content, $"{Dest}\\{CompiledFileName}");
             }
             args = new CompilerEventArgs(Source, Dest);
             Compiled(args); 
