@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 namespace SOM.Parsers
 {
 
-    public class DirectoryParser   
+    public class DirectoryParser
     {
         #region Props
-        private List<string> _Directories; 
+        private List<string> _Directories;
         public void AddDirectory(string Dir) => _Directories.Add(Dir);
 
         public Func<string, string> _ContentFormatter = (c) => (c);
@@ -27,14 +27,14 @@ namespace SOM.Parsers
 
         private Dictionary<string, string> _Results;
         public Dictionary<string, string> Results {
-            get { return _Results; } 
+            get { return _Results; }
         }
         private IParser<string> _Parser;
         public IParser<string> Parser
-        { 
+        {
             set { _Parser = value; }
             get { return _Parser; }
-        } 
+        }
         private string _Directory;
         public string Directory
         {
@@ -46,15 +46,21 @@ namespace SOM.Parsers
         {
             get { return _PathExcludePattern ?? "~~~~"; }
             set { _PathExcludePattern = value; }
-        } 
+        }
+        private string _PathIncludePattern = @".*";
+        public string PathIncludePattern
+        {
+            get { return _PathIncludePattern ?? ".*"; }
+            set { _PathIncludePattern = value; }
+        }
         public string FileFilter
         {
             get {
                 string ret = Directory.ReverseString().Split(new[] { '\\' })[0].ReverseString();
-                return (ret == "") ?  "*.*": ret; 
-            } 
-        } 
-        #endregion 
+                return (ret == "") ? "*.*" : ret;
+            }
+        }
+        #endregion
 
         #region Ctor
 
@@ -65,13 +71,17 @@ namespace SOM.Parsers
         }
         public DirectoryParser(string Directory) : this()
         {
-            _Directory = Directory;  
+            _Directory = Directory;
         }
         #endregion
 
         #region METHODS
 
-
+        public void ParseDirectory(string Directory) 
+        {
+            this.Directory = Directory;
+            ParseDirectory();
+        }
         public void ParseDirectory()
         {
             _Results.Clear();
@@ -125,9 +135,7 @@ namespace SOM.Parsers
                     result.Append($"{kvp.Value}\n");
             }
             return result.ToString();
-        }
-
-
+        } 
         #endregion
     }
 }

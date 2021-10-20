@@ -18,11 +18,19 @@ namespace UnitTests
         [TestMethod]
         public void LineExtractor_Extracts()
         {
-            DirectoryParser parser = new DirectoryParser();
-            parser.Directory = "D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\Sprocs\\*.sql";
-            parser.Parser = new LineExtractor("Email", 1);
+            Cache.Write("");
+            StringBuilder sb = new StringBuilder();
+            DirectoryParser parser = new DirectoryParser(); 
+            parser.Parser = new LineExtractor("DeadlineDate", 1);
             parser.Parser.ParseMode = ParseMode.Verbose;
-            parser.Inspect();
+            parser.PathExcludePattern = @"Archive|bin\\|obj\\"; 
+            //parser.ParseDirectory("D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\*.sql");
+            //sb.Append(parser.ToString());
+            parser.ParseDirectory("D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\code\\CyberScope\\*.vb");
+            sb.Append(parser.ToString());
+  
+            Cache.Write(sb.ToString());
+            Cache.CacheEdit();
             Assert.IsNotNull(parser);
         }
 
