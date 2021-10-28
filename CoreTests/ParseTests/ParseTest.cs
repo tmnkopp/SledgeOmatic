@@ -21,13 +21,12 @@ namespace UnitTests
             Cache.Write("");
             StringBuilder sb = new StringBuilder();
             DirectoryParser parser = new DirectoryParser(); 
-            parser.Parser = new LineExtractor("DeadlineDate", 1);
+            parser.Parser = new LineExtractor("KEY_SES_CAUSER", 1);
             parser.Parser.ParseMode = ParseMode.Verbose;
             parser.PathExcludePattern = @"Archive|bin\\|obj\\"; 
             //parser.ParseDirectory("D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\*.sql");
-            //sb.Append(parser.ToString());
-            parser.ParseDirectory("D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\code\\CyberScope\\*.vb");
-            sb.Append(parser.ToString());
+            parser.ParseDirectory(@"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\*");
+            sb.Append(parser.ToString()); 
   
             Cache.Write(sb.ToString());
             Cache.CacheEdit();
