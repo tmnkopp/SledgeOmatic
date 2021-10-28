@@ -21,7 +21,7 @@ namespace UnitTests
             Cache.Write("");
             StringBuilder sb = new StringBuilder();
             DirectoryParser parser = new DirectoryParser(); 
-            parser.Parser = new LineExtractor("KEY_SES_CAUSER", 1);
+            parser.Parser = new LineExtractor("ddl_Sections", 1);
             parser.Parser.ParseMode = ParseMode.Verbose;
             parser.PathExcludePattern = @"Archive|bin\\|obj\\"; 
             //parser.ParseDirectory("D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\*.sql");
