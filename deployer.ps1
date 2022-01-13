@@ -1,5 +1,4 @@
-﻿function Deploy
-{ 
+﻿function Deploy { 
     [CmdletBinding()]
         param ( 
         [Parameter(Mandatory = $false, Position = 0)] 
@@ -27,10 +26,6 @@
     #explorer.exe C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\
     explorer.exe C:\_som\
 } 
-Deploy -with " release commit " 
-
-# $exe = [System.Environment]::GetEnvironmentVariable('som', 'User')   
-# & $exe compile -m Cache -p saop.yaml
-
+Deploy -with " release commit "   
 som config
 

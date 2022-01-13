@@ -9,10 +9,10 @@ namespace SOM.Procedures
         private int _base = 0;
         private int _seed = 0;
         private string _incrementPattern = "";
-        public NumericIncrementer(int IncrementBase, int IncrementSeed, string NumericPattern)
+        public NumericIncrementer(object IncrementBase, object IncrementSeed, string NumericPattern)
         {
-            _base = IncrementBase;
-            _seed = IncrementSeed;
+            _base = (int)Convert.ToInt32(IncrementBase);
+            _seed = (int)Convert.ToInt32(IncrementSeed);
             _incrementPattern = NumericPattern;
         } 
         public string Compile(string content)

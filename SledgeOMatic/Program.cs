@@ -63,7 +63,7 @@ namespace SOM
                   .AddEnvironmentVariables()
                   .AddCommandLine(args)
                   .Build();
-
+ 
             var services = new ServiceCollection();
             services.AddLogging(cfg => cfg.AddConsole());
             services.AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Program>>());
