@@ -85,7 +85,10 @@ namespace SOM
                 MethodInfo[] mlist = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == rootitem.Key.ToString().ToLower()).ToArray();
                 if (mlist.Count() > 0)
                 {
-                    oparms = new List<object>(); 
+                    oparms = new List<object>();
+                    foreach (var parmValue in ((YamlSequenceNode)rootitem.Value).Children)
+                        oparms.Add(parmValue.ToString()); 
+
                     foreach (MethodInfo m in mlist) 
                         if (m.Name == rootitem.Key.ToString() && m.GetParameters().Count() == oparms.Count()) 
                             m.Invoke(compiler, oparms.ToArray());  
