@@ -181,7 +181,7 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021";
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2022";
-            compiler.CompileMode = CompileMode.Cache;
+            compiler.CompileMode = CompileMode.Debug;
             compiler.ContentCompilers.Add(new NumericIncrementer(22421, 30000, @"\d{5}")); 
             compiler.ContentCompilers.Add(new NumericIncrementer(2411, 3500, @"24\d{2}")); 
             compiler.ContentCompilers.Add(new NumericIncrementer(2311, 3100, @"23\d{2}")); 
