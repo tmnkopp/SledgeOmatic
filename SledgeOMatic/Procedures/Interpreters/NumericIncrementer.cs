@@ -33,7 +33,8 @@ namespace SOM.Procedures
                         , RegexOptions.Singleline);
                 };
                 target = Regex.Replace(target, $"\r|\n", "");
-                result.AppendLine(target);
+                if (!string.IsNullOrEmpty(target)) 
+                    result.AppendLine(target);  
             }
             return result.ToString();
         }

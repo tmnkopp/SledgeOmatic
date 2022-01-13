@@ -183,9 +183,10 @@ namespace CoreTests
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2022";
             compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new NumericIncrementer(22421, 30000, @"\d{5}")); 
+            compiler.ContentCompilers.Add(new NumericIncrementer(2411, 3500, @"24\d{2}")); 
+            compiler.ContentCompilers.Add(new NumericIncrementer(2311, 3100, @"23\d{2}")); 
             compiler.FileNameFormatter = (n) => (n.Replace("2021_", "2022_"));
-            compiler.ContentPostFormatter = (n) => (n.Replace("2021_", "2022_"));
-
+            compiler.ContentPostFormatter = (n) => (n.Replace("2021_", "2022_")); 
             compiler.Compile("*_IG_*aspx*"); 
             Cache.CacheEdit(); 
         }
