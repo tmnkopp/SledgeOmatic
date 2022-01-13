@@ -28,7 +28,7 @@ namespace CoreTests
     {
         //
         [TestMethod]
-        public void Einstien_REfactors()
+        public void Form_Refactors()
         {
             int fnum = 7;
             Cache.Write(""); 
@@ -48,11 +48,11 @@ namespace CoreTests
             };
   
             compiler.Compile();
-            //Cache.CacheEdit();
+            Cache.CacheEdit();
             Assert.IsNotNull(Cache.Read());
         }
         [TestMethod]
-        public void Einstien_Compiles()
+        public void Form_Compiles()
         {
             Cache.Write("");
             ISchemaProvider schema = new SchemaProvider("EinsteinUnannounced");
@@ -179,22 +179,15 @@ namespace CoreTests
         public void IG_Compiles()
         {
             Compiler compiler = new Compiler();
-            compiler.Source = @"C:\_som\_src\_compile\IG";
-            compiler.Dest = @"C:\_som\_src\_compile\IG\_compiled";
-            compiler.CompileMode = CompileMode.Commit;
-            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"C:\_som\_src\_compile\IG\keyval.sql"));
-            compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\IG\post-compile.json"));
-            compiler.FileNameFormatter = (n) => (n.Replace("2020_", "2021_"));
-            compiler.ContentPostFormatter = (n) => (n.Replace("2020_", "2021_"));
+            compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021";
+            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2022";
+            compiler.CompileMode = CompileMode.Cache;
+            compiler.ContentCompilers.Add(new NumericIncrementer(22421, 30000, @"\d{5}")); 
+            compiler.FileNameFormatter = (n) => (n.Replace("2021_", "2022_"));
+            compiler.ContentPostFormatter = (n) => (n.Replace("2021_", "2022_"));
 
-            //compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\Sprocs\";
-            //compiler.Compile("*frmVal*");
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\code\CyberScope\FismaForms\2021\"; //
-            compiler.Compile("*_IG_*aspx*"); //
-            compiler.Dest = @"D:\dev\CyberScope\CyberScope-v-7-34\CSwebdev\database\"; //
-            compiler.Compile("*DB_Update*sql"); //
-
-
+            compiler.Compile("*_IG_*aspx*"); 
+            Cache.CacheEdit(); 
         }
 
         [TestMethod]
