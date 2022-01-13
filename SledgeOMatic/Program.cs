@@ -54,24 +54,11 @@ namespace SOM
             {
                 Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User);
                 envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-            }
-            var exeassmloc = Assembly.GetExecutingAssembly().Location.ToLower().Replace("som.dll", "");
-            var loc = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User)?.ToLower().Replace("som.exe", "");
-            if (exeassmloc.Contains("\\appdata\\") && loc != null)
-            {
-                try
-                {
-                    File.Delete($"{exeassmloc}appsettings.json");
-                    File.Copy($"{loc}appsettings.json", $"{exeassmloc}appsettings.json");
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-          
+            } 
+            var basepath = envar.ToLower().Replace("som.exe", "");
+            Console.Write($"SetBasePath: {basepath}");
             IConfiguration configuration = new ConfigurationBuilder()
-                  .SetBasePath(exeassmloc)
+                  .SetBasePath(basepath)
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddEnvironmentVariables()
                   .AddCommandLine(args)
