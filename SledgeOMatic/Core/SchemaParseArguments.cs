@@ -21,10 +21,14 @@ namespace SOM
         [Option('i', "Interpreter", Default = null)]
         public string Interpreter { get; set; }
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
-        public bool Verbose { get; set; }
-        private List<string> _sequence = new List<string>();
-        [Option('s', "sequence")]
-        public string sequence { get; set; }
+        public bool Verbose { get; set; }  
+        [Option('s', Separator = ',', Default = new string[0])]
+        public IEnumerable<string> sequence { get; set; } = new string[0];
+    }
+    public class SomParseArguments
+    {
+        [Option('a', Separator = ',', Default = new string[0])]
+        public IEnumerable<string> Args { get; set; } = new string[0];
 
     }
 }

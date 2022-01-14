@@ -19,27 +19,26 @@ namespace SOM.Procedures
         ParseMode ParseMode { get; set; }
     }  
     public class CommandParseResult {
-        public string ArgumentCommandLine = "";
+        public string RawOptions = "";
         public string[] Args {
             get
             {
-                MatchCollection mc = Regex.Matches(ArgumentCommandLine.Split("\n")[0], @"-\w [^-]*");
+                MatchCollection mc = Regex.Matches(RawOptions.Split("\n")[0], $@"-\w [^-]*");
                 return (from m in mc select m.Value.Trim().Replace("\\n", "\n").Replace("\\t", "\t") ?? "{0}").ToArray();
             }
-        }
-        public SchemaParseArguments Arguments {
-            get
-            {
+        } 
+        public T Options<T>()  {
+       
                 return new CommandLine
                     .Parser(with => with.HelpWriter = null)
-                    .ParseArguments<SchemaParseArguments>(Args)
-                    .MapResult(o => o, o => null);
-            }
+                    .ParseArguments<T>(Args)
+                    .MapResult(o => o, o => default(T));
+       
         }
-        public CommandParseResult(string Result, string ArgumentCommandLine)
+        public CommandParseResult(string Result, string RawOptions)
         {
             this.Result = Result;
-            this.ArgumentCommandLine = ArgumentCommandLine; 
+            this.RawOptions = RawOptions; 
         }
         public string Result { get; set; } 
     }

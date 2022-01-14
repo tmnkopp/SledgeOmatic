@@ -87,7 +87,7 @@ namespace CoreTests
             compiler.Source = @"c:\_som\_src\_compile\SAOP\src\";
             compiler.CompileMode = CompileMode.Commit;  
             compiler.ContentCompilers.Add(new KeyValReplacer(@"C:\_som\_src\_compile\saop\pre-compile.json"));
-            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\keyval.json"));
+            compiler.ContentCompilers.Add(new NumericReplacer(@"c:\_som\_src\_compile\SAOP\keyval.json"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
             compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json")); 
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2021"; 
@@ -109,7 +109,7 @@ namespace CoreTests
             compiler.Source = @"c:\_som\_src\_compile\SAOP\src\";
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\pre-compile.json"));
-            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\SAOP\keyval.sql"));
+            compiler.ContentCompilers.Add(new NumericReplacer(@"c:\_som\_src\_compile\SAOP\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
             compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\SAOP\post-compile.json"));
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\";
@@ -163,8 +163,8 @@ namespace CoreTests
             Compiler compiler = new Compiler();
             compiler.Source = @"c:\_som\_src\_compile\BOD\";
             compiler.CompileMode = CompileMode.Cache;
-            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
-            compiler.ContentCompilers.Add(new NumericKeyReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
+            compiler.ContentCompilers.Add(new NumericReplacer(@"c:\_som\_src\_compile\BOD\pre-compile.json"));
+            compiler.ContentCompilers.Add(new NumericReplacer(@"c:\_som\_src\_compile\BOD\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json"));
             compiler.FilenameCompilers.Add(new KeyValReplacer(@"c:\_som\_src\_compile\BOD\post-compile.json")); 
             compiler.FileFilter = "*DB_Update*sql";
@@ -259,7 +259,7 @@ namespace CoreTests
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
             compiler.CompileMode = CompileMode.Commit;
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
-            compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
+            compiler.ContentCompilers.Add(new NumericReplacer($"{compiler.Source}\\keyval.sql"));
             compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));
             compiler.FileFilter = "*aspx*";
             compiler.Compile();
@@ -273,7 +273,7 @@ namespace CoreTests
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
             compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
-            compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
+            compiler.ContentCompilers.Add(new NumericReplacer($"{compiler.Source}\\keyval.sql"));
             compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));
             compiler.FileFilter = "*DB_Update*sql";
             compiler.Compile();

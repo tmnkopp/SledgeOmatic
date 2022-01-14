@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SOM.Extentions;
 namespace SOM.Procedures
 {
+   
     public class Indexer : ICompilable
     {
         private int _seed = 0;

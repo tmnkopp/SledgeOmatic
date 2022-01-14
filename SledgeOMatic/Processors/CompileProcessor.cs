@@ -98,13 +98,10 @@ namespace SOM
  
                 if (Regex.IsMatch(rootitem.Key.ToString().ToLower(), $"compilation"))
                 { 
-                    ((YamlSequenceNode)rootitem.Value).Children.ToList().ForEach( ncomp => {
+                    ((YamlSequenceNode)rootitem.Value).Children.ToList().ForEach(ncomp => {
                         ((YamlMappingNode)ncomp).Children.ToList().ForEach(nprop => {
                             var propinfo = compiler.GetType().GetProperties().Where(p => p.Name == nprop.Key.ToString()).FirstOrDefault();
-                            if (propinfo != null)
-                            {
-                                propinfo.SetValue(compiler, nprop.Value.ToString(), null);
-                            };
+                            propinfo?.SetValue(compiler, nprop.Value.ToString(), null);
                         });
                         compiler.Compile();
                     }); 
