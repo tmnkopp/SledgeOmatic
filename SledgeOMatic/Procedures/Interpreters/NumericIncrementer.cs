@@ -27,7 +27,7 @@ namespace SOM.Procedures
                 { 
                     target = Regex.Replace(target, pattern,
                         m => {
-                            int nextint =(_seed - _base) + Convert.ToInt32(m.Groups[2].Value) + 1; 
+                            int nextint =(_seed - _base) + Convert.ToInt32(m.Groups[2].Value) + 0; 
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);
