@@ -39,9 +39,9 @@ namespace CoreTests
         public void yamlProvider_Provides()
         {
             var yml = @"    
-  FileFilter: 'fileFilter'
-  Source: 'src'
-  Dest: 'dest'
+      FileFilter: 'fileFilter'
+      Source: 'src'
+      Dest: 'dest'
             ";
             
             var cc = new CompilationConfig() { FileFilter = "ff", Source = "src", Dest="dest" };
@@ -55,7 +55,8 @@ namespace CoreTests
                 .Build();
     
             var t = deserializer.Deserialize<CompilationConfig>(yml);
-            Assert.IsNotNull(t);
+            string s = t.Dest;
+            Assert.AreEqual("dest", s);
         }
     }
     [Serializable]
