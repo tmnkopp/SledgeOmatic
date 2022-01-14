@@ -39,22 +39,26 @@ namespace CoreTests
         public void yamlProvider_Provides()
         {
             var yml = @"    
-      FileFilter: 'fileFilter'
+    - FileFilter: 'fileFilter'
+      Source: 'src'
+      Dest: 'dest'
+    - FileFilter: 'fileFilter'
       Source: 'src'
       Dest: 'dest'
             ";
-            
-            var cc = new CompilationConfig() { FileFilter = "ff", Source = "src", Dest="dest" }; 
+            List<CompilationConfig> lst = new List<CompilationConfig>();
+            var cc = new CompilationConfig() { FileFilter = "ff", Source = "src", Dest="dest" };
+            lst.Add(cc);
             var serializer = new SerializerBuilder() 
                 .Build();
 
-            var yaml = serializer.Serialize(cc);
+            var yaml = serializer.Serialize(lst);
             System.Console.WriteLine(yaml); 
             var deserializer = new DeserializerBuilder() 
                 .Build();
     
-            var t = deserializer.Deserialize<CompilationConfig>(yml);
-            string s = t.Dest;
+            var t = deserializer.Deserialize<List<CompilationConfig>>(yml);
+            string s = t[1].Dest;
             Assert.AreEqual("dest", s);
         }
     } 
