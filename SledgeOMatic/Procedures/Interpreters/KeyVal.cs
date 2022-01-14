@@ -31,7 +31,7 @@ namespace SOM.Procedures
                 }
                 catch (JsonReaderException jex)
                 {
-                    Console.WriteLine(jex.Message);
+                    Console.WriteLine($"JsonReaderException: {jex.Message}");
                     return false;
                 }
                 catch (Exception ex)
@@ -67,11 +67,11 @@ namespace SOM.Procedures
         } 
         public KeyValReplacer(string Source)
         {
-            if (Source.EndsWith(".json"))
+            if (Source.ToLower().EndsWith(".json"))
             {
                 base.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Reader.Read(Source));
             }
-            if (Source.EndsWith(".sql"))
+            if (Source.ToLower().EndsWith(".sql"))
             {
                 IReader reader = new FileReader(Source);
                 string sql = reader.Read();

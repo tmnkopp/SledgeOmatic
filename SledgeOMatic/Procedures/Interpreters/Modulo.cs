@@ -14,7 +14,7 @@ namespace SOM.Procedures
         {
             StringBuilder result = new StringBuilder();
             string matchpattern = "";
-            Match match = Regex.Match(content, @".*som!%(\d) -f (.*).*!som");
+            Match match = Regex.Match(content, $@".*som!%(\d) -f (.*).*!som");
             if (!match.Success) {
                 return content;
             } else {

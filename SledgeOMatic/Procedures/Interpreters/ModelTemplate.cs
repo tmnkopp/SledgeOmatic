@@ -30,7 +30,7 @@ namespace SOM.Procedures
             string[] lines = content.Split('\n');
             foreach (var line in lines)
             {
-                Match match = Regex.Match(line, @".*som: -m (?<model>.*) -p (?<path>.*).*:som");
+                Match match = Regex.Match(line, $@".*som! -m (?<model>.*) -p (?<path>.*).*!som");
                 if (match.Success)
                 {
                     GroupCollection groups = match.Groups;
