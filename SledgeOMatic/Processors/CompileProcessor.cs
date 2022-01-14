@@ -2,6 +2,7 @@
 using CommandLine.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SOM.Compilers;
 using SOM.IO;
 using SOM.Parsers;
@@ -15,6 +16,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace SOM 
 {
@@ -82,25 +84,30 @@ namespace SOM
                         pi.SetValue(compiler, rootitem.Value.ToString(), null);
                     }
                 }
-                MethodInfo[] mlist = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == rootitem.Key.ToString().ToLower()).ToArray();
-                if (mlist.Count() > 0)
+                MethodInfo[] methods = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == rootitem.Key.ToString().ToLower()).ToArray();
+                if (methods.Count() > 0)
                 {
                     oparms = new List<object>();
                     foreach (var parmValue in ((YamlSequenceNode)rootitem.Value).Children)
                         oparms.Add(parmValue.ToString()); 
 
-                    foreach (MethodInfo m in mlist) 
+                    foreach (MethodInfo m in methods) 
                         if (m.Name == rootitem.Key.ToString() && m.GetParameters().Count() == oparms.Count()) 
                             m.Invoke(compiler, oparms.ToArray());  
                 }
+ 
                 if (Regex.IsMatch(rootitem.Key.ToString().ToLower(), $"compilation"))
-                {
-                    foreach (var propitem in ((YamlSequenceNode)rootitem.Value).Children)
-                    {
-                        oparms = GetParms((YamlMappingNode)propitem); 
-                        MethodInfo m = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == "compile" && m.GetParameters().Count()==2).FirstOrDefault();
-                        m.Invoke(compiler, oparms.ToArray());
-                    } 
+                { 
+                    ((YamlSequenceNode)rootitem.Value).Children.ToList().ForEach( ncomp => {
+                        ((YamlMappingNode)ncomp).Children.ToList().ForEach(nprop => {
+                            var propinfo = compiler.GetType().GetProperties().Where(p => p.Name == nprop.Key.ToString()).FirstOrDefault();
+                            if (propinfo != null)
+                            {
+                                propinfo.SetValue(compiler, nprop.Value.ToString(), null);
+                            };
+                        });
+                        compiler.Compile();
+                    }); 
                 }
             } 
             if (o.CompileMode != CompileMode.Commit) Cache.Inspect(); 

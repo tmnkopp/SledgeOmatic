@@ -14,7 +14,28 @@ using SOM.Data;
 using Microsoft.Extensions.Configuration;
 
 namespace SOM.Compilers 
-{ 
+{
+    [Serializable]
+    public class CompilationConfig
+    {
+        public CompilationConfig()
+        { 
+        }
+        public CompilationConfig(string FileFilter, string Source, string Dest)
+        {
+            this.FileFilter = FileFilter;
+            this.Source = Source;
+            this.Dest = Dest;
+        }
+        public string FileFilter { get; set; }
+        public string Source { get; set; }
+        public string Dest { get; set; }
+    }
+    [AttributeUsage(AttributeTargets.Method)]
+    public class CompilerMethodMeta : Attribute {
+        public string Invoker { get; set; } 
+    }
+
     public class Compiler : ICompiler
     {
         #region Props
@@ -96,14 +117,7 @@ namespace SOM.Compilers
         }
         #endregion
 
-        #region Methods 
-        public void Compile(string FileFilter, string Source, string Dest)
-        {
-            this.FileFilter = FileFilter;
-            this.Source = Source;
-            this.Dest = Dest; 
-            Compile();
-        }
+        #region Methods  
         public void Compile(string FileFilter, string Dest)
         {
             this.Dest = Dest;
