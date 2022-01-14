@@ -109,10 +109,10 @@ namespace CoreTests
         }
 
         [TestMethod]
-        public void tamlProvider_Provides()
+        public void yamlProvider_Provides()
         {
             var yml = @"    
-  FileFilter: 'ff'
+  FileFilter: 'fileFilter'
   Source: 'src'
   Dest: 'dest'
             ";
