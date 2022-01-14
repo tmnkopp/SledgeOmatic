@@ -121,11 +121,12 @@ namespace CoreTests
             var c = new Compile() { CompilationConfig = cc };
             var serializer = new SerializerBuilder() 
                 .Build();
+
             var yaml = serializer.Serialize(c);
             System.Console.WriteLine(yaml); 
             var deserializer = new DeserializerBuilder() 
                 .Build();
-            //yml contains a string containing your YAML
+    
             var t = deserializer.Deserialize<CompilationConfig>(yml);
             Assert.IsNotNull(t);
         }
