@@ -97,6 +97,13 @@ namespace SOM.Compilers
         #endregion
 
         #region Methods 
+        public void Compile(string FileFilter, string Source, string Dest)
+        {
+            this.FileFilter = FileFilter;
+            this.Source = Source;
+            this.Dest = Dest; 
+            Compile();
+        }
         public void Compile(string FileFilter, string Dest)
         {
             this.Dest = Dest;

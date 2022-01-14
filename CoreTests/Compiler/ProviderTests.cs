@@ -20,7 +20,8 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
-
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 namespace CoreTests
 {
     public static class Assm {
@@ -107,7 +108,38 @@ namespace CoreTests
             Assert.IsNotNull(type);
         }
 
-    } 
+        [TestMethod]
+        public void tamlProvider_Provides()
+        {
+            var yml = @"    
+  FileFilter: 'ff'
+  Source: 'src'
+  Dest: 'dest'
+            ";
+            
+            var cc = new CompilationConfig() { FileFilter = "ff", Source = "src", Dest="dest" };
+            var c = new Compile() { CompilationConfig = cc };
+            var serializer = new SerializerBuilder() 
+                .Build();
+            var yaml = serializer.Serialize(c);
+            System.Console.WriteLine(yaml); 
+            var deserializer = new DeserializerBuilder() 
+                .Build();
+            //yml contains a string containing your YAML
+            var t = deserializer.Deserialize<CompilationConfig>(yml);
+            Assert.IsNotNull(t);
+        }
+    }
+    [Serializable]
+    public class Compile { 
+        public CompilationConfig CompilationConfig { get; set; }
+    }
+    [Serializable]
+    public class CompilationConfig { 
+        public string FileFilter { get; set; }
+        public string Source { get; set; }
+        public string Dest { get; set; }
+    }
 }
 
 
