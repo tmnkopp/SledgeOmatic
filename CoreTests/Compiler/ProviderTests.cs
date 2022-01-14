@@ -44,12 +44,11 @@ namespace CoreTests
       Dest: 'dest'
             ";
             
-            var cc = new CompilationConfig() { FileFilter = "ff", Source = "src", Dest="dest" };
-            var c = new Compile() { CompilationConfig = cc };
+            var cc = new CompilationConfig() { FileFilter = "ff", Source = "src", Dest="dest" }; 
             var serializer = new SerializerBuilder() 
                 .Build();
 
-            var yaml = serializer.Serialize(c);
+            var yaml = serializer.Serialize(cc);
             System.Console.WriteLine(yaml); 
             var deserializer = new DeserializerBuilder() 
                 .Build();
@@ -58,11 +57,7 @@ namespace CoreTests
             string s = t.Dest;
             Assert.AreEqual("dest", s);
         }
-    }
-    [Serializable]
-    public class Compile { 
-        public CompilationConfig CompilationConfig { get; set; }
-    }
+    } 
     [Serializable]
     public class CompilationConfig { 
         public string FileFilter { get; set; }
