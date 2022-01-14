@@ -18,8 +18,7 @@ namespace SOM.Procedures
         IEnumerable<R> Parse(string content);
         ParseMode ParseMode { get; set; }
     }  
-    public class CommandParseResult {
-        public string RawOptions = "";
+    public class CommandParseResult { 
         public string[] Args {
             get
             {
@@ -35,12 +34,15 @@ namespace SOM.Procedures
                     .MapResult(o => o, o => default(T));
        
         }
-        public CommandParseResult(string Result, string RawOptions)
+        public CommandParseResult(string Parsed, string RawOptions)
         {
-            this.Result = Result;
+            this.Parsed = Parsed;
             this.RawOptions = RawOptions; 
         }
-        public string Result { get; set; } 
+        public string Parsed { get; set; } 
+        public string Prefix { get; set; } 
+        public string Postfix { get; set; } 
+        public string RawOptions { get; set; } 
     }
      
     public abstract class BaseParser

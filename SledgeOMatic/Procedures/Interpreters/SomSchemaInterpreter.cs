@@ -53,7 +53,7 @@ namespace SOM.Procedures
                         result.Append(item.ToStringFormat(parseresult.Options<SchemaParseArguments>().Format ?? "{0}"));
                     }   
                 }
-                content = content.Replace(parseresult.Result, result.ToString());
+                content = content.Replace(parseresult.Parsed, result.ToString());
             }
             return content; 
         } 

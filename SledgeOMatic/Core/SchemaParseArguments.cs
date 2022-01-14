@@ -29,6 +29,7 @@ namespace SOM
     {
         [Option('a', Separator = ',', Default = new string[0])]
         public IEnumerable<string> Args { get; set; } = new string[0];
-
+        [Option('v', "Verbose", Default = false)]
+        public bool Verbose { get; set; }
     }
 }

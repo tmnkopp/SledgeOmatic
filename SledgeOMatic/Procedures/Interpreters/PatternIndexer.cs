@@ -9,11 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
 {
-    [AttributeUsage(AttributeTargets.Constructor)]
-    public class CompilableCtorMeta : Attribute
-    {
-        public bool Invokable { get; set; }
-    }
+
     public class PatternIndexer : ICompilable
     {
         private int seed = 0; 

@@ -25,8 +25,11 @@ namespace SOM.Procedures
             { 
                 string match = content.Substring(prefix.Index, content.Length - prefix.Index);
                 Match postfix = Regex.Match(match, @""+ _parsetag + "!som.*", RegexOptions.IgnoreCase);
-                string result = match.Substring(0, postfix.Index + postfix.Length); 
-                yield return new CommandParseResult(result , prefix.Groups[1].Value);
+                string result = match.Substring(0, postfix.Index + postfix.Length);
+                var cpr = new CommandParseResult(result, prefix.Groups[1].Value);
+                cpr.Prefix = prefix.Value;
+                cpr.Postfix = postfix.Value; 
+                yield return cpr;
             }  
         } 
     }
