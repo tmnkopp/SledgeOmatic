@@ -31,7 +31,6 @@ namespace CoreTests
         public void Ein_Refactors()
         {
             int fnum = 7;
-            Cache.Write(""); 
             Compiler compiler = new Compiler();
             compiler.Source = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\EINSTEIN\2021\";
             compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\EINSTEIN\2021\";
@@ -54,7 +53,6 @@ namespace CoreTests
         [TestMethod]
         public void Ein_Compiles()
         {
-            Cache.Write("");
             ISchemaProvider schema = new SchemaProvider("EinsteinUnannounced");
 
             Compiler compiler = new Compiler();
