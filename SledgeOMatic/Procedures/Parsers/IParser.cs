@@ -26,13 +26,29 @@ namespace SOM.Procedures
                 return (from m in mc select m.Value.Trim().Replace("\\n", "\n").Replace("\\t", "\t") ?? "{0}").ToArray();
             }
         } 
-        public T Options<T>()  {
-       
-                return new CommandLine
-                    .Parser(with => with.HelpWriter = null)
-                    .ParseArguments<T>(Args)
-                    .MapResult(o => o, o => default(T));
-       
+        public T Options<T>()  { 
+            return new CommandLine
+            .Parser(with => with.HelpWriter = null)
+            .ParseArguments<T>(Args)
+            .MapResult(o => o, o => default(T)); 
+        }
+        public List<object> Parms() {
+            var oparms = new List<object>();
+            var o = this.Options<SomParseArguments>();
+            if (o.Json != null)
+            {
+                oparms.Add(o.Json);
+                return oparms;
+            }
+            if (o.String != null)
+            {
+                oparms.Add(o.String);
+                return oparms;
+            }
+            if (o.List.Count() > 0)  {
+                return (from a in o.List select a.ToString().Trim()).ToList<object>();
+            } 
+            return oparms;
         }
         public CommandParseResult(string Parsed, string RawOptions)
         {

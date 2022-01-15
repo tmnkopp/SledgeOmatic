@@ -30,9 +30,9 @@ namespace SOM.Procedures
                 foreach (var parseresult in parsed)
                 {
                     var parseItem = parseresult.Parsed;
-                    var opts = parseresult.Options<SomParseArguments>();
-                    var oparms = (from a in opts.Args select a.ToString().Trim()).ToList<object>();
-                    
+                    var opts = parseresult.Options<SomParseArguments>(); 
+                    var oparms = parseresult.Parms();
+
                     var parms = typ.GetConstructors()
                         .Where(c => c.GetParameters().Count() == oparms.Count())
                         .FirstOrDefault().GetParameters().ToList();

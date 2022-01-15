@@ -28,7 +28,11 @@ namespace SOM
     public class SomParseArguments
     {
         [Option('a', Separator = ',', Default = new string[0])]
-        public IEnumerable<string> Args { get; set; } = new string[0];
+        public IEnumerable<string> List { get; set; } = new string[0];
+        [Option('j')]
+        public string Json { get; set; }
+        [Option('s')]
+        public string String { get; set; }
         [Option('v', "Verbose", Default = false)]
         public bool Verbose { get; set; }
     }
