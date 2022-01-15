@@ -28,7 +28,7 @@ namespace CoreTests
     {
         //
         [TestMethod]
-        public void Form_Refactors()
+        public void Ein_Refactors()
         {
             int fnum = 7;
             Cache.Write(""); 
@@ -52,7 +52,7 @@ namespace CoreTests
             Assert.IsNotNull(Cache.Read());
         }
         [TestMethod]
-        public void Form_Compiles()
+        public void Ein_Compiles()
         {
             Cache.Write("");
             ISchemaProvider schema = new SchemaProvider("EinsteinUnannounced");
