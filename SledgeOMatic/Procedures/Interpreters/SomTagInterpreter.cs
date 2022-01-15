@@ -5,13 +5,17 @@ using SOM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text; 
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace SOM.Procedures
 { 
     public class SomTagInterpreter : ICompilable
     { 
-        public SomTagInterpreter()
-        { 
+        private string _ICompilablePattern = "";
+        public SomTagInterpreter(string ICompilablePattern)
+        {
+            _ICompilablePattern = (string.IsNullOrEmpty(ICompilablePattern)) ? ".*" : _ICompilablePattern;
         } 
         public string Compile(string content)
         {
@@ -20,6 +24,7 @@ namespace SOM.Procedures
                                 where assm.FullName.Contains(AppDomain.CurrentDomain.FriendlyName)
                                 from t in assm.GetTypes()
                                 where typeof(ICompilable).IsAssignableFrom(t) && t.IsClass 
+                                && Regex.IsMatch(t.Name, this._ICompilablePattern)
                                 select t).ToList();
 
             compilables.ForEach(c =>
