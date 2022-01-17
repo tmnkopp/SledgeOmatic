@@ -2,15 +2,14 @@
 using SOM.Data;
 using SOM.IO;
 using SOM.Procedures;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
-{ 
+{
+
     public class SomTagParser : BaseParser, IParser<CommandParseResult> 
     {  
         private string _parsetag = "";
@@ -27,8 +26,8 @@ namespace SOM.Procedures
                 Match postfix = Regex.Match(match, @""+ _parsetag + "!som.*", RegexOptions.IgnoreCase);
                 string result = match.Substring(0, postfix.Index + postfix.Length);
                 var cpr = new CommandParseResult(result, prefix.Groups[1].Value);
-                cpr.Prefix = prefix.Value;
-                cpr.Postfix = postfix.Value; 
+                cpr.Prefix = prefix;
+                cpr.Postfix = postfix; 
                 yield return cpr;
             }  
         } 

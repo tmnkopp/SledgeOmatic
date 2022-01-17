@@ -10,79 +10,66 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
-{ 
+{
     public class SomTagInterpreter : ICompilable
-    { 
-        private string _ICompilablePattern = "";
+    {
+        private string _ICompilablePattern = ""; 
         public SomTagInterpreter(string ICompilablePattern)
         {
             _ICompilablePattern = (string.IsNullOrEmpty(ICompilablePattern)) ? ".*" : _ICompilablePattern;
-        } 
+        }
         public string Compile(string content)
         {
-            StringBuilder sb = new StringBuilder();
-            List<Type> compilables = (from assm in AppDomain.CurrentDomain.GetAssemblies()
-                                where assm.FullName.Contains(AppDomain.CurrentDomain.FriendlyName)
-                                from t in assm.GetTypes()
-                                where typeof(ICompilable).IsAssignableFrom(t) && t.IsClass 
-                                && Regex.IsMatch(t.Name, this._ICompilablePattern)
-                                select t).ToList();
-
-            compilables = (from comp in compilables
-                           from ctor in comp.GetConstructors()
-                           let attr = (CompilableCtorMeta[])ctor.GetCustomAttributes(typeof(CompilableCtorMeta), false)
-                           from a in attr where a.Invokable
-                           select comp
-                           ).ToList();
-
-
-            compilables.ForEach(c =>
+            for (int i = 12; i > 0; i -= 4)
             {
-                Type typ = Type.GetType($"{c.FullName}, SOM");
-
-                CompilableCtorMeta ccm = (from cons in c.GetConstructors()
-                               let attr = (CompilableCtorMeta[])cons.GetCustomAttributes(typeof(CompilableCtorMeta), false)
-                               from a in attr where a.Invokable
-                               select a
-                               ).FirstOrDefault();
-
-                ConstructorInfo ctor = (from con in typ.GetConstructors()
-                                        let attr = (CompilableCtorMeta[])con.GetCustomAttributes(typeof(CompilableCtorMeta), false)
-                                        from a in attr
-                                        where a.Invokable
-                                        select con
-                                ).FirstOrDefault();
-
-                IParser<CommandParseResult> _Parser = new SomTagParser(c.Name);
+                IParser<CommandParseResult> _Parser = new SomDocParser(i);
                 var parsed = _Parser.Parse(content);
-                foreach (var parseresult in parsed)
-                { 
-                    var parseItem = parseresult.Parsed; 
-                    var oparms = parseresult.Parms();
-                     
-                    var parms = ctor.GetParameters().ToList();
+                foreach (var pr in parsed)
+                {
+                    Type typ = Type.GetType($"{pr.CommandType.FullName}, SOM");
+                    CompilableCtorMeta ccm = GetCompilableCtorMeta(pr.CommandType);
+                    ConstructorInfo ctor = GetConstructorInfo(typ);
 
-                    for (int i = 0; i < parms.Count(); i++) {
-                        if (i < oparms.Count)  {
-                            oparms[i] = Convert.ChangeType(oparms[i], parms[i].ParameterType);
-                        }  else {
+                    var parseItem = pr.Parsed;
+                    var oparms = pr.Parms();
+                    var parms = ctor.GetParameters().ToList();
+                    for (int p = 0; p < parms.Count(); p++)
+                    {
+                        if (p < oparms.Count)
+                            oparms[p] = Convert.ChangeType(oparms[p], parms[p].ParameterType);
+                        else
                             oparms.Add(null);
-                        }
-                    } 
-                    parseItem = parseItem.Replace(parseresult.RawOptions, "~optionsraw~");
+                    }
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     parseItem = obj.Compile(parseItem);
-                    parseItem = parseItem.Replace("~optionsraw~", parseresult.RawOptions);
-                    if (parseresult.Options().Verbose)
-                    {
-                        parseItem = parseItem.Replace(parseresult.Prefix, "");
-                        parseItem = parseItem.Replace(parseresult.Postfix, "");
-                    }
-                    content = content.Replace(parseresult.Parsed, parseItem); 
-                } 
-            });
-
-            return content; 
+                    parseItem = RemoveTags(parseItem);
+                    content = content.Replace(pr.Parsed, parseItem);
+                }
+            } 
+            return content;
+        }
+        public string RemoveTags(string tagged) {
+            StringBuilder sb = new StringBuilder();
+            var lines = Regex.Split(tagged, @"[\n|\r]");
+            foreach (var line in lines)
+            {
+                if (!Regex.IsMatch(line, @"(som!|!som)") && !string.IsNullOrWhiteSpace(line)) 
+                    sb.AppendLine(line); 
+            }
+            return sb.ToString();
+        }
+        public static ConstructorInfo GetConstructorInfo(Type typ)
+        {
+            return (from con in typ.GetConstructors()
+                    let attr = (CompilableCtorMeta[])con.GetCustomAttributes(typeof(CompilableCtorMeta), false)
+                    from a in attr where a.Invokable
+                    select con).FirstOrDefault();
+        }
+        public static CompilableCtorMeta GetCompilableCtorMeta(Type CommandType) {
+            return (from cons in CommandType.GetConstructors()
+                    let attr = (CompilableCtorMeta[])cons.GetCustomAttributes(typeof(CompilableCtorMeta), false)
+                    from a in attr where a.Invokable
+                    select a).FirstOrDefault(); 
         } 
     }
 }

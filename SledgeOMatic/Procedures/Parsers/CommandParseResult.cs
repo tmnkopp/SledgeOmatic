@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommandLine;
@@ -26,14 +27,19 @@ namespace SOM.Procedures
             oparms = (from a in o.ParamParsed select a.ToString().Trim()).ToList<object>();
             return oparms;
         }
+        public CommandParseResult()
+        { 
+        }
         public CommandParseResult(string Parsed, string RawOptions)
         {
             this.Parsed = Parsed;
             this.RawOptions = RawOptions; 
         }
         public string Parsed { get; set; } 
-        public string Prefix { get; set; } 
-        public string Postfix { get; set; } 
+        public string CommandName { get; set; } 
+        public Type CommandType { get; set; } 
+        public Match Prefix { get; set; } 
+        public Match Postfix { get; set; } 
         public string RawOptions { get; set; } 
     }
 }
