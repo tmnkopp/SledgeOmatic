@@ -9,7 +9,8 @@ namespace SOM.Procedures
     [AttributeUsage(AttributeTargets.Constructor)]
     public class CompilableCtorMeta : Attribute
     {
-        public bool Invokable { get; set; }
+        public bool Invokable { get; set; } = true;
+        public string CommandMapper { get; set; } 
     }
     public interface ICompilable
     {

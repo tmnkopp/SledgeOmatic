@@ -12,9 +12,9 @@ namespace SOM.Procedures
     {
         private int _increment = 0;
         private string _pattern = "";
-        public Incrementer(string NumericCapturePattern, int Increment)
+        public Incrementer(string Pattern, int Increment)
         {
-            _pattern = NumericCapturePattern;
+            _pattern = Pattern;
             _increment = Increment;
         }
         public string Compile(string content)

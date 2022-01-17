@@ -35,13 +35,13 @@ namespace SOM.Procedures
             {
                 StringBuilder result = new StringBuilder(); 
                 IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
-                    .GetModel(parseresult.Options<SchemaParseArguments>().Model.ToValidSchemaName() ?? _InitModel)
+                    .GetModel(parseresult.Options().Model.ToValidSchemaName() ?? _InitModel)
                     .AppModelItems.Select(schemaItemProjector)
                     .Where(schemaItemPredicate).AsEnumerable(); 
 
-                if (parseresult.Options<SchemaParseArguments>().Template != null)  { 
+                if (parseresult.Options().Template != null)  { 
                     foreach (AppModelItem item in _AppModelItems) { 
-                        string path = item.ToStringFormat(parseresult.Options<SchemaParseArguments>().Template);
+                        string path = item.ToStringFormat(parseresult.Options().Template);
                         path = path.Replace("{1}", item.DataType); 
                         if (_Parser.ParseMode == ParseMode.Debug) Cache.Debug($"\n{path}");
                         string fmt = item.ToStringFormat(Reader.Read(path));  
@@ -50,7 +50,7 @@ namespace SOM.Procedures
                 }
                 else { 
                     foreach (AppModelItem item in _AppModelItems) {
-                        result.Append(item.ToStringFormat(parseresult.Options<SchemaParseArguments>().Format ?? "{0}"));
+                        result.Append(item.ToStringFormat(parseresult.Options().Format ?? "{0}"));
                     }   
                 }
                 content = content.Replace(parseresult.Parsed, result.ToString());
