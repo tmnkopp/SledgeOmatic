@@ -14,15 +14,16 @@ namespace SOM.Procedures
                 return (from m in mc select m.Value.Trim().Replace("\\n", "\n").Replace("\\t", "\t") ?? "{0}").ToArray();
             }
         } 
-        public SomParseOptions Options()  { 
-            return new CommandLine
-            .Parser(with => with.HelpWriter = null)
-            .ParseArguments<SomParseOptions>(Args)
-            .MapResult(o => o, o => default(SomParseOptions)); 
+        public SomParseOptions Options  { get{
+                return new CommandLine
+                .Parser(with => with.HelpWriter = null)
+                .ParseArguments<SomParseOptions>(Args)
+                .MapResult(o => o, o => default(SomParseOptions));
+            } 
         }
         public List<object> Parms() {
             var oparms = new List<object>();
-            SomParseOptions o = (SomParseOptions)this.Options();
+            SomParseOptions o = (SomParseOptions)this.Options;
             var props = o.GetType().GetProperties();
             oparms = (from a in o.ParamParsed select a.ToString().Trim()).ToList<object>();
             return oparms;

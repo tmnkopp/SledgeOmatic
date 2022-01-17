@@ -42,7 +42,10 @@ namespace SOM.Procedures
                     }
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     parseItem = obj.Compile(parseItem);
-                    parseItem = RemoveTags(parseItem);
+                    if (!pr.Options.Verbose)
+                    {
+                        parseItem = RemoveTags(parseItem);
+                    } 
                     content = content.Replace(pr.Parsed, parseItem);
                 }
             } 
@@ -53,7 +56,7 @@ namespace SOM.Procedures
             var lines = Regex.Split(tagged, @"[\n|\r]");
             foreach (var line in lines)
             {
-                if (!Regex.IsMatch(line, @"(som!|!som)") && !string.IsNullOrWhiteSpace(line)) 
+                if (!Regex.IsMatch(line, $@"(som!\w+|\w+!som)") && !string.IsNullOrWhiteSpace(line)) 
                     sb.AppendLine(line); 
             }
             return sb.ToString();

@@ -21,6 +21,10 @@ namespace SOM.Procedures
             StringBuilder result = new StringBuilder();
             foreach (var line in content.Split("\n"))   {
                 string replacement = line;
+                if (Regex.IsMatch(replacement, $@"(som!\w+|\w+!som)")) {
+                    result.Append(replacement);
+                    continue;
+                } 
                 foreach (var item in KeyVals) { 
                     var match = Regex.Match(replacement, item.Key);
                     if (match.Success)
