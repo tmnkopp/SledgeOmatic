@@ -57,8 +57,7 @@ namespace SOM.Procedures
                 var parsed = _Parser.Parse(content);
                 foreach (var parseresult in parsed)
                 { 
-                    var parseItem = parseresult.Parsed;
-                    var opts = parseresult.Options();
+                    var parseItem = parseresult.Parsed; 
                     var oparms = parseresult.Parms();
                      
                     var parms = ctor.GetParameters().ToList();
@@ -74,7 +73,7 @@ namespace SOM.Procedures
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     parseItem = obj.Compile(parseItem);
                     parseItem = parseItem.Replace("~optionsraw~", parseresult.RawOptions);
-                    if (!opts.Verbose)
+                    if (parseresult.Options().Verbose)
                     {
                         parseItem = parseItem.Replace(parseresult.Prefix, "");
                         parseItem = parseItem.Replace(parseresult.Postfix, "");

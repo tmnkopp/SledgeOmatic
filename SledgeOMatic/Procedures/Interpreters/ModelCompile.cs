@@ -17,12 +17,15 @@ namespace SOM.Procedures
         private string _format;  
         private string _predpattern;  
 
-        [CompilableCtorMeta(CommandMapper="-m,-f")]
-        public ModelCompile(string Model, string Format )
+        [CompilableCtorMeta()]
+        public ModelCompile(string Model, string Format, string PredPattern )
         { 
             _SchemaProvider = new SchemaProvider(Model);
             _modelname = _SchemaProvider.Model.ModelName;
-            _format = Format; 
+            _format = Format;
+            _format = Regex.Replace(_format, @"\/n\s?", "\n") ;
+            _format = Regex.Replace(_format, @"\/t\s?", "\t") ;
+            _predpattern = PredPattern ?? ".*";
         } 
         public string Compile(string content)
         { 
@@ -30,7 +33,7 @@ namespace SOM.Procedures
             IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
                 .GetModel(_modelname)
                 .AppModelItems.Select(i => i)
-                .Where(i => Regex.IsMatch(i.Name, $@".*")).AsEnumerable(); 
+                .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable(); 
 
             if (Regex.IsMatch(_format, $@"^\w:"))  { 
                 foreach (AppModelItem item in _AppModelItems) { 

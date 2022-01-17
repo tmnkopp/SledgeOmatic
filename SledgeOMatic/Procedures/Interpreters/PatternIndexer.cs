@@ -14,7 +14,7 @@ namespace SOM.Procedures
     {
         private int seed = 0; 
         private string Pattern = "(index)"; 
-        [CompilableCtorMeta(CommandMapper = "-p,-s")]
+        [CompilableCtorMeta()]
         public PatternIndexer(string Pattern, int Seed)
         {
             this.seed = Seed;

@@ -64,7 +64,8 @@ namespace SOM.Procedures
     {
         public KeyValReplacer()
         { 
-        } 
+        }
+        
         public KeyValReplacer(string Source)
         {
             if (Source.ToLower().EndsWith(".json"))

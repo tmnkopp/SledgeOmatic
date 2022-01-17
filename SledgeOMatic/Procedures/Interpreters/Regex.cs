@@ -14,6 +14,7 @@ namespace SOM.Procedures
 {
     public class RegexReplacer : KeyValReplacer, ICompilable
     {
+        [CompilableCtorMeta()]
         public RegexReplacer(string Source) : base(Source) { }
         public override string Compile(string content)
         {
