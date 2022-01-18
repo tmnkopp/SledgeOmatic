@@ -41,13 +41,13 @@ namespace SOM.Procedures
                     cpr.Postfix = postfix;
                     yield return cpr;
                 }
-            }
-           
+            } 
         }
         private List<Type> _compilables { get; set; } = CompilableProvider();
         public static List<Type> CompilableProvider()
         {
-            List<Type> compilables = (from assm in AppDomain.CurrentDomain.GetAssemblies()
+            List<Type> compilables;
+            compilables = (from assm in AppDomain.CurrentDomain.GetAssemblies()
                                       where assm.FullName.Contains(AppDomain.CurrentDomain.FriendlyName)
                                       from t in assm.GetTypes()
                                       where typeof(ICompilable).IsAssignableFrom(t) && t.IsClass 
@@ -56,10 +56,8 @@ namespace SOM.Procedures
             compilables = (from comp in compilables
                            from ctor in comp.GetConstructors()
                            let attr = (CompilableCtorMeta[])ctor.GetCustomAttributes(typeof(CompilableCtorMeta), false)
-                           from a in attr
-                           where a.Invokable
-                           select comp
-                           ).ToList();
+                           from a in attr where a.Invokable
+                           select comp).ToList();
             return compilables;
         }
     }
