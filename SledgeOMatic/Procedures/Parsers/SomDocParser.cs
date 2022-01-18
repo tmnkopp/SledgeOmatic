@@ -19,7 +19,7 @@ namespace SOM.Procedures
             content = $"\n{content}\n"; 
  
             string indent = @"^ {" + this.indent + "}";
-            string pattern = @"som!(\w+) ?(.+)\n";
+            string pattern = @".*som!(\w+) ?(.+)\n";
             string regex = $"{indent}{pattern}";
             var mc = Regex.Matches(content, regex, RegexOptions.Multiline);
             foreach (Match prefix in mc)
@@ -28,7 +28,7 @@ namespace SOM.Procedures
                 {
                     var CommandName = prefix.Groups[1].Value; 
                     string matchedContent = content.Substring(prefix.Index, content.Length - prefix.Index);
-                    string postRegex = indent + CommandName + "!som.*";
+                    string postRegex = indent + ".*" + CommandName + "!som.*";
                     Match postfix = Regex.Match(matchedContent, postRegex, RegexOptions.Multiline);
                     string RawParsed = matchedContent.Substring(0, postfix.Index + postfix.Length);
 

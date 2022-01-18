@@ -47,8 +47,9 @@ namespace SOM.Procedures
                 foreach (AppModelItem item in _AppModelItems) {
                     result.Append(item.ToStringFormat(_format ?? "{0}"));
                 }   
-            }  
-            return result.ToString(); 
+            }
+            content = content.Replace("/r", result.ToString());
+            return content; 
         } 
     }
 }

@@ -13,10 +13,10 @@ namespace SOM.Procedures
 {
     public class SomTagInterpreter : ICompilable
     {
-        private string _ICompilablePattern = ""; 
-        public SomTagInterpreter(string ICompilablePattern)
+        private bool verbose = true; 
+        public SomTagInterpreter(string Options)
         {
-            _ICompilablePattern = (string.IsNullOrEmpty(ICompilablePattern)) ? ".*" : _ICompilablePattern;
+            verbose = Options.Contains("-v");
         }
         public string Compile(string content)
         {
@@ -42,7 +42,7 @@ namespace SOM.Procedures
                     }
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     parseItem = obj.Compile(parseItem);
-                    if (!pr.Options.Verbose)
+                    if (!pr.Options.Verbose && !verbose)
                     {
                         parseItem = RemoveTags(parseItem);
                     } 

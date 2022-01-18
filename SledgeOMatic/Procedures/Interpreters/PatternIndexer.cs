@@ -26,6 +26,11 @@ namespace SOM.Procedures
             string[] lines = content.Split('\n'); 
             foreach (var line in lines) {
                 var rslt = line;
+                if (Regex.IsMatch(rslt, $@"(som!\w+|\w+!som)"))
+                {
+                    result.AppendFormat("{0}\n", rslt);
+                    continue;
+                }
                 if (Regex.IsMatch(rslt, this.Pattern))
                 {
                     rslt = Regex.Replace(
