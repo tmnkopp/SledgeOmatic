@@ -24,13 +24,13 @@ namespace SOM.Procedures
         {
             StringBuilder result = new StringBuilder();
             string[] lines = content.Split('\n'); 
-            foreach (var line in lines) {
-                var rslt = line;
-                if (Regex.IsMatch(rslt, $@"(som!\w+|\w+!som)"))
+            foreach (var line in lines) { 
+                if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
                 {
-                    result.AppendFormat("{0}\n", rslt);
+                    result.AppendFormat("{0}\n", line);
                     continue;
                 }
+                var rslt = line;
                 if (Regex.IsMatch(rslt, this.Pattern))
                 {
                     rslt = Regex.Replace(  rslt , this.Pattern,
