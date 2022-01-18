@@ -30,8 +30,11 @@ namespace SOM.Procedures
                     string matchedContent = content.Substring(prefix.Index, content.Length - prefix.Index);
                     string postRegex = indent + ".*" + CommandName + "!som.*";
                     Match postfix = Regex.Match(matchedContent, postRegex, RegexOptions.Multiline);
-                    string RawParsed = matchedContent.Substring(0, postfix.Index + postfix.Length);
 
+                    string RawParsed = matchedContent.Substring(0, matchedContent.Length-1);
+                    if (postfix.Success) 
+                        RawParsed = matchedContent.Substring(0, postfix.Index + postfix.Length);
+                
                     var cpr = new CommandParseResult();
                     cpr.Parsed = RawParsed;
                     cpr.RawOptions = prefix.Groups[2].Value;

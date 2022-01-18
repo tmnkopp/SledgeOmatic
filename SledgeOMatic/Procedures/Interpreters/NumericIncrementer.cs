@@ -9,6 +9,7 @@ namespace SOM.Procedures
         private int _base = 0;
         private int _seed = 0;
         private string _incrementPattern = "";
+        [CompilableCtorMeta()]
         public NumericIncrementer(object IncrementBase, object IncrementSeed, string NumericPattern)
         {
             _base = (int)Convert.ToInt32(IncrementBase);
@@ -21,8 +22,13 @@ namespace SOM.Procedures
             var lines = Regex.Split(content, $"\r|\n");
             foreach (var line in lines)
             {
+                if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
+                {
+                    result.AppendLine(line);
+                    continue;
+                }
                 string target = line;
-                string pattern = "([^\\d])(" + _incrementPattern + ")([^\\d])";
+                string pattern = "([^\\d]|^)(" + _incrementPattern + ")([^\\d]|$)";
                 if (Regex.IsMatch(target, pattern))
                 { 
                     target = Regex.Replace(target, pattern,
@@ -33,7 +39,7 @@ namespace SOM.Procedures
                         , RegexOptions.Singleline);
                 };
                 target = Regex.Replace(target, $"\r|\n", "");
-                if (!string.IsNullOrEmpty(target)) 
+                if (!string.IsNullOrWhiteSpace(target)) 
                     result.AppendLine(target);  
             }
             return result.ToString();
