@@ -62,15 +62,10 @@ namespace SOM.Extentions
             return input;
         }
         public static string RemoveEmptyLines(this string input)
-        {
-            StringBuilder result = new StringBuilder();
-            string[] lines = input.Split('\n');
-            foreach (var line in lines)
-            { 
-                if (line.RemoveWhiteAndBreaks().Length > 0) 
-                    result.AppendFormat("{0}\n", line); 
-            }
-            return result.ToString();
+        { 
+            return string.Join('\n', (from s in Regex.Split(input, $@"\r|\n")
+                                      where !string.IsNullOrWhiteSpace(s)
+                                      select s).ToList());
         }
         public static string RemoveWhiteAndBreaks(this string input)
         {

@@ -42,11 +42,8 @@ namespace SOM.Procedures
                     } 
                 }
                 result.AppendLine(replacement);
-            }
-            var ret = string.Join('\n', (from s in Regex.Split(result.ToString(), $@"\r|\n")
-                                        where !string.IsNullOrWhiteSpace(s)
-                                        select s).ToList());
-            return ret; 
+            } 
+            return result.ToString().RemoveEmptyLines();
         }
     } 
 }
