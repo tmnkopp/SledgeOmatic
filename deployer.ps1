@@ -27,5 +27,6 @@
     explorer.exe C:\_som\
 } 
 Deploy -with " release commit "   
-# som config
-
+ 
+#  som config
+#  som compile -p tasks\test -m Debug

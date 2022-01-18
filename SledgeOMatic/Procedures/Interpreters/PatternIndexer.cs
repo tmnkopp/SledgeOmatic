@@ -33,9 +33,7 @@ namespace SOM.Procedures
                 }
                 if (Regex.IsMatch(rslt, this.Pattern))
                 {
-                    rslt = Regex.Replace(
-                        rslt
-                        , this.Pattern,
+                    rslt = Regex.Replace(  rslt , this.Pattern,
                         (Match m) => (
                             m.Groups[0].Value.Replace(m.Groups[1].Value, (this.seed++).ToString())
                     ));
