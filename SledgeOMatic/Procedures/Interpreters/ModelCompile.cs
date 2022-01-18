@@ -18,18 +18,24 @@ namespace SOM.Procedures
         private string _predpattern;  
 
         [CompilableCtorMeta()]
-        public ModelCompile(string Model, string Format, string PredPattern )
+        public ModelCompile(string Model, string PredPattern )
         { 
             _SchemaProvider = new SchemaProvider(Model);
-            _modelname = _SchemaProvider.Model.ModelName;
-            _format = Format;
-            _format = Regex.Replace(_format, @"\/n\s?", "\n") ;
-            _format = Regex.Replace(_format, @"\/t\s?", "\t") ;
+            _modelname = _SchemaProvider.Model.ModelName; 
             _predpattern = PredPattern ?? ".*";
         } 
         public string Compile(string content)
-        { 
-            StringBuilder result = new StringBuilder(); 
+        {
+            StringBuilder result = new StringBuilder();
+            var lines = (from s in Regex.Split(content, $@"\r|\n")
+                         where !string.IsNullOrWhiteSpace(s) select s).ToList();
+            var prefix = lines[0];
+            var postfix = lines[lines.Count() - 1];
+
+            _format = string.Join(' ', lines).Replace(prefix,"").Replace(postfix, ""); 
+            _format = Regex.Replace(_format, @"\/n\s?", "\n");
+            _format = Regex.Replace(_format, @"\/t\s?", "\t");
+
             IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
                 .GetModel(_modelname)
                 .AppModelItems.Select(i => i)
@@ -48,7 +54,7 @@ namespace SOM.Procedures
                     result.Append(item.ToStringFormat(_format ?? "{0}"));
                 }   
             }
-            content = content.Replace("/r", result.ToString());
+            content = prefix + "\n" + result.ToString() + "\n" + postfix;
             return content; 
         } 
     }

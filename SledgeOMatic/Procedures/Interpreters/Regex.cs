@@ -22,7 +22,7 @@ namespace SOM.Procedures
             foreach (var line in content.Split("\n"))   {
                 string replacement = line;
                 if (Regex.IsMatch(replacement, $@"(som!\w+|\w+!som)")) {
-                    result.Append(replacement);
+                    result.AppendLine(replacement);
                     continue;
                 } 
                 foreach (var item in KeyVals) { 
@@ -41,9 +41,12 @@ namespace SOM.Procedures
                             , RegexOptions.Singleline); 
                     } 
                 }
-                result.Append(replacement);
+                result.AppendLine(replacement);
             }
-            return result.ToString(); 
+            var ret = string.Join('\n', (from s in Regex.Split(result.ToString(), $@"\r|\n")
+                                        where !string.IsNullOrWhiteSpace(s)
+                                        select s).ToList());
+            return ret; 
         }
     } 
 }
