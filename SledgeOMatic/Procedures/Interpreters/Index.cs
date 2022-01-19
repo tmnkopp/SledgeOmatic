@@ -5,21 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SOM.Extentions;
+using System.Text.RegularExpressions;
+
 namespace SOM.Procedures
 {
    
     public class Indexer : ICompilable
     {
-        private int _seed = 0;
-        private int _reset = 1;
+        private int _seed = 0; 
+        private int _reset = 0; 
         private string _indexName = "[index]";
- 
+        [CompilableCtorMeta()]
+        public Indexer(int Seed, int Reset, string IndexName)
+        {
+            _indexName = IndexName;
+            _seed = Seed;
+            _reset = Reset;
+        }
         public string Compile(string content)
         {
-            StringBuilder result = new StringBuilder();
-            string[] lines = content.Split('\n');
+            StringBuilder result = new StringBuilder(); 
             int index = _seed; 
-            foreach (var line in lines) {
+            foreach (var line in content.Split('\n')) {
+                if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
+                {
+                    result.AppendLine(line);
+                    continue;
+                }
                 if (line.Contains(_indexName))
                     index++; 
                 result.AppendFormat("{0}\n", line.Replace(""+ _indexName + "", ReSetter(index).ToString()));
