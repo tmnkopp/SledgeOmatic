@@ -15,6 +15,7 @@ namespace SOM.IO
     public static class Reader {
         public static string Read(string FileName)
         {
+            FileName = FileName.Replace(@"\\", @"\");
             FileReader r = new FileReader(FileName);
             return r.Read();
         }

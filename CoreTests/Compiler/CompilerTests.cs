@@ -242,8 +242,7 @@ namespace CoreTests
                 Process p = Process.Start(startinfo);
             };
             compiler.ContentCompilers.Clear();
-            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\\_som\\_src\replace.json"));
-            compiler.ContentCompilers.Add(new Incrementer("(?<!\\d)\\d{3}(?!\\d)", 250));
+            compiler.ContentCompilers.Add(new KeyValReplacer(@"c:\\_som\\_src\replace.json")); 
             compiler.Compile();
 
             Assert.IsNotNull(Cache.Read());

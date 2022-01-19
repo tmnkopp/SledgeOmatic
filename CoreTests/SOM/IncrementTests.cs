@@ -24,20 +24,7 @@ namespace UnitTests
                 var g = matched.Groups[0];
             }
             Assert.IsTrue(matched.Success);
-        }
-        [TestMethod]
-        public void Increment_Increments()
-        {
-            Incrementer compiler = new Incrementer("[\"|,](\\d{4})[^\\d]", 1000); 
-            string actual = compiler.Compile(test);
-            string expected = @"FOO
-""2000
-""2001
-""3001 ""3002 ""3003 
-BAR";
-            Assert.AreEqual(expected, actual);
         } 
-
         public static string test = @"FOO
 ""1000
 ""1001
