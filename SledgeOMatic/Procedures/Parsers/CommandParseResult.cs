@@ -33,12 +33,7 @@ namespace SOM.Procedures
         }
         public CommandParseResult()
         { 
-        }
-        public CommandParseResult(string Parsed, string RawOptions)
-        {
-            this.Parsed = Parsed;
-            this.RawOptions = RawOptions; 
-        }
+        } 
         public string Parsed { get; set; } 
         public string CommandName { get; set; } 
         public Type CommandType { get; set; } 
