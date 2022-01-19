@@ -34,7 +34,7 @@ namespace SOM.Procedures
                     string RawParsed = matchedContent.Substring(0, matchedContent.Length-1);
                     if (postfix.Success) 
                         RawParsed = matchedContent.Substring(0, postfix.Index + postfix.Length);
-                
+                    
                     var cpr = new CommandParseResult();
                     cpr.Parsed = RawParsed;
                     cpr.RawOptions = prefix.Groups[2].Value;

@@ -20,32 +20,23 @@ namespace SOM.Procedures
         }
         public string Compile(string content)
         {
-            for (int i = 12; i > 0; i -= 4)
-            {
-                IParser<CommandParseResult> _Parser = new SomDocParser(i);
-                var parsed = _Parser.Parse(content);
+            for (int i = 12; i > 0; i -= 2)
+            { 
+                var parsed = new SomDocParser(i).Parse(content);
                 foreach (var pr in parsed)
                 {
                     Type typ = Type.GetType($"{pr.CommandType.FullName}, SOM");
                     CompilableCtorMeta ccm = GetCompilableCtorMeta(pr.CommandType);
                     ConstructorInfo ctor = GetConstructorInfo(typ);
-
+                     
                     var parseItem = pr.Parsed;
-                    var oparms = pr.Parms();
-                    var parms = ctor.GetParameters().ToList();
-                    for (int p = 0; p < parms.Count(); p++)
-                    {
-                        if (p < oparms.Count)
-                            oparms[p] = Convert.ChangeType(oparms[p], parms[p].ParameterType);
-                        else
-                            oparms.Add(null);
-                    }
+                    var oparms = pr.Parms(ctor.GetParameters());
+                     
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     parseItem = obj.Compile(parseItem);
-                    if (!pr.Options.Verbose && !verbose)
-                    {
+                    if (!pr.Options.Verbose && !verbose) 
                         parseItem = RemoveTags(parseItem);
-                    } 
+     
                     content = content.Replace(pr.Parsed, parseItem);
                 }
             } 

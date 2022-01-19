@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using CommandLine;
 
@@ -24,11 +25,20 @@ namespace SOM.Procedures
                 .MapResult(o => o, o => default(SomParseOptions));
             } 
         }
-        public List<object> Parms() {
+        public List<object> Parms(ParameterInfo[] parms) {
             var oparms = new List<object>();
             SomParseOptions o = (SomParseOptions)this.Options;
             var props = o.GetType().GetProperties();
             oparms = (from a in o.ParamParsed select a.ToString().Trim()).ToList<object>();
+    
+            for (int p = 0; p < parms.Count(); p++)
+            {
+                if (p < oparms.Count)
+                    oparms[p] = Convert.ChangeType(oparms[p], parms[p].ParameterType);
+                else
+                    oparms.Add(null);
+            }
+
             return oparms;
         }
         public CommandParseResult()
