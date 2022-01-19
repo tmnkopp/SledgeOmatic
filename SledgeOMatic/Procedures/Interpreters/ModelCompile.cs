@@ -25,7 +25,7 @@ namespace SOM.Procedures
             _predpattern = PredPattern ?? ".*";
         } 
         public string Compile(string content)
-        {
+        { 
             StringBuilder result = new StringBuilder();
             var lines = (from s in Regex.Split(content, $@"\r|\n")
                          where !string.IsNullOrWhiteSpace(s) select s).ToList();
