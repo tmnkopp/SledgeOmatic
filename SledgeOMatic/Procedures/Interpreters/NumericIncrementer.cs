@@ -10,10 +10,10 @@ namespace SOM.Procedures
         private int _seed = 0;
         private string _incrementPattern = "";
         [CompilableCtorMeta()]
-        public NumericIncrementer(object IncrementBase, object IncrementSeed, string NumericPattern)
+        public NumericIncrementer(object Seed, object Base, string NumericPattern)
         {
-            _base = (int)Convert.ToInt32(IncrementBase);
-            _seed = (int)Convert.ToInt32(IncrementSeed);
+            _seed = (int)Convert.ToInt32(Seed);
+            _base = (int)Convert.ToInt32(Base);
             _incrementPattern = NumericPattern;
         } 
         public string Compile(string content)
@@ -33,7 +33,7 @@ namespace SOM.Procedures
                 { 
                     target = Regex.Replace(target, pattern,
                         m => {
-                            int nextint =(_seed - _base) + Convert.ToInt32(m.Groups[2].Value) + 0; 
+                            int nextint =(_base - _seed) + Convert.ToInt32(m.Groups[2].Value) + 0; 
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);

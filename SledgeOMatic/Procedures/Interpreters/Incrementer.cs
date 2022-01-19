@@ -5,37 +5,47 @@ using System.Linq;
 using System.Threading.Tasks;
 using SOM.Extentions;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace SOM.Procedures
 {
     public class Incrementer : ICompilable
     {
-        private int _increment = 0;
-        private string _pattern = "";
-        public Incrementer(string Pattern, int Increment)
-        {
+        private int _amount = 0; 
+        private string _pattern = @"\d";
+        [CompilableCtorMeta()]
+        public Incrementer(int Amount, string Pattern)
+        { 
+            _amount = (int)Convert.ToInt32(Amount);
             _pattern = Pattern;
-            _increment = Increment;
         }
         public string Compile(string content)
-        { 
-            Match match = Regex.Match(content, _pattern);
-            string replacementContent = content;
-            while (match.Success)
+        {
+            StringBuilder result = new StringBuilder();
+            var lines = Regex.Split(content, $"\r|\n");
+            foreach (var line in lines)
             {
-                string targetReplace = match.Value;
-                string numTarget = match.Groups[0].Value;
-                if (match.Groups.Count > 1)
-                    numTarget = match.Groups[1].Value;
-
-                int replaceNum = Convert.ToInt32(numTarget) + _increment;
-                string replacement = targetReplace.Replace(numTarget, replaceNum.ToString());
-                replacementContent = replacementContent.Replace(targetReplace, replacement);
-
-                content = content.Remove(0, match.Index + match.Length);
-                match = Regex.Match(content, _pattern);
-            } 
-            return replacementContent.TrimTrailingNewline();
+                if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
+                {
+                    result.AppendLine(line);
+                    continue;
+                }
+                string target = line;
+                string pattern = "([^\\d]|^)(" + _pattern + ")([^\\d]|$)";
+                if (Regex.IsMatch(target, pattern))
+                {
+                    target = Regex.Replace(target, pattern,
+                        m => {
+                            int nextint = (_amount) + Convert.ToInt32(m.Groups[2].Value) + 0;
+                            return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
+                        }
+                        , RegexOptions.Singleline);
+                };
+                target = Regex.Replace(target, $"\r|\n", "");
+                if (!string.IsNullOrWhiteSpace(target))
+                    result.AppendLine(target);
+            }
+            return result.ToString();
         }
     }
 }

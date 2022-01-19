@@ -37,8 +37,7 @@ namespace SOM.Procedures
             _format = Regex.Replace(_format, @"\/t\s?", "\t");
 
             IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
-                .GetModel(_modelname)
-                .AppModelItems.Select(i => i)
+                .GetModel(_modelname).AppModelItems.Select(i => i)
                 .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable(); 
 
             if (Regex.IsMatch(_format, $@"^.*\w:\\"))  { 
