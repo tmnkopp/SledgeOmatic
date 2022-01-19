@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SOM.Extentions;
-using System.Text.RegularExpressions;
-
+using System.Text.RegularExpressions; 
 namespace SOM.Procedures
-{
-   
+{ 
     public class Indexer : ICompilable
     {
         private int _seed = 0; 

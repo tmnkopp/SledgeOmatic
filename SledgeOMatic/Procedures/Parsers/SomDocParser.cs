@@ -51,10 +51,10 @@ namespace SOM.Procedures
         {
             List<Type> compilables;
             compilables = (from assm in AppDomain.CurrentDomain.GetAssemblies()
-                                      where assm.FullName.Contains(AppDomain.CurrentDomain.FriendlyName)
-                                      from t in assm.GetTypes()
-                                      where typeof(ICompilable).IsAssignableFrom(t) && t.IsClass 
-                                      select t).ToList();
+                            where assm.FullName.Contains(AppDomain.CurrentDomain.FriendlyName)
+                            from t in assm.GetTypes()
+                            where typeof(ICompilable).IsAssignableFrom(t) && t.IsClass 
+                            select t).ToList();
 
             compilables = (from comp in compilables
                            from ctor in comp.GetConstructors()

@@ -11,7 +11,8 @@ namespace SOM.Procedures
             get
             {
                 MatchCollection mc = Regex.Matches(RawOptions.Split("\n")[0], $@"-\w [^-]*");
-                return (from m in mc select m.Value.Trim().Replace("\\n", "\n").Replace("\\t", "\t") ?? "{0}").ToArray();
+                return (from m in mc 
+                        select m.Value.Trim().Replace("\\n", "\n").Replace("\\t", "\t") ?? "{0}").ToArray();
             }
         } 
         public SomParseOptions Options  { get{

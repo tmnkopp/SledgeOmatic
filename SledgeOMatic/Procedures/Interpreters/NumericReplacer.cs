@@ -25,8 +25,7 @@ namespace SOM.Procedures
                     {
                         line = Regex.Replace(line, pattern,  
                             m => $"{m.Groups[1].Value}{item.Value}{m.Groups[3].Value}"  
-                            , RegexOptions.Singleline);
-
+                            , RegexOptions.Singleline); 
                         if (cnt++ > 5)
                             break;
                     }; 
