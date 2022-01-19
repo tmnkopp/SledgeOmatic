@@ -42,8 +42,17 @@ namespace SOM
         public void Process(CompileOptions o) 
         {
             string configPath = config.GetSection("AppSettings:CompileConfig").Value;
-            if (!string.IsNullOrEmpty(o.Path.ToString()))
-            {
+            if (!string.IsNullOrEmpty(o.Path.ToString()))  {
+                string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
+                o.Path = o.Path.Replace("~", envar); 
+                if (!o.Path.Contains(":"))
+                    o.Path = $"{envar}{o.Path}";
+                if (!o.Path.EndsWith(".yaml"))
+                    o.Path += ".yaml";
+                o.Path = o.Path.Replace(@"\\", @"\");
+                configPath = o.Path; 
+            }
+            if (!string.IsNullOrEmpty(o.Path.ToString()))  {
                 string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
                 o.Path = o.Path.Replace("~", envar); 
                 if (!o.Path.Contains(":"))
@@ -61,13 +70,10 @@ namespace SOM
             var root = (YamlMappingNode)yaml.Documents[0].RootNode;
 
             List<object> oparms;
-            foreach (var rootitem in root.Children)
-            {
+            foreach (var rootitem in root.Children)  {
                 PropertyInfo pi = compiler.GetType().GetProperty(rootitem.Key.ToString());
-                if (pi != null)
-                { 
-                    if (pi.PropertyType.FullName.Contains("List`1"))
-                    { 
+                if (pi != null)  { 
+                    if (pi.PropertyType.FullName.Contains("List`1"))  { 
                         foreach (var propitems in ((YamlSequenceNode)rootitem.Value).Children)
                         {
                             string stype = ((YamlMappingNode)propitems).FirstOrDefault().Key.ToString();
@@ -79,8 +85,7 @@ namespace SOM
                             pi.PropertyType.GetMethod("Add").Invoke(pi.GetValue(compiler), new object[] { obj });
                         }
                     }
-                    else
-                    {
+                    else  {
                         pi.SetValue(compiler, rootitem.Value.ToString(), null);
                     }
                 }
