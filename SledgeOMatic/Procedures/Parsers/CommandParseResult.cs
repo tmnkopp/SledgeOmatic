@@ -15,7 +15,9 @@ namespace SOM.Procedures
                         select m.Value.Trim().Replace("\\n", "\n").Replace("\\t", "\t") ?? "{0}").ToArray();
             }
         } 
-        public SomParseOptions Options  { get{
+        public SomParseOptions Options  { 
+            get
+            {
                 return new CommandLine
                 .Parser(with => with.HelpWriter = null)
                 .ParseArguments<SomParseOptions>(Args)
