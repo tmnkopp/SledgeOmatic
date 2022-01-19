@@ -94,8 +94,7 @@ namespace SOM
                     foreach (MethodInfo m in methods) 
                         if (m.Name == rootitem.Key.ToString() && m.GetParameters().Count() == oparms.Count()) 
                             m.Invoke(compiler, oparms.ToArray());  
-                }
- 
+                } 
                 if (Regex.IsMatch(rootitem.Key.ToString().ToLower(), $"compilation"))
                 { 
                     ((YamlSequenceNode)rootitem.Value).Children.ToList().ForEach(ncomp => {

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace SOM 
 {
     public static class AppSettings
-    {
-        
+    { 
         public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString(); 
         public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();         
         public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString(); 

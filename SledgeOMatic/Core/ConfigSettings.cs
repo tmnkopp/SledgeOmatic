@@ -13,6 +13,7 @@ namespace SOM
         string BasePath { get; }
         string DestDir { get; }
         string SourceDir { get; }
+        string SomTagPattern { get; }
     } 
     public class ConfigSettings : IAppSettings
     {
@@ -24,5 +25,6 @@ namespace SOM
         public string BasePath => config.GetSection("AppSettings")["BasePath"];
         public string SourceDir => config.GetSection("AppSettings")["SourceDir"];
         public string DestDir => config.GetSection("AppSettings")["DestDir"];
+        public string SomTagPattern => config.GetSection("AppSettings")["SomTagPattern"];
     }
 }
