@@ -41,15 +41,14 @@ namespace SOM.Procedures
                 .AppModelItems.Select(i => i)
                 .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable(); 
 
-            if (Regex.IsMatch(_format, $@"^\w:"))  { 
+            if (Regex.IsMatch(_format, $@"^.*\w:\\"))  { 
                 foreach (AppModelItem item in _AppModelItems) { 
                     string path = item.ToStringFormat(_format);
                     path = path.Replace("{1}", item.DataType);  
                     string fmt = item.ToStringFormat(Reader.Read(path));  
                     result.Append(fmt); 
                 } 
-            }
-            else { 
+            } else { 
                 foreach (AppModelItem item in _AppModelItems) {
                     result.Append(item.ToStringFormat(_format ?? "{0}"));
                 }   
