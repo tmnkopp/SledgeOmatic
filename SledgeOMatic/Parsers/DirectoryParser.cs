@@ -22,36 +22,18 @@ namespace SOM.Parsers
     public class DirectoryParser
     {
         #region Props
-        public List<string> Directories { get; set; } = new List<string>();
-  
+        public List<string> Directories { get; set; } = new List<string>(); 
         public Func<string, string> _ContentFormatter = (c) => (c);
         public Func<string, string> ContentFormatter
         {
             set { _ContentFormatter = value; }
-        }
-
+        } 
         private Dictionary<string, string> _Results;
         public Dictionary<string, string> Results {
             get { return _Results; }
-        }
-        private IParser<string> _Parser;
-        public IParser<string> Parser
-        {
-            set { _Parser = value; }
-            get { return _Parser; }
         } 
-        private string _PathExcludePattern = @"\$";
-        public string PathExcludePattern
-        {
-            get { return _PathExcludePattern ?? "~~~~"; }
-            set { _PathExcludePattern = value; }
-        }
-        private string _PathIncludePattern = @".*";
-        public string PathIncludePattern
-        {
-            get { return _PathIncludePattern ?? ".*"; }
-            set { _PathIncludePattern = value; }
-        }
+        public IParser<string> Parser { get; set; } 
+        public string PathExcludePattern { get; set; } = @"\$";
         public string FileFilter { get; set; }
         #endregion
 
@@ -83,19 +65,19 @@ namespace SOM.Parsers
                 DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(FileFilter, "")}");
                 foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
                 {
-                    if (_Parser.ParseMode == ParseMode.Debug)
+                    if (this.Parser.ParseMode == ParseMode.Debug)
                         Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
 
                     if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
                     {
-                        if (_Parser.ParseMode == ParseMode.Debug)
+                        if (this.Parser.ParseMode == ParseMode.Debug)
                             Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
                         continue;
                     }
 
                     string content = Reader.Read(file.FullName);
                     StringBuilder result = new StringBuilder();
-                    foreach (var item in _Parser.Parse(content))
+                    foreach (var item in this.Parser.Parse(content))
                     {
                         result.Append(_ContentFormatter(item));
                     }
@@ -113,12 +95,11 @@ namespace SOM.Parsers
         {
             ParseDirectory();
             Cache.Inspect(ToString());
-        }
-
+        } 
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
-            if (_Parser.ParseMode != ParseMode.Default)
+            if (this.Parser.ParseMode != ParseMode.Default)
             {
                 foreach (KeyValuePair<string, string> kvp in _Results)
                     result.Append($"{kvp.Key}\n");
