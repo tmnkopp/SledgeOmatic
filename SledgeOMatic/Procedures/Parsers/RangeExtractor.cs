@@ -32,13 +32,11 @@ namespace SOM.Procedures
             string[] lines = Regex.Split(content, _fromPattern);
             lines = (from fs in lines where Regex.IsMatch(fs, _extractPattern) select fs).ToArray();
             
-            if (this.ParseMode == ParseMode.Debug)
-                Console.WriteLine($"{_fromPattern}");
+            if (this.ParseMode == ParseMode.Debug)  Console.WriteLine($"{_fromPattern}");
 
             foreach (var line in lines)
             {
-                if (this.ParseMode == ParseMode.Debug)
-                    Console.WriteLine($"{line}"); 
+                if (this.ParseMode == ParseMode.Debug)  Console.WriteLine($"{line}"); 
                 if (Regex.IsMatch(line, _extractPattern))
                 {
                     int toPos = line.IndexOf(_toWhere);
