@@ -41,17 +41,7 @@ namespace SOM
         }
         public void Process(CompileOptions o) 
         {
-            string configPath = config.GetSection("AppSettings:CompileConfig").Value;
-            if (!string.IsNullOrEmpty(o.Path.ToString()))  {
-                string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
-                o.Path = o.Path.Replace("~", envar); 
-                if (!o.Path.Contains(":"))
-                    o.Path = $"{envar}{o.Path}";
-                if (!o.Path.EndsWith(".yaml"))
-                    o.Path += ".yaml";
-                o.Path = o.Path.Replace(@"\\", @"\");
-                configPath = o.Path; 
-            }
+            string configPath = config.GetSection("AppSettings:CompileConfig").Value; 
             if (!string.IsNullOrEmpty(o.Path.ToString()))  {
                 string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
                 o.Path = o.Path.Replace("~", envar); 
