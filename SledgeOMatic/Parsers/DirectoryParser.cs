@@ -65,14 +65,14 @@ namespace SOM.Parsers
                 foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
                 {
                     if (this.Parser.ParseMode == ParseMode.Debug)
-                        Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
+                        Console.WriteLine($"debug DirectoryName: {file.DirectoryName}"); 
 
                     if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
                     {
                         if (this.Parser.ParseMode == ParseMode.Debug)
                             Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
                         continue;
-                    }
+                    } 
 
                     string content = Reader.Read(file.FullName);
                     StringBuilder result = new StringBuilder();
