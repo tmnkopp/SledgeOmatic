@@ -39,13 +39,7 @@ namespace SOM.Parsers
         {
             set { _Parser = value; }
             get { return _Parser; }
-        }
-        private string _Directory;
-        public string Directory
-        {
-            get { return _Directory; }
-            set { _Directory = value; }
-        }
+        } 
         private string _PathExcludePattern = @"\$";
         public string PathExcludePattern
         {
@@ -58,13 +52,7 @@ namespace SOM.Parsers
             get { return _PathIncludePattern ?? ".*"; }
             set { _PathIncludePattern = value; }
         }
-        public string FileFilter
-        {
-            get {
-                string ret = Directory.ReverseString().Split(new[] { '\\' })[0].ReverseString();
-                return (ret == "") ? "*.*" : ret;
-            }
-        }
+        public string FileFilter { get; set; }
         #endregion
 
         #region Ctor
@@ -76,7 +64,7 @@ namespace SOM.Parsers
         }
         public DirectoryParser(string Directory) : this()
         {
-            _Directory = Directory;
+            Directories.Add(Directory);
         }
         #endregion
 
@@ -84,34 +72,37 @@ namespace SOM.Parsers
 
         public void ParseDirectory(string Directory) 
         {
-            this.Directory = Directory;
+            Directories.Add(Directory);
             ParseDirectory();
         }
         public void ParseDirectory()
         {
             _Results.Clear();
-            DirectoryInfo DI = new DirectoryInfo($"{this._Directory.Replace(FileFilter, "")}");
-            foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
+            foreach (var dir in Directories)
             {
-                if (_Parser.ParseMode == ParseMode.Debug)
-                    Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
-
-                if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
+                DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(FileFilter, "")}");
+                foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
                 {
                     if (_Parser.ParseMode == ParseMode.Debug)
-                        Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
-                    continue;
-                }
+                        Console.WriteLine($"debug DirectoryName: {file.DirectoryName}");
 
-                string content = Reader.Read(file.FullName);
-                StringBuilder result = new StringBuilder();
-                foreach (var item in _Parser.Parse(content))
-                {
-                    result.Append(_ContentFormatter(item));
+                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
+                    {
+                        if (_Parser.ParseMode == ParseMode.Debug)
+                            Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
+                        continue;
+                    }
+
+                    string content = Reader.Read(file.FullName);
+                    StringBuilder result = new StringBuilder();
+                    foreach (var item in _Parser.Parse(content))
+                    {
+                        result.Append(_ContentFormatter(item));
+                    }
+                    if (result.ToString() != "")
+                        _Results.Add($"{file.FullName}", $"{result.ToString()}");
                 }
-                if (result.ToString() != "")
-                    _Results.Add($"{file.FullName}", $"{result.ToString()}");
-            }
+            } 
         }
         public void ParseTo(IWriter Writer)
         {
