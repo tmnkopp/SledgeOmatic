@@ -84,7 +84,7 @@ namespace SOM.Parsers
                     StringBuilder result = new StringBuilder(); 
                     foreach (var item in this.Parser.Parse(content))
                     {
-                        result.Append(_ContentFormatter(item));
+                        result.Append(_ContentFormatter(item) + "\n");
                     }
                     if (result.ToString() != ""){
                         if (!_Results.ContainsKey(file.FullName))
