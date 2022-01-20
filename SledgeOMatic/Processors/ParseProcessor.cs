@@ -37,8 +37,7 @@ namespace SOM
             this.logger = logger;
         }
         public void Process(ParseOptions o) {
-            Console.Clear();
-
+            Console.Clear(); 
             string configPath = config.GetSection("AppSettings:ParseConfig").Value;
             if (!string.IsNullOrEmpty(o.ConfigFile.ToString()))
             {
