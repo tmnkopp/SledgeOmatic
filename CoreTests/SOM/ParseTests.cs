@@ -74,7 +74,8 @@ namespace UnitTests
 
             string raw = File.ReadAllText(@"c:\_som\parse\dfd.yaml");
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
-            dfd = deser.Deserialize<DirectoryParseDefinition>(raw);
+            dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
+            ParseMode pm =  (ParseMode)Enum.Parse(typeof(ParseMode), dfd.ParseMode);
 
         }
     }

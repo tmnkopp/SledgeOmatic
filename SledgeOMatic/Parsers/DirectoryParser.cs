@@ -22,9 +22,8 @@ namespace SOM.Parsers
     public class DirectoryParser
     {
         #region Props
-        private List<string> _Directories;
-        public void AddDirectory(string Dir) => _Directories.Add(Dir);
-
+        public List<string> Directories { get; set; } = new List<string>();
+  
         public Func<string, string> _ContentFormatter = (c) => (c);
         public Func<string, string> ContentFormatter
         {
