@@ -68,23 +68,23 @@ namespace SOM.Parsers
                 foreach (var file in DI.GetFiles(filter, SearchOption.AllDirectories))
                 {
                     if (this.Parser.ParseMode == ParseMode.Debug)
-                        Console.WriteLine($"debug DirectoryName: {file.DirectoryName}"); 
+                        Console.WriteLine($"[DBG]: {file.DirectoryName} {file.Name}"); 
 
-                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
-                    {
-                        if (this.Parser.ParseMode == ParseMode.Debug)
-                            Console.WriteLine($"debug PathExcludePattern: {PathExcludePattern} {file.DirectoryName}");
+                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern)) 
                         continue;
-                    } 
-
+               
                     string content = Reader.Read(file.FullName);
                     StringBuilder result = new StringBuilder();
                     foreach (var item in this.Parser.Parse(content))
                     {
                         result.Append(_ContentFormatter(item));
                     }
-                    if (result.ToString() != "")
-                        _Results.Add($"{file.FullName}", $"{result.ToString()}");
+                    if (result.ToString() != ""){
+                        if (!_Results.ContainsKey(file.FullName))
+                        {
+                            _Results.Add($"{file.FullName}", $"{result.ToString()}");
+                        }
+                    }     
                 }
             } 
         }

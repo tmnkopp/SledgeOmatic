@@ -30,7 +30,7 @@ namespace SOM.Procedures
         {
             base.Content = Content;
             if (this.ParseMode == ParseMode.Debug)
-                Console.WriteLine($"content.Contains(_fromWhere) {content.Contains(_fromWhere)}");
+                Console.WriteLine($"content.Contains({_fromWhere})  {content.Contains(_fromWhere)}");
 
             if (content.Contains(_fromWhere) && Regex.Match(content, _extractPattern).Success)
             {
