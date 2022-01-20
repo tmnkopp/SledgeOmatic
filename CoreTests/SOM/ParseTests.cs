@@ -75,8 +75,7 @@ namespace UnitTests
             string raw = File.ReadAllText(@"c:\_som\parse\dfd.yaml");
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
- 
-
+  
         }
         [TestMethod]
         public void PathParser_Parses()

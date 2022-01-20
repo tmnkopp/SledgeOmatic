@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "parse -p config -m Debug"
+      "commandLineArgs": "parse -p config -m Default"
     }
   }
 }
