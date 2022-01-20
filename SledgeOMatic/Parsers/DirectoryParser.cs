@@ -18,6 +18,7 @@ namespace SOM.Parsers
         public List<object> ParseTypeArgs { get; set; }
         public string FileFilter { get; set; } 
         public string ResultFormat { get; set; }
+        public string Dest { get; set; }
     }
     public class DirectoryParser
     {
@@ -101,6 +102,12 @@ namespace SOM.Parsers
         {
             ParseDirectory();
             Writer.Write(ToString());
+        }
+        public void ParseToFile(string Filename)
+        {
+            var writer = new FileWriter(Filename);
+            ParseDirectory();
+            writer.Write(ToString(), true);
         }
         public void Inspect()
         {

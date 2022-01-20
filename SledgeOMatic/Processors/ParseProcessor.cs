@@ -58,7 +58,7 @@ namespace SOM
             parser.Parser = (IParser<string>)Activator.CreateInstance(ptype, dfd.ParseTypeArgs.ToArray());
             parser.Parser.ParseMode = o.ParseMode;
             parser.FileFilter = dfd.FileFilter;
-            parser.ResultFormat = dfd.ResultFormat ;
+            parser.ResultFormat = dfd.ResultFormat;
             parser.Inspect(); 
              
         }
