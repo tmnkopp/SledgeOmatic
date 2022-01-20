@@ -45,12 +45,11 @@ namespace SOM
             string raw = File.ReadAllText(configPath);
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
-            Type ptype = (from t in types() where t.Name == dfd.ParseType select t).FirstOrDefault();
-            Type type = Type.GetType($"{ptype.FullName}, {ptype.FullName.Split('.')[0]}");
+            Type ptype = (from t in types() where t.Name == dfd.ParseType select t).FirstOrDefault(); 
    
             DirectoryParser parser = new DirectoryParser();
             parser.Directories.AddRange(dfd.Directories); 
-            parser.Parser = (IParser<string>)Activator.CreateInstance(type, dfd.ParseTypeArgs.ToArray());
+            parser.Parser = (IParser<string>)Activator.CreateInstance(ptype, dfd.ParseTypeArgs.ToArray());
             parser.Parser.ParseMode = o.ParseMode;
             parser.FileFilter = dfd.FileFilter;
             parser.Inspect(); 
