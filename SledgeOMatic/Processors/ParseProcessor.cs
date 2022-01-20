@@ -39,14 +39,7 @@ namespace SOM
         public void Process(ParseOptions o) {
             Console.Clear(); 
             string configPath = config.GetSection("AppSettings:ParseConfig").Value;
-            if (!string.IsNullOrEmpty(o.Path.ToString()))
-            {
-                string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
-                o.Path = o.Path.Replace("~", envar);
-                if (!o.Path.Contains(":")) o.Path = $"{envar}{o.Path}";
-                if (!o.Path.EndsWith(".yaml")) o.Path += ".yaml"; 
-                configPath = o.Path.Replace(@"\\", @"\");
-            }
+            configPath = $"{configPath}{o.ConfigFile}.yaml".Replace(@"\\", @"\");
             logger.LogInformation("{o}", configPath);
 
             string raw = File.ReadAllText(configPath);

@@ -35,7 +35,7 @@ namespace SOM
         [Option('f', "Filter", Default = "")]
         public string Filter { get; set; }
         [Option('p', "Path", Default = "c:\\_som\\parse\\config.yaml")]
-        public string Path { get; set; }
+        public string ConfigFile { get; set; }
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }  
     }
