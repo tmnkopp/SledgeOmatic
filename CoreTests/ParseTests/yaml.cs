@@ -49,6 +49,7 @@ namespace CoreTests
         [TestMethod]
         public void Yaml_DeSerializes()
         {
+        
             Task task = new Task();
             task.Context = "context";
             task.Name = "name";

@@ -27,29 +27,44 @@ namespace SOM.Procedures
             _toWhere = (ToWhere!= "") ? ToWhere : "~~~~"; 
         }
         public virtual IEnumerable<string> Parse(string content)
-        {
-            base.Content = Content;
+        { 
+            string _fromPattern = $"(?={_fromWhere})";
+            string[] lines = Regex.Split(content, _fromPattern);
+            lines = (from fs in lines where Regex.IsMatch(fs, _extractPattern) select fs).ToArray();
+            
             if (this.ParseMode == ParseMode.Debug)
-                Console.WriteLine($"content.Contains({_fromWhere})  {content.Contains(_fromWhere)}");
+                Console.WriteLine($"{_fromPattern}");
 
-            if (content.Contains(_fromWhere) && Regex.Match(content, _extractPattern).Success)
+            foreach (var line in lines)
             {
-                string[] FromSplits = content.Split(new[] { _fromWhere }, StringSplitOptions.None);
-                foreach (string FromSplit in FromSplits)
+                if (this.ParseMode == ParseMode.Debug)
+                    Console.WriteLine($"{line}"); 
+                if (Regex.IsMatch(line, _extractPattern))
                 {
-                    int matchPos = Regex.Match(FromSplit, _extractPattern).Index;
-                    if (matchPos > 0)
-                    {
-                        int toPos = FromSplit.IndexOf(_toWhere);
-                        toPos = (toPos < 0) ? FromSplit.Length : toPos + _toWhere.Length;
-
-                        if (toPos > FromSplit.Length)
-                            toPos = FromSplit.Length;
-                        yield return string.Format("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
-
-                    }
+                    int toPos = line.IndexOf(_toWhere);
+                    toPos = (toPos < 0) ? line.Length : toPos + _toWhere.Length; 
+                    if (toPos > line.Length) toPos = line.Length;
+                    yield return string.Format("{0}",line.Substring(0, toPos)); 
                 }
             }
+            //   if (content.Contains(_fromWhere) && Regex.Match(content, _extractPattern).Success)
+            //   {
+            //       string[] FromSplits = content.Split(new[] { _fromWhere }, StringSplitOptions.None);
+            //       foreach (string FromSplit in FromSplits)
+            //       {
+            //           int matchPos = Regex.Match(FromSplit, _extractPattern).Index;
+            //           if (matchPos > 0)
+            //           {
+            //               int toPos = FromSplit.IndexOf(_toWhere);
+            //               toPos = (toPos < 0) ? FromSplit.Length : toPos + _toWhere.Length;
+            //   
+            //               if (toPos > FromSplit.Length)
+            //                   toPos = FromSplit.Length;
+            //               yield return string.Format("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
+            //   
+            //           }
+            //       }
+            //   }
         }
     }
 }
