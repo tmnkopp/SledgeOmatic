@@ -8,6 +8,8 @@ using SOM.Procedures;
 using SOM.Extentions;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization;
 
 namespace UnitTests
 {
@@ -43,6 +45,23 @@ namespace UnitTests
             string content = "1\n2\n3\n<-target->\n1\n2\n3\n<-target->\n1\n5\n3";
             StringBuilder result = new StringBuilder();
             RangeExtractor parser = new RangeExtractor("-target-", "<", ">"); 
+            foreach (var item in parser.Parse(content))
+                result.Append(item);
+            Assert.AreEqual("<-target-><-target->", result.ToString());
+        }
+
+        [TestMethod]
+        public void YAML_Parses()
+        {
+
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+            var yaml = serializer.Serialize(tasks);
+
+            string content = "1\n2\n3\n<-target->\n1\n2\n3\n<-target->\n1\n5\n3";
+            StringBuilder result = new StringBuilder();
+            RangeExtractor parser = new RangeExtractor("-target-", "<", ">");
             foreach (var item in parser.Parse(content))
                 result.Append(item);
             Assert.AreEqual("<-target-><-target->", result.ToString());
