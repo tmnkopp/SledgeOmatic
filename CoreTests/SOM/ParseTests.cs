@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
+using SOM.Parsers;
 
 namespace UnitTests
 {
@@ -53,18 +54,28 @@ namespace UnitTests
         [TestMethod]
         public void YAML_Parses()
         {
+            List<string> dirs = new List<string>();
+            dirs.AddRange(new string[] { "111", "222" });
+            List<object> args = new List<object>();
+            args.AddRange(new object[] { "111", "222" });
 
-            var serializer = new SerializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            DirectoryParseDefinition dfd = new DirectoryParseDefinition() ;
+            dfd.Directories = dirs;
+            dfd.FileFilter = ".*";
+            dfd.ParseMode = "Default";
+            dfd.ParseType = "RangeExtractor";
+            dfd.ParseTypeArgs = args;
+
+            var ser = new SerializerBuilder()
+                .WithNamingConvention(PascalCaseNamingConvention.Instance)
                 .Build();
-            var yaml = serializer.Serialize(tasks);
+            string yaml = ser.Serialize(dfd);
+            File.WriteAllText(@"c:\_som\parse\dfd.yaml", yaml);
 
-            string content = "1\n2\n3\n<-target->\n1\n2\n3\n<-target->\n1\n5\n3";
-            StringBuilder result = new StringBuilder();
-            RangeExtractor parser = new RangeExtractor("-target-", "<", ">");
-            foreach (var item in parser.Parse(content))
-                result.Append(item);
-            Assert.AreEqual("<-target-><-target->", result.ToString());
+            string raw = File.ReadAllText(@"c:\_som\parse\dfd.yaml");
+            var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
+            dfd = deser.Deserialize<DirectoryParseDefinition>(raw);
+
         }
     }
  
