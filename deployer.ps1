@@ -26,7 +26,6 @@
     #explorer.exe C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\
     explorer.exe C:\_som\
 } 
-Deploy -with " release commit "   
- 
+Deploy -with " release commit "    
 #  som config
 #  som compile -p tasks\test -m Debug
