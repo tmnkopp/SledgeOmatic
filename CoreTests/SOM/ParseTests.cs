@@ -61,8 +61,7 @@ namespace UnitTests
 
             DirectoryParseDefinition dfd = new DirectoryParseDefinition() ;
             dfd.Directories = dirs;
-            dfd.FileFilter = ".*";
-            dfd.ParseMode = "Default";
+            dfd.FileFilter = ".*"; 
             dfd.ParseType = "RangeExtractor";
             dfd.ParseTypeArgs = args;
 
@@ -75,7 +74,7 @@ namespace UnitTests
             string raw = File.ReadAllText(@"c:\_som\parse\dfd.yaml");
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
-            ParseMode pm =  (ParseMode)Enum.Parse(typeof(ParseMode), dfd.ParseMode);
+ 
 
         }
     }

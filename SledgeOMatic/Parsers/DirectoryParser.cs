@@ -13,8 +13,7 @@ using System.Threading.Tasks;
 namespace SOM.Parsers
 {
     public class DirectoryParseDefinition{
-        public List<string> Directories{ get; set; }
-        public string ParseMode { get; set; }
+        public List<string> Directories{ get; set; } 
         public string ParseType { get; set; }
         public List<object> ParseTypeArgs { get; set; }
         public string FileFilter { get; set; }
