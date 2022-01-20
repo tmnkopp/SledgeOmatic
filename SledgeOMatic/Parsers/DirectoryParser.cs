@@ -16,7 +16,8 @@ namespace SOM.Parsers
         public List<string> Directories{ get; set; } 
         public string ParseType { get; set; }
         public List<object> ParseTypeArgs { get; set; }
-        public string FileFilter { get; set; }
+        public string FileFilter { get; set; } 
+        public string ResultFormat { get; set; }
     }
     public class DirectoryParser
     {
@@ -75,7 +76,7 @@ namespace SOM.Parsers
                         continue;
                
                     string content = Reader.Read(file.FullName);
-                    StringBuilder result = new StringBuilder();
+                    StringBuilder result = new StringBuilder(); 
                     foreach (var item in this.Parser.Parse(content))
                     {
                         result.Append(_ContentFormatter(item));
