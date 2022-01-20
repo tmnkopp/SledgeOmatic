@@ -46,9 +46,10 @@ namespace SOM
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
             Type ptype = (from t in types() where t.Name == dfd.ParseType select t).FirstOrDefault();
-            for (int i = 0; i < ptype.GetProperties().Count(); i++)
+            var ctor_params = ptype.GetConstructors()[0].GetParameters();
+            for (int i = 0; i < ctor_params.Count(); i++)
             {
-                var val = Convert.ChangeType(dfd.ParseTypeArgs[i], ptype.GetConstructors()[0].GetParameters()[i].ParameterType);
+                var val = Convert.ChangeType(dfd.ParseTypeArgs[i], ctor_params[i].ParameterType);
                 dfd.ParseTypeArgs[i] = val;
             }
     
