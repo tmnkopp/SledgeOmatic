@@ -27,6 +27,7 @@ namespace SOM.Parsers
         {
             set { _ContentFormatter = value; }
         } 
+        public string ResultFormat { get; set; } = @"{0}";
         private Dictionary<string, string> _Results;
         public Dictionary<string, string> Results {
             get { return _Results; }
@@ -82,7 +83,9 @@ namespace SOM.Parsers
                     if (result.ToString() != ""){
                         if (!_Results.ContainsKey(file.FullName))
                         {
-                            _Results.Add($"{file.FullName}", $"{result.ToString()}");
+                            string fresult = result.ToString();
+                            fresult = ResultFormat.Replace("{0}", fresult).Replace("{1}", file.FullName); 
+                            _Results.Add($"{file.FullName}", $"{fresult}");
                         }
                     }     
                 }
