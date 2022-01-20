@@ -37,10 +37,9 @@ namespace SOM
         [Option('p', "Parser", Default = "0")]
         public string Parser { get; set; }
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
-        public bool Verbose { get; set; }
-        private List<string> _PathExclude = new List<string>();
-        [Option('e', "PathExcludePattern")]
-        public string PathExcludePattern { get; set; }
+        public bool Verbose { get; set; } 
+        [Option('c', "ConfigFile")]
+        public string ConfigFile { get; set; }
     }
 
     [Serializable]
