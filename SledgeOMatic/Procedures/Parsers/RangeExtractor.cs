@@ -44,25 +44,7 @@ namespace SOM.Procedures
                     if (toPos > line.Length) toPos = line.Length;
                     yield return string.Format("{0}",line.Substring(0, toPos)); 
                 }
-            }
-            //   if (content.Contains(_fromWhere) && Regex.Match(content, _extractPattern).Success)
-            //   {
-            //       string[] FromSplits = content.Split(new[] { _fromWhere }, StringSplitOptions.None);
-            //       foreach (string FromSplit in FromSplits)
-            //       {
-            //           int matchPos = Regex.Match(FromSplit, _extractPattern).Index;
-            //           if (matchPos > 0)
-            //           {
-            //               int toPos = FromSplit.IndexOf(_toWhere);
-            //               toPos = (toPos < 0) ? FromSplit.Length : toPos + _toWhere.Length;
-            //   
-            //               if (toPos > FromSplit.Length)
-            //                   toPos = FromSplit.Length;
-            //               yield return string.Format("{0}{1}", _fromWhere, FromSplit.Substring(0, toPos));
-            //   
-            //           }
-            //       }
-            //   }
+            } 
         }
     }
 }
