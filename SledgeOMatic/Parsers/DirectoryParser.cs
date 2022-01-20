@@ -79,7 +79,7 @@ namespace SOM.Parsers
 
                     if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern)) 
                         continue;
-               
+                    
                     string content = Reader.Read(file.FullName);
                     StringBuilder result = new StringBuilder(); 
                     foreach (var item in this.Parser.Parse(content))
