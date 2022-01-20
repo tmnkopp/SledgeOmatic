@@ -33,11 +33,9 @@ namespace SOM.Parsers
         {
             get { return (string.IsNullOrWhiteSpace(_ResultFormat)) ? "{0}" : _ResultFormat; }
             set { _ResultFormat = value; }
-        } 
-        private Dictionary<string, string> _Results;
-        public Dictionary<string, string> Results {
-            get { return _Results; }
-        } 
+        }
+        public Dictionary<string, string> Results { get; private set; } 
+ 
         public IParser<string> Parser { get; set; } 
         public string PathExcludePattern { get; set; } = @"\$";
         public string FileFilter { get; set; }
@@ -47,7 +45,7 @@ namespace SOM.Parsers
 
         public DirectoryParser()
         {
-            _Results = new Dictionary<string, string>();
+            Results = new Dictionary<string, string>();
             Cache.Write("");
         }
         public DirectoryParser(string Directory) : this()
@@ -65,7 +63,7 @@ namespace SOM.Parsers
         }
         public void ParseDirectory()
         {
-            _Results.Clear();
+            Results.Clear();
             foreach (var dir in Directories)
             { 
                 string ff = (from p in dir.Split(@"\").Reverse() select p).FirstOrDefault(); 
@@ -81,18 +79,19 @@ namespace SOM.Parsers
                         continue;
                     
                     string content = Reader.Read(file.FullName);
-                    StringBuilder result = new StringBuilder(); 
+                    StringBuilder sb = new StringBuilder(); 
                     foreach (var item in this.Parser.Parse(content))
                     {
-                        result.Append(_ContentFormatter(item) + "\n");
-                    }
-                    if (result.ToString() != ""){
-                        if (!_Results.ContainsKey(file.FullName))
+                        if (!string.IsNullOrWhiteSpace(item)) 
+                            sb.Append(_ContentFormatter(item) + "\n"); 
+                    } 
+                    if (sb.ToString() != ""){
+                        if (!Results.ContainsKey(file.FullName))
                         {
-                            string fresult = result.ToString();
+                            string fresult = sb.ToString();
                             fresult = ResultFormat.Replace("{{0}}", fresult).Replace("{{1}}", file.FullName);
                             fresult = fresult.Replace("/r", "\n");
-                            _Results.Add($"{file.FullName}", $"{fresult}");
+                            Results.Add($"{file.FullName}", $"{fresult}");
                         }
                     }     
                 }
@@ -110,20 +109,20 @@ namespace SOM.Parsers
         } 
         public override string ToString()
         {
-            StringBuilder result = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             if (this.Parser.ParseMode != ParseMode.Default)
             {
-                foreach (KeyValuePair<string, string> kvp in _Results)
-                    result.Append($"{kvp.Key}\n");
-                foreach (KeyValuePair<string, string> kvp in _Results)
-                    result.Append($"{kvp.Key}\n{kvp.Value}\n");
+                foreach (KeyValuePair<string, string> kvp in Results)
+                    sb.Append($"{kvp.Key}\n");
+                foreach (KeyValuePair<string, string> kvp in Results)
+                    sb.Append($"{kvp.Key}\n{kvp.Value}\n");
             }
             else
             {
-                foreach (KeyValuePair<string, string> kvp in _Results)
-                    result.Append($"{kvp.Value}\n");
+                foreach (KeyValuePair<string, string> kvp in Results)
+                    sb.Append($"{kvp.Value}\n");
             }
-            return result.ToString();
+            return sb.ToString();
         } 
         #endregion
     }

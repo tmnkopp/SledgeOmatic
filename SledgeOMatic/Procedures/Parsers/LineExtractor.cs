@@ -43,7 +43,7 @@ namespace SOM.Procedures
                             if ( ParseMode == ParseMode.Default)
                                 result.Append( lines[takeIndex] + "\n"  );
                             else
-                                result.Append($"{lines[takeIndex]}[LN {takeIndex.ToString()}]\n");  
+                                result.Append($"{lines[takeIndex]} [LN {takeIndex.ToString()}]\n");  
                         } 
                         cursor = takeIndex;
                     }
