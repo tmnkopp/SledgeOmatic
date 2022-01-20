@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using SOM.Parsers;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -76,6 +77,15 @@ namespace UnitTests
             dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
  
 
+        }
+        [TestMethod]
+        public void PathParser_Parses()
+        {
+            string path = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2022\";
+            string ff = (from p in path.Split(@"\").Reverse() select p).FirstOrDefault();
+
+            path = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2022\*.*";
+            ff = (from p in path.Split(@"\").Reverse() select p).FirstOrDefault();
         }
     }
  

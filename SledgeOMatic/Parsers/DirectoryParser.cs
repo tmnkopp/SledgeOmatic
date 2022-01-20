@@ -60,9 +60,12 @@ namespace SOM.Parsers
         {
             _Results.Clear();
             foreach (var dir in Directories)
-            {
-                DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(FileFilter, "")}");
-                foreach (var file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
+            { 
+                string ff = (from p in dir.Split(@"\").Reverse() select p).FirstOrDefault(); 
+                string filter = (!string.IsNullOrWhiteSpace(ff)) ? ff : FileFilter;
+
+                DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(filter, "")}");
+                foreach (var file in DI.GetFiles(filter, SearchOption.AllDirectories))
                 {
                     if (this.Parser.ParseMode == ParseMode.Debug)
                         Console.WriteLine($"debug DirectoryName: {file.DirectoryName}"); 
