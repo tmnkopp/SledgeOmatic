@@ -39,10 +39,10 @@ namespace SOM
         public void Process(ParseOptions o) {
             Console.Clear(); 
             string configPath = config.GetSection("AppSettings:ParseConfig").Value;
-            configPath = $"{configPath}{o.ConfigFile}.yaml".Replace(@"\\", @"\");
-            logger.LogInformation("{o}", configPath);
+            string configFile = $"{configPath}{o.ConfigFile}.yaml".Replace(@"\\", @"\");
+            logger.LogInformation("{o}", configFile);
 
-            string raw = File.ReadAllText(configPath);
+            string raw = File.ReadAllText(configFile);
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
             Type ptype = (from t in types() where t.Name == dfd.ParseType select t).FirstOrDefault();
@@ -59,8 +59,13 @@ namespace SOM
             parser.Parser.ParseMode = o.ParseMode;
             parser.FileFilter = dfd.FileFilter;
             parser.ResultFormat = dfd.ResultFormat;
-            parser.Inspect(); 
-             
+            if (string.IsNullOrWhiteSpace(dfd.Dest))
+            {
+                parser.Inspect(); 
+            }else{ 
+                dfd.Dest = dfd.Dest.Replace("~", configPath);
+                parser.ParseToFile(dfd.Dest);
+            }    
         }
         private static string getFilter()
         {
