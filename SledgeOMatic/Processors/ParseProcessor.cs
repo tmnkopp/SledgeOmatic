@@ -48,7 +48,8 @@ namespace SOM
             Type ptype = (from t in types() where t.Name == dfd.ParseType select t).FirstOrDefault();
             for (int i = 0; i < ptype.GetProperties().Count(); i++)
             {
-                dfd.ParseTypeArgs[i] = Convert.ChangeType(dfd.ParseTypeArgs[i], ptype.GetProperties()[i].GetType());
+                var val = Convert.ChangeType(dfd.ParseTypeArgs[i], ptype.GetConstructors()[0].GetParameters()[i].ParameterType);
+                dfd.ParseTypeArgs[i] = val;
             }
     
             DirectoryParser parser = new DirectoryParser();
