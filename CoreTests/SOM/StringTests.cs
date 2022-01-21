@@ -19,7 +19,6 @@ namespace UnitTests
             string expected= $"line\nline\nline\nline\nline\n";
             string content = $"line\nline\n\r\r\n\nline\nline\n\n\nline\n";
             Cache.Write($"{content}\n--------------------\n{expected}");
-
             content = content
                 .RemoveEmptyLines();
             Cache.CacheEdit();

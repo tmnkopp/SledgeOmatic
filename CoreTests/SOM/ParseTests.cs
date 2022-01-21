@@ -14,8 +14,7 @@ using SOM.Parsers;
 using System.Linq;
 
 namespace UnitTests
-{
-     
+{ 
     [TestClass]
     public class ParseTests
     { 
