@@ -20,7 +20,7 @@ namespace SOM.Procedures
         }
         public string Compile(string content)
         {
-            for (int i = 12; i > 0; i -= 2)
+            for (int i = 12; i > 0; i -= 4)
             { 
                 var parsed = new SomDocParser(i).Parse(content);
                 foreach (var pr in parsed)
