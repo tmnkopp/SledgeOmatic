@@ -18,7 +18,7 @@ namespace SOM.Procedures
         private string _predpattern;  
 
         [CompilableCtorMeta()]
-        public ModelCompile(string Model, string PredPattern )
+        public ModelCompile(string Model, string PredPattern)
         { 
             _SchemaProvider = new SchemaProvider(Model);
             _modelname = _SchemaProvider.Model.ModelName; 
@@ -33,8 +33,8 @@ namespace SOM.Procedures
             var postfix = lines[lines.Count() - 1];
 
             _format = string.Join(' ', lines).Replace(prefix,"").Replace(postfix, "");
-            _format = Regex.Replace(_format, @"\/n", "\n");
-            _format = Regex.Replace(_format, @"\/t", "\t");
+            _format = Regex.Replace(_format, @"\s\/n", "\n");
+            _format = Regex.Replace(_format, @"\s\/t", "\t");
 
             IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
                 .GetModel(_modelname).AppModelItems.Select(i => i)
