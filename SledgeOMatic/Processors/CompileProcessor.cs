@@ -41,18 +41,18 @@ namespace SOM
         }
         public void Process(CompileOptions o) 
         {
-            string configPath = config.GetSection("AppSettings:CompileConfig").Value; 
+            string configPath = config.GetSection("AppSettings:CompileConfig").Value;
+            string configFile = o.Path;
             if (!string.IsNullOrEmpty(o.Path.ToString()))  {
-                string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
-                o.Path = o.Path.Replace("~", envar); 
-                if (!o.Path.Contains(":")) o.Path = $"{envar}{o.Path}"; 
+                 o.Path = o.Path.Replace("~", configPath); 
+                if (!o.Path.Contains(":")) o.Path = $"{configPath}{o.Path}"; 
                 o.Path = o.Path.Replace(@"\\", @"\");
-                configPath = $"{o.Path}.yaml"; 
+                configFile = (o.Path.Contains(".yaml")) ? o.Path : $"{o.Path}.yaml"; 
             }
-            logger.LogInformation("{o}", configPath);
+            logger.LogInformation("{o}", configFile);
             compiler.CompileMode = o.CompileMode; 
             var yaml = new YamlStream();
-            using (TextReader tr = File.OpenText(configPath))
+            using (TextReader tr = File.OpenText(configFile))
                 yaml.Load(tr);
             var root = (YamlMappingNode)yaml.Documents[0].RootNode;
 
