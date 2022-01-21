@@ -28,5 +28,5 @@
 } 
 Deploy -with " release commit "    
 #  som config
-#  som compile -p tasks\test -m Debug
+#  som compile -p IG -m Debug
 #  som parse -p config -m Default

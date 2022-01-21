@@ -45,12 +45,9 @@ namespace SOM
             if (!string.IsNullOrEmpty(o.Path.ToString()))  {
                 string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).ToLower().Replace("som.exe", "");
                 o.Path = o.Path.Replace("~", envar); 
-                if (!o.Path.Contains(":"))
-                    o.Path = $"{envar}{o.Path}";
-                if (!o.Path.EndsWith(".yaml"))
-                    o.Path += ".yaml";
+                if (!o.Path.Contains(":")) o.Path = $"{envar}{o.Path}"; 
                 o.Path = o.Path.Replace(@"\\", @"\");
-                configPath = o.Path; 
+                configPath = $"{o.Path}.yaml"; 
             }
             logger.LogInformation("{o}", configPath);
             compiler.CompileMode = o.CompileMode; 
