@@ -44,7 +44,7 @@ namespace SOM.Procedures
         }
         public string RemoveTags(string tagged) {
             StringBuilder sb = new StringBuilder();
-            var lines = Regex.Split(tagged, @"[\n|\r]");
+            var lines = Regex.Split(tagged, @"[\n\r]");
             foreach (var line in lines)
             {
                 if (!Regex.IsMatch(line, $@"(som!\w+|\w+!som)") && !string.IsNullOrWhiteSpace(line)) 
