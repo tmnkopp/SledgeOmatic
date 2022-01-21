@@ -21,7 +21,7 @@
         $message = $message + $m  
         $message = $message + $m
         cd 'C:\Users\Tim\source\repos\SledgeOMatic';  
-        git add .; git commit -m ('update config option' + $m) ; git push; 
+        git add .; git commit -m ('config refactor' + $m) ; git push; 
     }  
     #explorer.exe C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\
     explorer.exe C:\_som\
