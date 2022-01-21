@@ -58,14 +58,12 @@ namespace SOM.Procedures
             return JsonConvert.SerializeObject(this.KeyVals, Formatting.Indented);
         }
     } 
-    #endregion
-
+    #endregion 
     public class KeyValReplacer : BaseKeyValReplacer, ICompilable
     {
         public KeyValReplacer()
         { 
-        }
-        
+        } 
         public KeyValReplacer(string Source)
         {
             if (Source.ToLower().EndsWith(".json"))

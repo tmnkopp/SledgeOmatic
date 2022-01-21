@@ -45,7 +45,7 @@ namespace SOM
             string raw = File.ReadAllText(configFile);
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
-            Type ptype = (from t in types() where t.Name == dfd.ParseType select t).FirstOrDefault();
+            Type ptype = (from t in this.IParserTypes where t.Name == dfd.ParseType select t).FirstOrDefault();
             var ctor_params = ptype.GetConstructors()[0].GetParameters();
             for (int i = 0; i < ctor_params.Count(); i++)
             {
@@ -59,32 +59,19 @@ namespace SOM
             parser.Parser.ParseMode = o.ParseMode;
             parser.FileFilter = dfd.FileFilter;
             parser.ResultFormat = dfd.ResultFormat;
-            if (string.IsNullOrWhiteSpace(dfd.Dest))
-            {
+            if (string.IsNullOrWhiteSpace(dfd.Dest)) {
                 parser.Inspect(); 
             }else{ 
                 dfd.Dest = dfd.Dest.Replace("~", configPath);
                 parser.ParseToFile(dfd.Dest);
             }    
-        }
-        private static string getFilter()
-        {
-            Console.WriteLine("Filter: ");
-            var f = Console.ReadLine();
-            return (string.IsNullOrEmpty(f)) ? "*.*" : f;
-        }
-        /*  utils  */
-        private static List<string> dirs()
-        {
-            return new ConsoleSettingsProvider().Provide().Paths;
-        }
-        private static List<Type> types()
-        {
-            var type = typeof(IParser<string>);
-            var types = AppDomain.CurrentDomain.GetAssemblies()
+        }  
+        private List<Type> IParserTypes{ 
+            get{ 
+                return AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p) && p.IsClass).ToList();
-            return types;
+                .Where(p => typeof(IParser<string>).IsAssignableFrom(p) && p.IsClass).ToList();
+            }
         } 
     }
 }

@@ -18,8 +18,6 @@ namespace SOM
     {
         public static string Basepath = "~"; 
         public static string SRC = "%src%";
-        public static string DEST = "%dest%";
-        public static string Index = "[index]";
-        public static string EXT = "[ext]";
+        public static string DEST = "%dest%";  
     }
 }
