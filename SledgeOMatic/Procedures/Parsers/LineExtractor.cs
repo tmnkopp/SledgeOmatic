@@ -27,7 +27,7 @@ namespace SOM.Procedures
             string[] lines = content.Split('\n');
             int findingCnt = 0;
             if (this.ParseMode == ParseMode.Debug)
-                Console.WriteLine($"debug: _extractTarget {_extractTarget} {Regex.Match(content, _extractTarget).Success}");
+                Console.WriteLine($"[Debug]: _extractTarget {_extractTarget} {Regex.Match(content, _extractTarget).Success}");
             for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
             { 
                 Match match = Regex.Match(lines[lineIndex], _extractTarget); 
