@@ -32,9 +32,9 @@ namespace SOM.Procedures
             var prefix = lines[0];
             var postfix = lines[lines.Count() - 1];
 
-            _format = string.Join(' ', lines).Replace(prefix,"").Replace(postfix, ""); 
-            _format = Regex.Replace(_format, @"\/n\s?", "\n");
-            _format = Regex.Replace(_format, @"\/t\s?", "\t");
+            _format = string.Join(' ', lines).Replace(prefix,"").Replace(postfix, "");
+            _format = Regex.Replace(_format, @"\/n", "\n");
+            _format = Regex.Replace(_format, @"\/t", "\t");
 
             IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
                 .GetModel(_modelname).AppModelItems.Select(i => i)
@@ -52,6 +52,7 @@ namespace SOM.Procedures
                     result.Append(item.ToStringFormat(_format ?? "{0}"));
                 }   
             }
+
             content = prefix + "\n" + result.ToString() + "\n" + postfix;
             return content; 
         } 
