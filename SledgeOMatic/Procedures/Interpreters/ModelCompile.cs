@@ -51,8 +51,7 @@ namespace SOM.Procedures
                 foreach (AppModelItem item in _AppModelItems) {
                     result.Append(item.ToStringFormat(_format ?? "{0}"));
                 }   
-            }
-
+            } 
             content = prefix + "\n" + result.ToString() + "\n" + postfix;
             return content; 
         } 

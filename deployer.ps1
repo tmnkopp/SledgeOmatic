@@ -29,5 +29,8 @@
 Deploy -with " release commit "    
 #  som config
 #  som compile -p IG -m Debug
+
 #  som compile -p refactor -m Debug
+
+#  som parse -p ff -m Debug
 #  som parse -p config -m Default
