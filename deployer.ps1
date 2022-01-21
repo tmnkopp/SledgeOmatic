@@ -32,5 +32,5 @@ Deploy -with " release commit "
 
 #  som compile -p refactor -m Debug
 
-#  som parse -p ff -m Debug
+#  som parse -p ff -m Default
 #  som parse -p config -m Default
