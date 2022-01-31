@@ -1,15 +1,13 @@
 *It's not a slicer.*
 *It's not a dicer.*
 *It's not chopper or a hopper.*
-*What in the hell could it possibly be?* 
+*What could it possibly be?* 
 *It's Sledge-O-Matic.*
 
 ![alt text](https://the80port.com/cdn/logos/som75-2.png "som")
 # Sledge-O-Matic
-
-Sledge-O-Matic takes the suck out of sucky repetitive code tasks. 
-
-A code scaffolder, code generator, code compiler, code refactor-er, task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. SOM uses developer friendly configurations. Key value refactor substitutions, for instance, can be configured through JSON, CSV, C# Dictionaries, SQL scripts, and more. Custom markup language (*soml*) can be used to refactor code inline. 
+ 
+A code scaffolder, code generator, code refactor-er, task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. SOM uses developer friendly configurations. Key value refactor substitutions, for instance, can be configured through JSON, CSV, C# Dictionaries, SQL scripts, and more. Custom markup language (*soml*) can be used to refactor code inline. 
 
 Compilation steps are made manageable using builder patterns. Compilations are debuggable, with compilation Modes including debug, verbose, cached and commit allowing the code to be inspected and tested prior to committing the compilation. Compilations may be configured and executed via command line using no code/ low code YAML configuration scripts. 
 
