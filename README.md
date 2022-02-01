@@ -32,21 +32,29 @@ Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects 
 
 ```
     
-    > som compile -m Commit -v -s c:\srcdir\ -d d:\destdir\
+    > som compile -p refactorConfig -m Cache
+    > som compile -p refactorConfig -m Debug    
+    > som compile -p refactorConfig -m Commit       
     
 ```
 ## Compilations Config
 
 ``` YAML
-    ContentCompilers:
-    - NumericKeyReplacer:  ['c:\_som\_src\_compile\keyval.sql']
-    - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
-    Source: 'c:\_som\_src\_compile'
-    Dest: 'c:\_som\_src\_compile\_compiled'
-    FileFilter: '*asp*' 
-    FilenameCompilers: 
-    - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
-    Compile:
+    ContentCompilers: 
+    - RegexReplacer:  '{"OriginalValue":"refac"}'    
+    - NumericIncrementer:  [22421, 32421, '\d{5}'] 
+    - NumericIncrementer:  [2410, 3521, '24[1-3]\d']  
+    - NumericIncrementer:  [2310, 3310, '23[1-3]\d']  
+    - NumericReplacer:  '{"2021":"2022"}'  
+    FilenameCompilers:  
+    - RegexReplacer:  '{"Original":"refac"}'    
+    Compilations: 
+    - FileFilter: '*.cs*'
+        Source: 'C:\_som\source\'
+        Dest: 'C:\_som\dest\csharp\'
+    - FileFilter: '*.sql*'
+        Source: 'C:\_som\source\'
+        Dest: 'C:\_som\dest\sql\'    
 ```
 
 
