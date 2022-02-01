@@ -229,8 +229,8 @@ Expressing in YAML
     - KeyValReplacer:  'c:\_som\_src\_compile\replace.json'    
     Compilations: 
     - FileFilter: '*my_sprocs*.sql*' 
-        Source: 'c:\path\to\source'
-        Dest: 'c:\path\to\compile\dest'
+      Source: 'c:\path\to\source'
+      Dest: 'c:\path\to\compile\dest'
  
 ```
 
