@@ -35,7 +35,7 @@ Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects 
 ***
 # Features
 
-## Command Line Code Compilation
+## Command Line Code Refactor
  
 ``` 
     > som compile -p refactorConfig -m Cache
@@ -43,7 +43,7 @@ Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects 
     > som compile -p refactorConfig -m Commit       
     
 ```
-## Compilations Config
+## Compilations Config (ex. refactorConfig.yaml file)
 
 ``` YAML
     ContentCompilers: 
@@ -56,11 +56,11 @@ Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects 
     - RegexReplacer:  '{"Original":"refac"}'    
     Compilations: 
     - FileFilter: '*.cs*'
-        Source: 'C:\_som\source\'
-        Dest: 'C:\_som\dest\csharp\'
+      Source: 'C:\_som\source\'
+      Dest: 'C:\_som\dest\csharp\'
     - FileFilter: '*.sql*'
-        Source: 'C:\_som\source\'
-        Dest: 'C:\_som\dest\sql\'    
+      Source: 'C:\_som\source\'
+      Dest: 'C:\_som\dest\sql\'    
 ```
 
 
