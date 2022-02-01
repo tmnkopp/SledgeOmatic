@@ -7,12 +7,21 @@
 ![alt text](https://the80port.com/cdn/logos/som75-2.png "som")
 # Sledge-O-Matic
  
-A code scaffolder, code generator, code refactor-er, task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. SOM uses developer friendly configurations. Key value refactor substitutions, for instance, can be configured through JSON, CSV, C# Dictionaries, SQL scripts, and more. Custom markup language (*soml*) can be used to refactor code inline. 
+A code scaffolder, code generator, code refactor-er, task automator...Sledge-O-Matic is a C# extendable library of code generation utilities exposed through coder-friendly endpoints. Key value refactor substitutions can be configured through JSON, CSV, C# Dictionaries, SQL scripts, and more. Custom markup language (*soml*) can be used to refactor code inline. 
+
 
 Compilation steps are made manageable using builder patterns. Compilations are debuggable, with compilation Modes including debug, verbose, cached and commit allowing the code to be inspected and tested prior to committing the compilation. Compilations may be configured and executed via command line using no code/ low code YAML configuration scripts. 
 
 SOML: Compilations and code refactorings may be configured inline using SOML (**S**ledge-**O**-**M**atic/markup **L**anguage). SOML tags can be introduced into any codebase to execute inline code compile instructions. Angular frontend consuming an API is available for browser based code generation and refactoring. 
 
+```   
+    som!RegexReplacer  -p /p {"(nvarchar)":"string"}
+        som!ModelCompile  -p /p aspnet_Membership /p .*
+        /n /t /t, {1} {0}
+        ModelCompile!som 
+    RegexReplacer!som   
+
+```
 ***
 
 Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects actively maintained by a busy but dedicated coder determined to unsuck sucky coding tasks.   
@@ -27,11 +36,8 @@ Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects 
 # Features
 
 ## Command Line Code Compilation
-
  
-
-```
-    
+``` 
     > som compile -p refactorConfig -m Cache
     > som compile -p refactorConfig -m Debug    
     > som compile -p refactorConfig -m Commit       
@@ -63,25 +69,47 @@ Sledge-O-Matic is a member of the "O-Matics" family, a suite of coding projects 
 
 Sledge-O-Matic supports in-line code compilation using SOML tags (som!  !som). 
  
-`som!schema` for example will generate code based on a model and inject it directly into code. Formatting the injected code can be done inline or by using code templates. 
+`som!ModelCompile` for example will generate code based on a model and inject it directly into code. Formatting the injected code can be done inline or by using code templates. 
 
 The following will inject all fields from the aspnet_Membership table into the code and format them as SQL parameters. 
 
 ```
-som!schema -m aspnet_Membership -f @{0} {1}({2}),
 
-schema!som
+        som!ModelCompile  -p /p aspnet_Membership /p .*
+        /n /t /t, {1} {0}
+        ModelCompile!som 
 
 ```
 For more complicated formatting, simply reference a file
 
 ```
 
-som!schema -m aspnet_Membership -t ~T\SQL\MyCustomTemplate_{1}.sql
-
-schema!som 
+        som!ModelCompile  -p /p aspnet_Membership /p ^(?!.*User).*
+        ~T\SQL\MyCustomTemplate_{1}.sql
+        ModelCompile!som  
 
 ```
+
+Support for nested tags to control order of execution 
+
+```
+
+    <!--som!NumericIncrementer  -p /p 1000 /p 5000 /p 10\d{2} -->
+        1000
+        1001
+        1002
+        1003
+        1004
+    <!--NumericIncrementer!som -->
+ 
+    som!RegexReplacer  -p /p {"(nvarchar)":"string"}
+        som!ModelCompile  -p /p aspnet_Membership /p ^(?!.*PK_|User).*
+        /n /t /t, {1} {0}
+        ModelCompile!som 
+    RegexReplacer!som   
+
+```
+
 
 SOML integrates with any codebase.
 
@@ -93,28 +121,28 @@ SOML integrates with any codebase.
     class PyCompiler:
         def __init__(self, context):
             self._ctx = context 
-            # som!schema -t ~T\PY\TRY_{1}.py 
-
-            # schema!som 
-    # som!schema -m aspnet_Membership -f {0}
+            # som!ModelCompile  -p /p aspnet_Membership /p .*
+            # ~T\PY\TRY_{1}.py 
+            # ModelCompile!som 
+    # som!ModelCompile -p /p aspnet_Membership /p .*
         self._ctx = context  
-    # schema!som              
+    # ModelCompile!som              
 ```
 
 ####  TypeScript
 ``` TypeScript 
     export class MembershipModel {
         constructor(
-        // som!schema -m aspnet_Membership -f {0}?:{1}
-            public ModelId?:number
-        // schema!som                 
+        // som!ModelCompile  -p /p aspnet_Membership /p .*
+            public {0}?:{1}
+        // ModelCompile!som                 
         ){}
     }//export class
     export class RolesModel {
       constructor(
-        // som!schema -m aspnet_Roles -f {0}?:{1}
-            public ModelId?:number
-        // schema!som    
+        // som!ModelCompile  -p /p aspnet_Membership /p .*
+            public {0}?:{1}
+        // schema!ModelCompile    
       ){} 
     }//export class 
      
@@ -124,9 +152,9 @@ SOML integrates with any codebase.
 ####  SQL
 ``` SQL 
     ALTER PROCEDURE [dbo].[aspnet_Membership_CREATE]
-    -- som!schema -m aspnet_Membership -f @{0} {1}({2})
-
-    -- schema!som
+    -- som!ModelCompile  -p /p aspnet_Membership /p .*
+        {0}
+    -- ModelCompile!som
     AS
     BEGIN
     SELECT  @NewUserId = UserId FROM aspnet_Users WHERE LOWER(@UserName) = LoweredUserName 
@@ -136,20 +164,20 @@ SOML integrates with any codebase.
         EXEC @ReturnValue = dbo.aspnet_Users_CreateUser @ApplicationId OUTPUT
         SET @NewUserCreated = 1
     END
-    -- som!schema -t ~T\SQL\IF_NULL_ELSE_{1}.sql
-    
-    -- schema!som
+    -- som!ModelCompile  -p /p aspnet_Membership /p .*
+    ~T\SQL\IF_NULL_ELSE_{1}.sql
+    -- ModelCompile!som
     END
 ```
 ####  C# / RAZOR
 ``` CSHTML
-    @* som!schema -t ~T\CS\FORM_ELEMENT_{1}.cshtml *@
+    @* som!ModelCompile -p /p aspnet_Membership /p .*
         <div class="form-group">
                 <label asp-for="{3}.{0}" class="control-label"></label>
                 <input asp-for="{3}.{0}" class="form-control" />
                 <span asp-validation-for="{3}.{0}" class="text-danger"></span>
         </div>
-    @* schema!som *@
+    @* ModelCompile!som *@
 ```
 ## Custom Compilers
 
@@ -193,15 +221,17 @@ namespace SOM.Procedures
 Expressing in YAML
 
 ``` YAML
-    Source: 'c:\path\to\source'
-    Dest: 'c:\path\to\compile\dest'
-    ContentCompilers:
-    - NumericKeyReplacer:  ['c:\_som\_src\_compile\keyval.sql']
-    - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json']  
-    FileFilter: '*my_sprocs*.sql*' 
-    FilenameCompilers: 
-    - KeyValReplacer:  ['c:\_som\_src\_compile\replace.json'] 
-    Compile:
+
+    ContentCompilers: 
+    - NumericKeyReplacer:  'c:\_som\_src\_compile\keyval.sql'   
+    - KeyValReplacer:  'c:\_som\_src\_compile\replace.json'
+    FilenameCompilers:  
+    - KeyValReplacer:  'c:\_som\_src\_compile\replace.json'    
+    Compilations: 
+    - FileFilter: '*my_sprocs*.sql*' 
+        Source: 'c:\path\to\source'
+        Dest: 'c:\path\to\compile\dest'
+ 
 ```
 
 ```csharp
@@ -264,7 +294,7 @@ OnCompiled executing an automated in-browser test routine using [Browse-O-matic]
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\pre-compile.json"));    
             compiler.ContentCompilers.Add(new NumericKeyReplacer($"{compiler.Source}\\keyval.sql"));
             compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\post-compile.json"));            
-            compiler.FileNameFormatter = (n) => (n.Replace("2020", "2021")); 
+            compiler.FileNameFormatter = (n) => (n.Replace("2022", "2023")); 
             compiler.Compile();   
 
 ```
