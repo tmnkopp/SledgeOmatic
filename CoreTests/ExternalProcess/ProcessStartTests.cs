@@ -73,6 +73,48 @@ namespace CoreTests
             Assert.IsNotNull(Cache.Read());
         }
 
-    } 
+        [TestMethod]
+        public void Cache_Writes()
+        {
+            Cache.Write("");
+            for (var i = 0; i < 100; i++)
+            {
+                bool IsFizz = (i % 2 == 0);
+                bool IsBuzz = (i % 4 == 0);
+                if (IsFizz && IsBuzz)
+                {
+                    Cache.WriteLine("FizzBuzz");
+                }
+                else if(IsFizz)
+                {
+                    Cache.WriteLine("Fizz");
+                }
+                else if (IsBuzz)
+                {
+                    Cache.WriteLine("Buzz");
+                }
+                else
+                {
+                    Cache.WriteLine($"{i}");
+                }
+            } 
+            Cache.Inspect();
+        }
+        interface ILogger{
+            void Log(string message);
+        }
+        class CacheLogger : ILogger{
+            public void Log(string message){
+                Cache.WriteLine($"{message}");
+            }
+        }
+        static class RangeProvider{ 
+            public static IEnumerable<int> Provide(){
+                for (var i = 0; i < 100; i++){
+                    yield return i;
+                }  
+            }
+        }
+    }
 }
  
