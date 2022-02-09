@@ -72,31 +72,26 @@ namespace CoreTests
 
             Assert.IsNotNull(Cache.Read());
         }
-
+        static long Factorial(int num)
+        {
+            if(num == 0 || num == 1){
+                return 1;
+            }else{
+                return num * Factorial(num - 1);
+            } 
+        }
         [TestMethod]
         public void Cache_Writes()
         {
+            string write = "";
             Cache.Write("");
-            for (var i = 0; i < 100; i++)
-            {
-                bool IsFizz = (i % 2 == 0);
-                bool IsBuzz = (i % 4 == 0);
-                if (IsFizz && IsBuzz)
+            for(int i = 1; i <= 5 ; i++){
+                for (int j = 1; j <= i; j++)
                 {
-                    Cache.WriteLine("FizzBuzz");
+                    write += $"{j}";  
                 }
-                else if(IsFizz)
-                {
-                    Cache.WriteLine("Fizz");
-                }
-                else if (IsBuzz)
-                {
-                    Cache.WriteLine("Buzz");
-                }
-                else
-                {
-                    Cache.WriteLine($"{i}");
-                }
+                Cache.WriteLine($"{write}");
+                write = "";
             } 
             Cache.Inspect();
         }
