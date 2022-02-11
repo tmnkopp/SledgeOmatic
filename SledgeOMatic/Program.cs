@@ -11,14 +11,16 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using System.Configuration;
 using Newtonsoft.Json;
-using SOM.Compilers; 
+using SOM.Compilers;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace SOM
 {
     class Program
-    {
+    {  
         static void Main(string[] args)
-        {
+        { 
             ServiceProvider serviceProvider = RegisterServices(args);
             IConfiguration config = serviceProvider.GetService<IConfiguration>();
             IAppSettings appSettings = serviceProvider.GetService<IAppSettings>();

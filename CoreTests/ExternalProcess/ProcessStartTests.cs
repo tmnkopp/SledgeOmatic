@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CoreTests
 { 
@@ -82,19 +83,11 @@ namespace CoreTests
         }
         [TestMethod]
         public void Cache_Writes()
-        {
-            string write = "";
-            Cache.Write("");
-            for(int i = 1; i <= 5 ; i++){
-                for (int j = 1; j <= i; j++)
-                {
-                    write += $"{j}";  
-                }
-                Cache.WriteLine($"{write}");
-                write = "";
-            } 
+        { 
+            Cache.Write(""); 
+            Cache.WriteLine($" ");
             Cache.Inspect();
-        }
+        } 
         interface ILogger{
             void Log(string message);
         }

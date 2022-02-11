@@ -43,14 +43,14 @@ namespace CoreTests
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)   
                 .Build(); 
             //yml contains a string containing your YAML
-            var t = deserializer.Deserialize<List<Task>>(yml);
+            var t = deserializer.Deserialize<List<bomTask>>(yml);
             var steps = t[0].taskSteps;
         }
         [TestMethod]
         public void Yaml_DeSerializes()
         {
         
-            Task task = new Task();
+            bomTask task = new bomTask();
             task.Context = "context";
             task.Name = "name";
             task.taskSteps.Add( new TaskStep("a", new string[] { "1", "2" })  );
@@ -64,9 +64,9 @@ namespace CoreTests
         }
     }
     [Serializable]
-    public class Task 
+    public class bomTask 
     {
-        public Task()
+        public bomTask()
         {
             taskSteps = new List<TaskStep>();
         }
