@@ -30,7 +30,10 @@ namespace SOM.Procedures
                             break;
                     }; 
                 }
-                line = Regex.Replace(line, $"\r|\n", "");
+                if (line.Length > 5)
+                {
+                    line = Regex.Replace(line, $"\r|\n", "");
+                } 
                 result.AppendLine(line);
             } 
             return result.ToString();

@@ -263,21 +263,17 @@ namespace CoreTests
             Assert.IsNotNull(Cache.Read());
         }
         [TestMethod]
-        public void CIO_Compiles()
+        public void NumericReplacer_Compiles()
         {
             Compiler compiler = new Compiler();
             compiler.Source = "c:\\_som\\_src\\_compile";
             compiler.Dest = "c:\\_som\\_src\\_compile\\_compiled";
-            compiler.CompileMode = CompileMode.Cache;
-            compiler.ContentCompilers.Add(new KeyValReplacer($"{compiler.Source}\\replace.json"));
-            compiler.ContentCompilers.Add(new NumericReplacer($"{compiler.Source}\\keyval.sql"));
+            compiler.CompileMode = CompileMode.Cache; 
+            compiler.ContentCompilers.Add(new NumericIncrementer(27000, 27500, @"27\d{3}"));
             compiler.FileNameFormatter = (n) => (n.Replace("Q1", "Q2"));
             compiler.FileFilter = "*DB_Update*sql";
             compiler.Compile();
-            compiler.FileFilter = "*frmVal*";
-            compiler.Compile();
-            compiler.FileFilter = "*aspx*";
-            compiler.Compile();
+            Cache.Inspect();
             Assert.IsNotNull(Cache.Read());
         }
     }
