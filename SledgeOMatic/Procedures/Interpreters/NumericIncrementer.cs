@@ -19,8 +19,9 @@ namespace SOM.Procedures
         public string Compile(string content)
         {
             StringBuilder result = new StringBuilder();
-            var lines = Regex.Split(content, $"\r|\n");
-            foreach (var line in lines)
+            content = content.Replace($"\r", $"\n");
+            content = content.Replace($"\n\n", $"\n"); 
+            foreach (var line in content.Split($"\n"))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
                 {
@@ -37,11 +38,9 @@ namespace SOM.Procedures
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);
-                };
-                target = Regex.Replace(target, $"\r|\n", "");
-                if (!string.IsNullOrWhiteSpace(target)) 
-                    result.AppendLine(target);  
-            }
+                }; 
+                result.AppendLine($"{target}");
+            } 
             return result.ToString();
         }
     }

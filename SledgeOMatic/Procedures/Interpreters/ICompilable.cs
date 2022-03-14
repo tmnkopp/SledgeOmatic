@@ -15,5 +15,15 @@ namespace SOM.Procedures
     public interface ICompilable
     {
          string Compile(string content);
-    } 
+    }
+    public abstract class BaseCompilable
+    {
+        protected virtual IEnumerable<string> LineProvider(string content){
+            content = content.Replace($"\r", $"\n");
+            content = content.Replace($"\n\n", $"\n");
+            foreach (string line in content.Split($"\n")){
+                yield return line;
+            }
+        }
+    }
 }
