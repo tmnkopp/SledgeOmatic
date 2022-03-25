@@ -42,7 +42,8 @@ namespace CoreTests
             compiler.Source = som;
             compiler.FileFilter = "*.som";
             compiler.CompileMode = CompileMode.Cache;
-            compiler.ContentCompilers.Add(new RegexReplacer("{\"FOO\":\"BAR\"}")); 
+            compiler.ContentCompilers.Add(new RegexReplacer("{\"FOO\":\"BAR\"}"));
+            compiler.ContentCompilers.Add(new NumericIncrementer(1000, 2000,  @"\d{4}"));
             compiler.Compile();
             Cache.Inspect();
             Assert.IsNotNull(compiler);

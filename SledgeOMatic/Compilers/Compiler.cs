@@ -89,7 +89,7 @@ namespace SOM.Compilers
 
         #region CTOR
         private readonly ISomContext somContext;
-        public Compiler(ISomContext somContext )
+        public Compiler(ISomContext somContext)
         {
             this.somContext = somContext;
             ContentCompilers = new List<ICompilable>();
