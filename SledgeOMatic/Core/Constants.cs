@@ -9,10 +9,11 @@ namespace SOM
 {
     public static class AppSettings
     { 
-        public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString(); 
-        public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();         
-        public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString(); 
-        public static string Cache = AppSettings.BasePath + "_cache.txt";    
+        // public static string BasePath = ConfigurationManager.AppSettings["BasePath"].ToString(); 
+        // public static string SourceDir = ConfigurationManager.AppSettings["SourceDir"].ToString();         
+        // public static string DestDir = ConfigurationManager.AppSettings["DestDir"].ToString(); 
+        public static string Cache = @"c:\_som\_cache.txt";
+        public static string BasePath = @"c:\_som\";
     }
     public static class Placeholder
     {

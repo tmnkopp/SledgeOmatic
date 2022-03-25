@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-    <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
-    <Copy SourceFiles="app.config" DestinationFiles="$(OutDir)\testhost.x86.dll.config" />
-  </Target>
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
@@ -10,17 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="app.config" />
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="app.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

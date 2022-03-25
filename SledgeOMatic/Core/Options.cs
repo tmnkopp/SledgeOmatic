@@ -20,7 +20,7 @@ namespace SOM
     {
         [Option('t', "Task")]
         public string Task { get; set; }
-        [Option('p', "Path", Default = "", HelpText = "Configuration File Path.")]
+        [Option('p', "Path", Default = "", HelpText = "Config File Path.")]
         public string Path { get; set; }
         [Option('m', "Mode", Default = SomMode.Cache)]
         public SomMode Mode { get; set; }

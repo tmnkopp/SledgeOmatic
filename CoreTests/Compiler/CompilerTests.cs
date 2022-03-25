@@ -5,25 +5,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SOM;
-using SOM.Compilers; 
-using SOM.Data;
-using SOM.Extentions;
-using SOM.IO;
-using SOM.Models;
+using SOM.Compilers;
+using SOM.IO; 
 using SOM.Procedures;
-using SOMAPI.Services;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Text.RegularExpressions;
+
 namespace CoreTests
 { 
     [TestClass]
@@ -31,18 +17,36 @@ namespace CoreTests
     { 
         [TestMethod]
         public void ModelCompile_Compiles()
-        {
-            Cache.Write("");
+        { 
+            var som = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
             var config = new TestServices().Configuration;
-            var mock = new Mock<ILogger<CompilerTests>>();
-            ISomContext somContext = new SomContext(config, mock.Object);
-            somContext.Content = "\nPREFIX\n{0} : {0}\nPOSTFIX\n";
-            ModelCompile compiler = new ModelCompile("aspnet_Users", ".*");
-            string content = compiler.Compile(somContext);
-            Cache.WriteLine(content);
+            var logger = new Mock<ILogger>().Object;
+            ISomContext somContext = new SomContext(config, logger); 
+            var compiler = new Compiler(somContext);
+            compiler.Source = som;
+            compiler.FileFilter = "*.som";
+            compiler.CompileMode = CompileMode.Cache;
+            compiler.ContentCompilers.Add(new ModelCompile("aspnet_Users", ".*")); 
+            compiler.Compile(); 
             Cache.Inspect();
             Assert.IsNotNull(compiler); 
-        } 
+        }
+        [TestMethod] 
+        public void Regex_Compiles()
+        {
+            var som = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            var config = new TestServices().Configuration;
+            var logger = new Mock<ILogger>().Object;
+            ISomContext somContext = new SomContext(config, logger);
+            var compiler = new Compiler(somContext);
+            compiler.Source = som;
+            compiler.FileFilter = "*.som";
+            compiler.CompileMode = CompileMode.Cache;
+            compiler.ContentCompilers.Add(new RegexReplacer("{\"FOO\":\"BAR\"}")); 
+            compiler.Compile();
+            Cache.Inspect();
+            Assert.IsNotNull(compiler);
+        }
     }
     public class TestServices
     {

@@ -54,7 +54,7 @@ namespace SOM.Procedures
                 } 
             } else { 
                 foreach (AppModelItem item in _AppModelItems) {
-                    _format = (!string.IsNullOrWhiteSpace(_format)) ? "{0}" : _format;
+                    _format = (string.IsNullOrWhiteSpace(_format)) ? "{0}" : _format;
                     result.Append(item.ToStringFormat(_format));
                 }   
             } 

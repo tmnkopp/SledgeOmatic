@@ -22,10 +22,18 @@ namespace SOM.IO
     }
     public class FileReader : IReader
     { 
-        private string _filename = AppSettings.Cache;
-        private string _basepath = AppSettings.BasePath; 
+        private string _filename;
+        public string _basepath
+        {
+            get => Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+        }
+        public string _cachepath
+        {
+            get => $"{this._basepath}_cache.txt";
+        }
         public FileReader( )
         { 
+            this._filename = _cachepath;
         }
         public FileReader(string filename)
         {
@@ -33,7 +41,7 @@ namespace SOM.IO
         }
         public string Read()
         {
-            _filename = _filename.Replace(Placeholder.Basepath, _basepath).Trim(); 
+            _filename = _filename.Replace("~", _basepath).Trim(); 
             try {
                 using (TextReader tr = File.OpenText(_filename)) 
                     return tr.ReadToEnd(); 

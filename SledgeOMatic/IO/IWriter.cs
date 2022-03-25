@@ -15,14 +15,24 @@ namespace SOM.IO
         void Write(string writeme);
     } 
     public class FileWriter : IWriter
-    { 
-        private string _filename = AppSettings.Cache; 
-        public FileWriter()
+    {
+        private string _filename; 
+        public string _basepath
+        { 
+            get => Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+        }
+        public string _cachepath
         {
+            get => $"{this._basepath}_cache.txt";
+        }
+        public FileWriter()
+        { 
+            this._filename = _cachepath;
         }
         public FileWriter(string Path)
-        {
+        { 
             _filename = Path;
+            _filename = _filename.Replace("~", _basepath).Trim();
         }
         public void Write(string writeme , bool Create)
         { 
@@ -34,11 +44,7 @@ namespace SOM.IO
         {
             _filename = _filename.Replace("\\\\", "\\");
             try
-            {
-               // do
-               // {
-               //     writeme = writeme.TrimTrailingNewline();
-               // } while (writeme.EndsWith("\n"));
+            { 
                 File.WriteAllText($"{_filename}", writeme, Encoding.Unicode);
             }
             catch (Exception ex)

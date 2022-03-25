@@ -16,8 +16,8 @@ namespace SOM
     {
         public IConfiguration Config { get => this.config ; }
         public ILogger Logger { get => this.logger;  }
-        public string Content { get; set; }
- 
+        public string Content { get; set; } = "";
+         
         private readonly IConfiguration config;
         private readonly ILogger logger;
         public SomContext(IConfiguration config, ILogger logger)

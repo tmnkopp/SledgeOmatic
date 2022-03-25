@@ -12,14 +12,14 @@ namespace SOM
     {
         public static void Run()
         {
-            string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-            if (string.IsNullOrEmpty(envar))
+            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            if (string.IsNullOrEmpty(basepath))
             {
                 Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User); 
             } 
             DirectoryInfo DI;
             string[] dirnames = new string[] {
-                AppSettings.BasePath,  AppSettings.SourceDir, AppSettings.DestDir 
+                basepath
             }; 
             foreach (string dir in dirnames)
             {
@@ -29,7 +29,7 @@ namespace SOM
             string[] filenames = new string[] { "_cache.txt"  }; 
             foreach (string filename in filenames)
             {
-                using (StreamWriter w = File.AppendText($"{AppSettings.BasePath }\\{filename}"))
+                using (StreamWriter w = File.AppendText($"{basepath}\\{filename}"))
                 {
                 }
             } 

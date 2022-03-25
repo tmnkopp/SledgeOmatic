@@ -18,8 +18,8 @@ namespace SOM.Compilers
     public class Compiler : ICompiler
     {
         #region Props
-        public string Source { get; set; }
-        public string Dest { get; set; }
+        public string Source { get; set; } = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+        public string Dest { get; set; } = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
         private string _fileFilter = null;
         public string FileFilter
         {
@@ -135,17 +135,18 @@ namespace SOM.Compilers
         }
         protected virtual string CompileContent(string content)
         {
-            this.somContext.Content = content;
-            foreach (ICompilable proc in ContentCompilers) 
-                content = proc.Compile(somContext); 
-            return _ContentPostFormatter(content);
+            somContext.Content = content;
+            foreach (ICompilable proc in ContentCompilers) {
+                this.somContext.Content = proc.Compile(somContext);
+            }     
+            return _ContentPostFormatter(this.somContext.Content);
         }
         protected virtual string CompileFileName(string Filename)
         {
-            this.somContext.Content = Filename;
+            somContext.Content = Filename;
             foreach (ICompilable proc in FilenameCompilers)
-                Filename = proc.Compile(somContext).RemoveWhiteAndBreaks();
-            return _FileNameFormatter(Filename);
+                this.somContext.Content = proc.Compile(somContext).RemoveWhiteAndBreaks();
+            return _FileNameFormatter(this.somContext.Content);
         }
         private void CommitFile(string Content, string FileName)
         {
