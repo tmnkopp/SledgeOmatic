@@ -13,9 +13,9 @@ namespace SOM.Data
     public interface ISchemaProvider
     {
         AppModel Model { get; }
-        List<AppModelItem> AppModelItems { get; }
+        List<AppModelItem> AppModelItems { get; } 
+        AppModel GetModel(string ModelName);
         IEnumerable<string> GetTables(string Filter);
-        AppModel GetModel(string ModelName); 
     }
     public class SchemaProvider : ISchemaProvider
     {
@@ -44,16 +44,12 @@ namespace SOM.Data
         }
         public void LoadModel(string ModelName)
         {
-            if (ModelName.Contains("."))  {
-                _AppModelItems = new TypeEnumerator(Type.GetType(ModelName)).Items;
-                ModelName = ModelName.Split(".")[ModelName.Split(".").Length - 1];
-            }
-            else
-                _AppModelItems = new TableEnumerator(ModelName, _config).Items;
-            _model = new AppModel()  {
+            _AppModelItems = new TableEnumerator(ModelName, _config).Items;
+            _model = new AppModel()
+            {
                 ModelName = ModelName,
                 AppModelItems = _AppModelItems
-            };
+            }; 
         }
         public IEnumerable<string> GetTables(string Filter)
         {

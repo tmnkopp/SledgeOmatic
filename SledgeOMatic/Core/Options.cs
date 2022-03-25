@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace SOM
 {
     [Serializable]
-    [Verb("compile", HelpText = @"Command Runner: som compile -m Debug -p c:\_som\config.yaml")]
+    [Verb("compile", HelpText = @"Command Runner: som compile -p SomDocParser -m Cache")]
     public class CompileOptions
     {
         [Option('t', "Task")]

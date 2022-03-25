@@ -12,16 +12,14 @@ namespace SOM.Procedures
 {
     public class ModelCompile : ICompilable
     {
-        private ISchemaProvider _SchemaProvider; 
-        private string _modelname; 
+        private ISchemaProvider _SchemaProvider;  
         private string _format;  
         private string _predpattern;  
 
         [CompilableCtorMeta()]
         public ModelCompile(string Model, string PredPattern)
         { 
-            _SchemaProvider = new SchemaProvider(Model);
-            _modelname = _SchemaProvider.Model.ModelName; 
+            _SchemaProvider = new SchemaProvider(Model); 
             _predpattern = PredPattern ?? ".*";
         } 
         public string Compile(string content)
@@ -37,7 +35,7 @@ namespace SOM.Procedures
             _format = Regex.Replace(_format, @"\s\/t", "\t");
 
             IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
-                .GetModel(_modelname).AppModelItems.Select(i => i)
+                .AppModelItems.Select(i => i)
                 .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable(); 
 
             if (Regex.IsMatch(_format, $@"^.*\w:\\"))  { 

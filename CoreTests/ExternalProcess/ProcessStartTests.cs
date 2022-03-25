@@ -37,26 +37,7 @@ namespace CoreTests
             process.Start(); 
             Assert.IsNotNull(process);
         }
-
-        [TestMethod]
-        public void ProcessStarter_Starts()
-        { 
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "cmd.exe",
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            }; 
-            var process = new Process { StartInfo = startInfo }; 
-            process.Start(); 
-            process.StandardInput.WriteLine(@"mkdir C:\_som\_src\_compile\BOD\compiled"); 
-            process.StandardInput.WriteLine("exit");
-
-            process.WaitForExit();
-
-        }
+         
         [TestMethod]
         public void Powershell_Powershells()
         {

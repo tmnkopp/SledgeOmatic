@@ -23,30 +23,7 @@ namespace SOM.Procedures
                 this.Enumerate().ToList()
             );
         }
-    }
-
-    public class TypeEnumerator: BaseTypeEnumerator<AppModelItem>
-    {
-        private Type _type ;
-        public TypeEnumerator(Type type)
-        {
-            _type = type;
-        }
-        public override IEnumerable<AppModelItem> Enumerate() {
-            int cnt = 0;
-            foreach (var prop in _type.GetProperties())
-            {
-                AppModelItem _item = new AppModelItem()
-                {
-                    Name = prop.Name,
-                    DataType = prop.PropertyType.ToString(),
-                    OrdinalPosition = (cnt++)
-                };
-                yield return _item; 
-            }
-        }
-    }
-   
+    } 
     public class TableEnumerator : BaseTypeEnumerator<AppModelItem>
     {
         private string _tablename;
@@ -59,8 +36,8 @@ namespace SOM.Procedures
         }
         public override IEnumerable<AppModelItem> Enumerate()
         {
-            //var con = _config.GetSection("ConnectionStrings")["default"];
-            var con = ConfigurationManager.ConnectionStrings["default"].ToString();
+            var con = _config.GetSection("ConnectionStrings")["default"];
+            //var con = ConfigurationManager.ConnectionStrings["default"].ToString();
             using (SqlConnection myConnection = new SqlConnection(con))
             {
                 string sql = $"SELECT COLUMN_NAME, DATA_TYPE, ORDINAL_POSITION, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME  = '{_tablename}'";

@@ -50,32 +50,7 @@ namespace UnitTests
                 result.Append(item);
             Assert.AreEqual("<-target-><-target->", result.ToString());
         }
-
-        [TestMethod]
-        public void YAML_Parses()
-        {
-            List<string> dirs = new List<string>();
-            dirs.AddRange(new string[] { "111", "222" });
-            List<object> args = new List<object>();
-            args.AddRange(new object[] { "111", "222" });
-
-            DirectoryParseDefinition dfd = new DirectoryParseDefinition() ;
-            dfd.Directories = dirs;
-            dfd.FileFilter = ".*"; 
-            dfd.ParseType = "RangeExtractor";
-            dfd.ParseTypeArgs = args;
-
-            var ser = new SerializerBuilder()
-                .WithNamingConvention(PascalCaseNamingConvention.Instance)
-                .Build();
-            string yaml = ser.Serialize(dfd);
-            File.WriteAllText(@"c:\_som\parse\dfd.yaml", yaml);
-
-            string raw = File.ReadAllText(@"c:\_som\parse\dfd.yaml");
-            var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
-            dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
-  
-        }
+ 
         [TestMethod]
         public void PathParser_Parses()
         {

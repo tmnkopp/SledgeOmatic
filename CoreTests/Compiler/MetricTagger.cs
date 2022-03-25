@@ -15,20 +15,7 @@ namespace CoreTests
 {
     [TestClass]
     public class MetricTaggeTests
-    {
-        [TestMethod]
-        public void MetricTagger_Tags()
-        {
-            var metrics = new MetricProvider().GetItems("2021-A-HVA");
-            Compiler compiler = new Compiler();
-            compiler.Source = @"c:\_som\_src\_compile\BOD\compiled";
-            compiler.CompileMode = CompileMode.Cache;
-            compiler.ContentCompilers.Add(new MetricTagger(metrics));
-            compiler.FileFilter = "*.aspx";
-            compiler.Dest = @"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\HVA\2021";
-            compiler.Compile();
-            Cache.Inspect();
-        }
+    { 
 
         [TestMethod]
         public void MetricProvider_Providers()
