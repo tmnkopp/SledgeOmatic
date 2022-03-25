@@ -27,17 +27,18 @@ namespace SOM
     public class CompileProcessor : ICompileProcessor
     {
         private readonly ICompiler compiler;
-        private readonly IConfiguration config;
-        private readonly ILogger logger; 
+        private readonly ISomContext somContext;
+        private IConfiguration config;
+        private ILogger logger;  
         public CompileProcessor(
               ICompiler compiler
-            , IConfiguration config
-            , ILogger logger
+            , ISomContext somContext
         )
         {
+            this.somContext = somContext;
             this.compiler = compiler;
-            this.config = config;
-            this.logger = logger;
+            this.config = this.somContext.Config;
+            this.logger = this.somContext.Logger; 
         }
         public void Process(CompileOptions o) 
         {

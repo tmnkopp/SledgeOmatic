@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 namespace SOM.Procedures
 {
 
-    public class PatternIndexer : ICompilable
+    public class PatternIndexer : BaseCompiler, ICompilable
     {
         private int seed = 0; 
         private string Pattern = "(index)"; 
@@ -20,11 +20,12 @@ namespace SOM.Procedures
             this.seed = Seed;
             this.Pattern = Pattern;
         }
-        public string Compile(string content)
+        public string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            string[] lines = content.Split('\n'); 
-            foreach (var line in lines) { 
+         
+            foreach (var line in base.ParseLines(content)) { 
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
                 {
                     result.AppendFormat("{0}\n", line);

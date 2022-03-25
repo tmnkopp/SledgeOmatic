@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
 {
-    public class NumericIncrementer : ICompilable
+    public class NumericIncrementer : BaseCompiler, ICompilable
     {
         private int _base = 0;
         private int _seed = 0;
@@ -15,13 +15,14 @@ namespace SOM.Procedures
             _seed = (int)Convert.ToInt32(Seed);
             _base = (int)Convert.ToInt32(Base);
             _incrementPattern = NumericPattern;
-        } 
-        public string Compile(string content)
+        }
+        public string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder();
             content = content.Replace($"\r", $"\n");
             content = content.Replace($"\n\n", $"\n"); 
-            foreach (var line in content.Split($"\n"))
+            foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
                 {

@@ -11,7 +11,7 @@ using SOM.Extentions;
 namespace SOM.Procedures
 {
     #region Base
-    public abstract class BaseKeyValReplacer 
+    public abstract class BaseKeyValReplacer : BaseCompiler
     {
         protected Dictionary<string, string> KeyVals { get; set; }
         public BaseKeyValReplacer()
@@ -45,8 +45,9 @@ namespace SOM.Procedures
                 return false;
             }
         }
-        public virtual string Compile(string content)
+        public virtual string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             foreach (var item in KeyVals)
             {
                 content = content.Replace(item.Key, item.Value);
@@ -86,10 +87,6 @@ namespace SOM.Procedures
         public KeyValReplacer(Dictionary<string, string> Dict)
         {
             base.KeyVals = Dict;
-        }
-        public override string Compile(string content)
-        {
-            return base.Compile(content);
-        }
+        } 
     } 
 }

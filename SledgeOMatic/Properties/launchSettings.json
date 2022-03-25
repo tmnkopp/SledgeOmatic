@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p refactor -m Debug"
+      "commandLineArgs": "compile -p unittest -m Debug"
     }
   }
 }

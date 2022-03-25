@@ -9,9 +9,10 @@ using System.Text.RegularExpressions;
 namespace SOM.Procedures
 {
     public class ModuloInterpreter : ICompilable
-    {   
-        public string Compile(string content)
+    {
+        public virtual string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder();
             string matchpattern = "";
             Match match = Regex.Match(content, $@".*som!%(\d) -f (.*).*!som");

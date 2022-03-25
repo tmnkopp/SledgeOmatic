@@ -4,11 +4,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SOM.Core
+namespace SOM
 {
     public interface ISomContext
     {
-        IConfiguration config { get; set;  }
-        ILogger logger { get; set;  }
+        IConfiguration Config { get;   }
+        ILogger Logger { get;  }
+        string Content { get; set; }
+    }
+    public class SomContext: ISomContext
+    {
+        public IConfiguration Config { get => this.config ; }
+        public ILogger Logger { get => this.logger;  }
+        public string Content { get; set; }
+ 
+        private readonly IConfiguration config;
+        private readonly ILogger logger;
+        public SomContext(IConfiguration config, ILogger logger)
+        {
+            this.config = config;
+            this.logger = logger; 
+        }
     }
 }

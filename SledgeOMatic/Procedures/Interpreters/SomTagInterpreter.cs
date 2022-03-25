@@ -18,8 +18,10 @@ namespace SOM.Procedures
         {
             verbose = Options.Contains("-v");
         }
-        public string Compile(string content)
+        public string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
+
             for (int i = 12; i > 0; i -= 4)
             { 
                 var parsed = new SomDocParser(i).Parse(content);
@@ -33,7 +35,8 @@ namespace SOM.Procedures
                     var oparms = pr.Parms(ctor.GetParameters());
                      
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
-                    parseItem = obj.Compile(parseItem);
+                    somContext.Content = parseItem;
+                    parseItem = obj.Compile(somContext);
                     if (!pr.Options.Verbose && !verbose) 
                         parseItem = RemoveTags(parseItem);
      

@@ -2,14 +2,15 @@
 using System.Text.RegularExpressions;
 namespace SOM.Procedures
 { 
-    public class NumericReplacer : KeyValReplacer
+    public class NumericReplacer :  KeyValReplacer
     {
         [CompilableCtorMeta()]
-        public NumericReplacer(string Source) : base(Source) {  } 
-        public override string Compile(string content)
+        public NumericReplacer(string Source) : base(Source) {  }
+        public override string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder(); 
-            foreach (var contentline in content.Split("\n"))
+            foreach (var contentline in base.ParseLines(content))
             {
                 string line = contentline;
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))

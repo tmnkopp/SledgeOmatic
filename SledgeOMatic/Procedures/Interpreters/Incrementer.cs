@@ -9,7 +9,7 @@ using System.Text;
 
 namespace SOM.Procedures
 {
-    public class Incrementer : ICompilable
+    public class Incrementer : BaseCompiler, ICompilable
     {
         private int _amount = 0; 
         private string _pattern = @"\d";
@@ -18,12 +18,14 @@ namespace SOM.Procedures
         { 
             _amount = (int)Convert.ToInt32(Amount);
             _pattern = Pattern;
+
         }
-        public string Compile(string content)
+        public string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder();
             var lines = Regex.Split(content, $"\r|\n");
-            foreach (var line in lines)
+            foreach (var line in ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
                 {

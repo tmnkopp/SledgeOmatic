@@ -5,7 +5,7 @@
     <RootNamespace>SOM</RootNamespace>
     <AssemblyName>SOM</AssemblyName>
     <OutputType>Exe</OutputType>
-    <StartupObject>SOM.Program</StartupObject>
+    <StartupObject></StartupObject>
     <Description></Description>
     <PackageReleaseNotes>compile -e '\$|pycache'</PackageReleaseNotes>
     <ApplicationIcon />

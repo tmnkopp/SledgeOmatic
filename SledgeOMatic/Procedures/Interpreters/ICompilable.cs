@@ -1,4 +1,5 @@
-﻿using System;
+﻿ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,11 +15,11 @@ namespace SOM.Procedures
     }
     public interface ICompilable
     {
-         string Compile(string content);
+         string Compile(ISomContext somContext);
     }
-    public abstract class BaseCompilable
+    public abstract class BaseCompiler
     {
-        protected virtual IEnumerable<string> LineProvider(string content){
+        protected virtual IEnumerable<string> ParseLines(string content){
             content = content.Replace($"\r", $"\n");
             content = content.Replace($"\n\n", $"\n");
             foreach (string line in content.Split($"\n")){

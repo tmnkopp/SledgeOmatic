@@ -8,7 +8,7 @@ using SOM.Extentions;
 using System.Text.RegularExpressions; 
 namespace SOM.Procedures
 { 
-    public class Indexer : ICompilable
+    public class Indexer : BaseCompiler, ICompilable
     {
         private int _seed = 0; 
         private int _reset = 0; 
@@ -20,11 +20,12 @@ namespace SOM.Procedures
             _seed = Seed;
             _reset = Reset;
         }
-        public string Compile(string content)
+        public virtual string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder(); 
             int index = _seed; 
-            foreach (var line in content.Split('\n')) {
+            foreach (var line in base.ParseLines(content)) {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
                 {
                     result.AppendLine(line);

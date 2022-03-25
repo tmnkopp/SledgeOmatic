@@ -28,8 +28,9 @@ namespace SOM.Procedures
         {
             set { schemaItemPredicate = value; }
         }
-        public string Compile(string content)
+        public string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             IParser<CommandParseResult> _Parser = new SomTagParser("SCHEMA"); 
             foreach (var parseresult in _Parser.Parse(content))
             {

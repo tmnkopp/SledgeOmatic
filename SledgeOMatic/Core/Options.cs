@@ -10,6 +10,24 @@ using System.Collections.Generic;
 
 namespace SOM
 {
+    public interface ISomOptions{
+        string Task { get; set; }
+        string Path { get; set; }
+        SomMode Mode { get; set; }
+        bool Verbose { get; set; }
+    }
+    public class SomOptions : ISomOptions
+    {
+        [Option('t', "Task")]
+        public string Task { get; set; }
+        [Option('p', "Path", Default = "", HelpText = "Configuration File Path.")]
+        public string Path { get; set; }
+        [Option('m', "Mode", Default = SomMode.Cache)]
+        public SomMode Mode { get; set; }
+        [Option('v', "Verbose", HelpText = "Print details during execution.")]
+        public bool Verbose { get; set; }
+    }
+
     [Serializable]
     [Verb("compile", HelpText = @"Command Runner: som compile -p SomDocParser -m Cache")]
     public class CompileOptions

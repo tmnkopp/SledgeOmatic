@@ -22,6 +22,7 @@ namespace SOM
         { 
             ServiceProvider serviceProvider = RegisterServices(args);
             IConfiguration config = serviceProvider.GetService<IConfiguration>();
+            ISomContext somContext = serviceProvider.GetService<ISomContext>();
             IAppSettings appSettings = serviceProvider.GetService<IAppSettings>();
             ICompiler compiler = serviceProvider.GetService<ICompiler>();
             IParseProcessor parseProcessor = serviceProvider.GetService<IParseProcessor>();
@@ -71,6 +72,7 @@ namespace SOM
             services.AddSingleton(configuration);
             services.AddTransient<IAppSettings, ConfigSettings>(); 
             services.AddTransient<ICompiler, Compiler>(); 
+            services.AddTransient<ISomContext, SomContext>(); 
             services.AddTransient<ICompileProcessor, CompileProcessor>(); 
             services.AddTransient<IParseProcessor, ParseProcessor>(); 
             services.AddTransient<IConfigProcessor, ConfigProcessor>(); 

@@ -16,10 +16,13 @@ namespace SOM.Procedures
     {
         [CompilableCtorMeta()]
         public RegexReplacer(string Source) : base(Source) { }
-        public override string Compile(string content)
+ 
+        public override string Compile(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            foreach (var line in content.Split("\n"))   {
+
+            foreach (var line in base.ParseLines(content))   {
                 string replacement = line;
                 if (Regex.IsMatch(replacement, $@"(som!\w+|\w+!som)")) {
                     result.AppendLine(replacement);

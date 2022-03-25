@@ -10,23 +10,30 @@ using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
 {
-    public class ModelCompile : ICompilable
+    public class ModelCompile : BaseCompiler, ICompilable
     {
         private ISchemaProvider _SchemaProvider;  
         private string _format;  
+        private string _modelName;  
         private string _predpattern;  
 
         [CompilableCtorMeta()]
         public ModelCompile(string Model, string PredPattern)
-        { 
-            _SchemaProvider = new SchemaProvider(Model); 
-            _predpattern = PredPattern ?? ".*";
-        } 
-        public string Compile(string content)
-        { 
+        {  
+            this._modelName = Model;
+            this._predpattern = PredPattern ?? ".*";
+        }
+        public string Compile(ISomContext somContext)
+        {
+            string content = somContext.Content;
             StringBuilder result = new StringBuilder();
+
+            _SchemaProvider = new SchemaProvider(somContext.Config);
+            _SchemaProvider.LoadModel(this._modelName);
+             
             var lines = (from s in Regex.Split(content, $@"\r|\n")
                          where !string.IsNullOrWhiteSpace(s) select s).ToList();
+            
             var prefix = lines[0];
             var postfix = lines[lines.Count() - 1];
 
@@ -34,7 +41,7 @@ namespace SOM.Procedures
             _format = Regex.Replace(_format, @"\s\/n", "\n");
             _format = Regex.Replace(_format, @"\s\/t", "\t");
 
-            IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider
+            IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider 
                 .AppModelItems.Select(i => i)
                 .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable(); 
 
@@ -47,7 +54,8 @@ namespace SOM.Procedures
                 } 
             } else { 
                 foreach (AppModelItem item in _AppModelItems) {
-                    result.Append(item.ToStringFormat(_format ?? "{0}"));
+                    _format = (!string.IsNullOrWhiteSpace(_format)) ? "{0}" : _format;
+                    result.Append(item.ToStringFormat(_format));
                 }   
             } 
             content = prefix + "\n" + result.ToString() + "\n" + postfix;

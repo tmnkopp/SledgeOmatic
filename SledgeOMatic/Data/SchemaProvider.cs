@@ -15,21 +15,17 @@ namespace SOM.Data
         AppModel Model { get; }
         List<AppModelItem> AppModelItems { get; } 
         AppModel GetModel(string ModelName);
+        void LoadModel(string ModelName);
         IEnumerable<string> GetTables(string Filter);
     }
     public class SchemaProvider : ISchemaProvider
     {
-        private readonly IConfiguration _config;
-        private string con;
+        private readonly IConfiguration _config; 
         public SchemaProvider(
             IConfiguration configuration)
         {
             _config = configuration; 
-        }
-        public SchemaProvider(string ModelName)
-        {
-             LoadModel(ModelName);
-        }
+        } 
         AppModel _model;
         public AppModel Model { get { return _model; } }
         public AppModel GetModel (string ModelName)
@@ -50,7 +46,7 @@ namespace SOM.Data
                 ModelName = ModelName,
                 AppModelItems = _AppModelItems
             }; 
-        }//
+        }
         public IEnumerable<string> GetTables(string Filter)
         {
             string sql = $" SELECT CONVERT(NVARCHAR(5), ROW_NUMBER() OVER (ORDER BY TABLE_NAME))  K, TABLE_NAME V FROM INFORMATION_SCHEMA.TABLES ";

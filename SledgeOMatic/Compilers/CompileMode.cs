@@ -8,4 +8,8 @@ namespace SOM.Compilers
     {
         Debug, Cache, Commit
     }
+    public enum SomMode
+    {
+        Debug, Cache, Commit
+    }
 }

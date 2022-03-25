@@ -88,8 +88,10 @@ namespace SOM.Compilers
         #endregion
 
         #region CTOR
-        public Compiler()
-        { 
+        private readonly ISomContext somContext;
+        public Compiler(ISomContext somContext )
+        {
+            this.somContext = somContext;
             ContentCompilers = new List<ICompilable>();
             FilenameCompilers = new List<ICompilable>();
             Cache.Write("");
@@ -133,14 +135,16 @@ namespace SOM.Compilers
         }
         protected virtual string CompileContent(string content)
         {
+            this.somContext.Content = content;
             foreach (ICompilable proc in ContentCompilers) 
-                content = proc.Compile(content); 
+                content = proc.Compile(somContext); 
             return _ContentPostFormatter(content);
         }
         protected virtual string CompileFileName(string Filename)
-        { 
+        {
+            this.somContext.Content = Filename;
             foreach (ICompilable proc in FilenameCompilers)
-                Filename = proc.Compile(Filename).RemoveWhiteAndBreaks();
+                Filename = proc.Compile(somContext).RemoveWhiteAndBreaks();
             return _FileNameFormatter(Filename);
         }
         private void CommitFile(string Content, string FileName)
