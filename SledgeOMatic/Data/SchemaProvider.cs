@@ -50,7 +50,7 @@ namespace SOM.Data
                 ModelName = ModelName,
                 AppModelItems = _AppModelItems
             }; 
-        }
+        }//
         public IEnumerable<string> GetTables(string Filter)
         {
             string sql = $" SELECT CONVERT(NVARCHAR(5), ROW_NUMBER() OVER (ORDER BY TABLE_NAME))  K, TABLE_NAME V FROM INFORMATION_SCHEMA.TABLES ";
