@@ -10,9 +10,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.Configuration;
 using Newtonsoft.Json;
-using SOM.Compilers;
-using System.Threading.Tasks;
-using System.Threading;
+using SOM.Compilers; 
 
 namespace SOM
 {
@@ -22,13 +20,13 @@ namespace SOM
         { 
             ServiceProvider serviceProvider = RegisterServices(args);
             IConfiguration config = serviceProvider.GetService<IConfiguration>();
-            ISomContext somContext = serviceProvider.GetService<ISomContext>();
-            IAppSettings appSettings = serviceProvider.GetService<IAppSettings>();
+            ILogger logger = serviceProvider.GetService<ILogger<Program>>();
+            ISomContext somContext = serviceProvider.GetService<ISomContext>(); 
             ICompiler compiler = serviceProvider.GetService<ICompiler>();
             IParseProcessor parseProcessor = serviceProvider.GetService<IParseProcessor>();
             ICompileProcessor compileProcessor = serviceProvider.GetService<ICompileProcessor>();
             IConfigProcessor configProcessor = serviceProvider.GetService<IConfigProcessor>();
-            ILogger logger = serviceProvider.GetService<ILogger<Program>>();
+            
 
             var exit = Parser.Default.ParseArguments<CompileOptions, ParseOptions, ConfigOptions>(args)
                 .MapResult(
@@ -69,8 +67,7 @@ namespace SOM
             var services = new ServiceCollection();
             services.AddLogging(cfg => cfg.AddConsole());
             services.AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Program>>());
-            services.AddSingleton(configuration);
-            services.AddTransient<IAppSettings, ConfigSettings>(); 
+            services.AddSingleton(configuration); 
             services.AddTransient<ICompiler, Compiler>(); 
             services.AddTransient<ISomContext, SomContext>(); 
             services.AddTransient<ICompileProcessor, CompileProcessor>(); 
