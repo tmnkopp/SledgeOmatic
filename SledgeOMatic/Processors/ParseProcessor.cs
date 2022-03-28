@@ -1,7 +1,5 @@
-﻿using CommandLine;
-using CommandLine.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Serilog;
 using SOM.Compilers;
 using SOM.Parsers;
 using SOM.Procedures;
@@ -40,7 +38,7 @@ namespace SOM
             Console.Clear(); 
             string configPath = config.GetSection("AppSettings:ParseConfig").Value;
             string configFile = $"{configPath}{o.ConfigFile}.yaml".Replace(@"\\", @"\");
-            logger.LogInformation("{o}", configFile);
+            logger.Information("{o}", configFile);
 
             string raw = File.ReadAllText(configFile);
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();

@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p unittest -m Debug"
+      "commandLineArgs": "compile -p SomDocParser -m Cache"
     }
   }
 }

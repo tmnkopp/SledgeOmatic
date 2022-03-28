@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
+using System.Diagnostics; 
 
 namespace SOM.IO
 {
@@ -42,7 +37,7 @@ namespace SOM.IO
         } 
         public static void CacheEdit() {
             Process p = new Process();
-            p.StartInfo.FileName = ConfigurationManager.AppSettings["CodeViewer"].ToString();
+            p.StartInfo.FileName = "C:\\Users\\Tim\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe";
             p.StartInfo.Arguments = AppSettings.Cache; 
             p.Start();
         }

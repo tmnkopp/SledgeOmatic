@@ -12,26 +12,24 @@ namespace SOM
     {
         public static void Run()
         {
-            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User); 
             if (string.IsNullOrEmpty(basepath))
             {
                 Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User); 
             } 
             DirectoryInfo DI;
             string[] dirnames = new string[] {
-                basepath
+                basepath, $"{basepath}src", $"{basepath}dest"
             }; 
             foreach (string dir in dirnames)
             {
                 DI = new DirectoryInfo(dir);
                 if (!DI.Exists) Directory.CreateDirectory(dir);
             } 
-            string[] filenames = new string[] { "_cache.txt"  }; 
+            string[] filenames = new string[] { "_cache.txt" , "cache.som" }; 
             foreach (string filename in filenames)
             {
-                using (StreamWriter w = File.AppendText($"{basepath}\\{filename}"))
-                {
-                }
+                using (StreamWriter w = File.AppendText($"{basepath}\\{filename}"))  {  }
             } 
         }
     }

@@ -30,10 +30,13 @@ namespace SOM.Procedures
                     Type typ = Type.GetType($"{pr.CommandType.FullName}, SOM");
                     CompilableCtorMeta ccm = GetCompilableCtorMeta(pr.CommandType);
                     ConstructorInfo ctor = GetConstructorInfo(typ);
-                     
+
                     var parseItem = pr.Parsed;
                     var oparms = pr.Parms(ctor.GetParameters());
-                     
+
+                    somContext.Logger.Information("{o} {p}", pr.CommandType.FullName, string.Join(", ", oparms.ToArray()));
+     
+
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     somContext.Content = parseItem;
                     parseItem = obj.Compile(somContext);

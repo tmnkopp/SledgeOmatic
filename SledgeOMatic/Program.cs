@@ -1,47 +1,42 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using CommandLine;
-using CommandLine.Text;
-using System.Reflection;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq; 
-using Microsoft.Extensions.Logging;
-using System.Configuration;
+using Microsoft.Extensions.Configuration; 
+using CommandLine; 
+using Microsoft.Extensions.DependencyInjection; 
+using Microsoft.Extensions.Logging; 
 using Newtonsoft.Json;
-using SOM.Compilers; 
-
+using SOM.Compilers;
+using Serilog;
+using System.IO;  
 namespace SOM
 {
     class Program
-    {  
+    {
+        public int MyProperty { get; set; } = 0;
         static void Main(string[] args)
         { 
             ServiceProvider serviceProvider = RegisterServices(args);
             IConfiguration config = serviceProvider.GetService<IConfiguration>();
-            ILogger logger = serviceProvider.GetService<ILogger<Program>>();
+            Serilog.ILogger logger = serviceProvider.GetService<Serilog.ILogger>();
             ISomContext somContext = serviceProvider.GetService<ISomContext>(); 
             ICompiler compiler = serviceProvider.GetService<ICompiler>();
             IParseProcessor parseProcessor = serviceProvider.GetService<IParseProcessor>();
             ICompileProcessor compileProcessor = serviceProvider.GetService<ICompileProcessor>();
             IConfigProcessor configProcessor = serviceProvider.GetService<IConfigProcessor>();
-            
-
+  
             var exit = Parser.Default.ParseArguments<CompileOptions, ParseOptions, ConfigOptions>(args)
                 .MapResult(
                 (CompileOptions o) => { 
-                    logger.LogInformation("{o}", JsonConvert.SerializeObject(o)); 
+                    logger.Information("{o}", JsonConvert.SerializeObject(o)); 
                     compileProcessor.Process(o);
                     return 0; 
                 },
                 (ParseOptions o) => { 
-                    logger.LogInformation("{o}", JsonConvert.SerializeObject(o));
+                    logger.Information("{o}", JsonConvert.SerializeObject(o));
                     parseProcessor.Process(o);
                     return 0; 
                 },
                 (ConfigOptions o) => {
-                    logger.LogInformation("{o}", JsonConvert.SerializeObject(o));
+                    logger.Information("{o}", JsonConvert.SerializeObject(o));
                     configProcessor.Process(o);
                     return 0;
                 },
@@ -49,24 +44,31 @@ namespace SOM
         }
         private static ServiceProvider RegisterServices(string[] args)
         {
-            string envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-            if (string.IsNullOrEmpty(envar))
+            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            if (string.IsNullOrEmpty(basepath))
             {
                 Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User);
-                envar = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-            } 
-            var basepath = envar.ToLower().Replace("som.exe", "");
-            Console.Write($"SetBasePath: {basepath}");
+                basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            }  
             IConfiguration configuration = new ConfigurationBuilder()
                   .SetBasePath(basepath)
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddEnvironmentVariables()
                   .AddCommandLine(args)
                   .Build();
- 
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .ReadFrom.Configuration(configuration)
+                .WriteTo.RollingFile($"{basepath}log.txt" ) 
+                .WriteTo.Console()
+                .CreateLogger();
+
             var services = new ServiceCollection();
-            services.AddLogging(cfg => cfg.AddConsole());
-            services.AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Program>>());
+            services.AddLogging(cfg => cfg.AddSerilog());
+           
+            Log.Information($"Information: {basepath}"); 
+            services.AddSingleton<Serilog.ILogger>(Log.Logger);
             services.AddSingleton(configuration); 
             services.AddTransient<ICompiler, Compiler>(); 
             services.AddTransient<ISomContext, SomContext>(); 

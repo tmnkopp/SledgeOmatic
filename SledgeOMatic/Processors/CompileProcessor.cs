@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Newtonsoft.Json;
 using SOM.Compilers;
 using SOM.IO;
@@ -50,7 +50,7 @@ namespace SOM
                 o.Path = o.Path.Replace(@"\\", @"\");
                 configFile = (o.Path.Contains(".yaml")) ? o.Path : $"{o.Path}.yaml"; 
             }
-            logger.LogInformation("{o}", configFile);
+            logger.Information("{o}", configFile);
             compiler.CompileMode = o.CompileMode; 
             var yaml = new YamlStream();
             using (TextReader tr = File.OpenText(configFile))

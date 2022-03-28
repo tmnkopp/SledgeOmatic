@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using SOM.Compilers; 
 using SOM.Procedures;
 using System;
@@ -17,17 +17,14 @@ namespace SOM
         void Process(ConfigOptions o);
     }
     public class ConfigProcessor: IConfigProcessor
-    {
-        private readonly ICompiler compiler;
+    { 
         private readonly IConfiguration config;
         private readonly ILogger logger;
-        public ConfigProcessor(
-              ICompiler compiler
-            , IConfiguration config
+        public ConfigProcessor( 
+             IConfiguration config
             , ILogger logger
             )
-        {
-            this.compiler = compiler;
+        { 
             this.config = config;
             this.logger = logger;
         }
@@ -37,11 +34,12 @@ namespace SOM
             Console.Write($"{string.Join("\n", from t in types() let c = cnt++ select $"({c}) {t}")}\n");
             var AppSettings = config.GetSection("AppSettings").GetChildren();
             foreach (var item in AppSettings) 
-                logger.LogInformation("{k} {v}", item.Key, item.Value);
-        
+                logger.Information("{k} {v}", item.Key, item.Value);
+
+            //Bootstrapper.Run();
             // logger.LogInformation($"CompileConfig: {o}", config.GetSection("AppSettings:CompileConfig").Value);
-            
-        }  
+
+        }
         private static List<Type> types()
         { 
             var types = AppDomain.CurrentDomain.GetAssemblies()
