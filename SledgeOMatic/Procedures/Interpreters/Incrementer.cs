@@ -11,15 +11,27 @@ namespace SOM.Procedures
 {
     public class Incrementer : BaseCompiler, ICompilable
     {
-        private int _amount = 0; 
+        #region FIELDS
+
+        private int _amount = 0;
         private string _pattern = @"\d";
+
+        #endregion
+
+        #region CTOR
+
         [CompilableCtorMeta()]
         public Incrementer(int Amount, string Pattern)
-        { 
+        {
             _amount = (int)Convert.ToInt32(Amount);
             _pattern = Pattern;
 
         }
+
+        #endregion
+
+        #region METHODS
+
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
@@ -37,7 +49,8 @@ namespace SOM.Procedures
                 if (Regex.IsMatch(target, pattern))
                 {
                     target = Regex.Replace(target, pattern,
-                        m => {
+                        m =>
+                        {
                             int nextint = (_amount) + Convert.ToInt32(m.Groups[2].Value) + 0;
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
@@ -49,5 +62,8 @@ namespace SOM.Procedures
             }
             return result.ToString();
         }
+
+        #endregion
+
     }
 }

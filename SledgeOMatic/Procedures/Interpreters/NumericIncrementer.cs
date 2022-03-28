@@ -6,9 +6,16 @@ namespace SOM.Procedures
 {
     public class NumericIncrementer : BaseCompiler, ICompilable
     {
+        #region FIELDS
+
         private int _base = 0;
         private int _seed = 0;
         private string _incrementPattern = "";
+
+        #endregion
+        
+        #region CTOR
+
         [CompilableCtorMeta()]
         public NumericIncrementer(object Seed, object Base, string NumericPattern)
         {
@@ -16,12 +23,17 @@ namespace SOM.Procedures
             _base = (int)Convert.ToInt32(Base);
             _incrementPattern = NumericPattern;
         }
+
+        #endregion
+
+        #region METHODS
+
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
             content = content.Replace($"\r", $"\n");
-            content = content.Replace($"\n\n", $"\n"); 
+            content = content.Replace($"\n\n", $"\n");
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
@@ -32,17 +44,20 @@ namespace SOM.Procedures
                 string target = line;
                 string pattern = "([^\\d]|^)(" + _incrementPattern + ")([^\\d]|$)";
                 if (Regex.IsMatch(target, pattern))
-                { 
+                {
                     target = Regex.Replace(target, pattern,
-                        m => {
-                            int nextint =(_base - _seed) + Convert.ToInt32(m.Groups[2].Value) + 0; 
+                        m =>
+                        {
+                            int nextint = (_base - _seed) + Convert.ToInt32(m.Groups[2].Value) + 0;
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);
-                }; 
+                };
                 result.AppendLine($"{target}");
-            } 
+            }
             return result.ToString();
         }
+
+        #endregion
     }
 }

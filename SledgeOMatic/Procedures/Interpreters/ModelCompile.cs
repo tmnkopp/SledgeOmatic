@@ -12,17 +12,28 @@ namespace SOM.Procedures
 {
     public class ModelCompile : BaseCompiler, ICompilable
     {
-        private ISchemaProvider _SchemaProvider;  
-        private string _format;  
-        private string _modelName;  
-        private string _predpattern;  
+        #region FIELDS
+
+        private ISchemaProvider _SchemaProvider;
+        private string _format;
+        private string _modelName;
+        private string _predpattern;
+
+        #endregion
+
+        #region CTOR
 
         [CompilableCtorMeta()]
         public ModelCompile(string Model, string PredPattern)
-        {  
+        {
             this._modelName = Model;
             this._predpattern = PredPattern ?? ".*";
         }
+
+        #endregion
+
+        #region METHODS
+
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
@@ -30,36 +41,44 @@ namespace SOM.Procedures
 
             _SchemaProvider = new SchemaProvider(somContext.Config);
             _SchemaProvider.LoadModel(this._modelName);
-             
+
             var lines = (from s in Regex.Split(content, $@"\r|\n")
-                         where !string.IsNullOrWhiteSpace(s) select s).ToList();
-            
+                         where !string.IsNullOrWhiteSpace(s)
+                         select s).ToList();
+
             var prefix = lines[0];
             var postfix = lines[lines.Count() - 1];
 
-            _format = string.Join(' ', lines).Replace(prefix,"").Replace(postfix, "");
+            _format = string.Join(' ', lines).Replace(prefix, "").Replace(postfix, "");
             _format = Regex.Replace(_format, @"\s\/n", "\n");
             _format = Regex.Replace(_format, @"\s\/t", "\t");
 
-            IEnumerable<AppModelItem>_AppModelItems = _SchemaProvider 
+            IEnumerable<AppModelItem> _AppModelItems = _SchemaProvider
                 .AppModelItems.Select(i => i)
-                .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable(); 
+                .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable();
 
-            if (Regex.IsMatch(_format, $@"^.*\w:\\"))  { 
-                foreach (AppModelItem item in _AppModelItems) { 
+            if (Regex.IsMatch(_format, $@"^.*\w:\\"))
+            {
+                foreach (AppModelItem item in _AppModelItems)
+                {
                     string path = item.ToStringFormat(_format);
-                    path = path.Replace("{1}", item.DataType);  
-                    string fmt = item.ToStringFormat(Reader.Read(path));  
-                    result.Append(fmt); 
-                } 
-            } else { 
-                foreach (AppModelItem item in _AppModelItems) {
+                    path = path.Replace("{1}", item.DataType);
+                    string fmt = item.ToStringFormat(Reader.Read(path));
+                    result.Append(fmt);
+                }
+            }
+            else
+            {
+                foreach (AppModelItem item in _AppModelItems)
+                {
                     _format = (string.IsNullOrWhiteSpace(_format)) ? "{0}" : _format;
                     result.Append(item.ToStringFormat(_format));
-                }   
-            } 
+                }
+            }
             content = prefix + "\n" + result.ToString() + "\n" + postfix;
-            return content; 
-        } 
+            return content;
+        }
+
+        #endregion
     }
 }

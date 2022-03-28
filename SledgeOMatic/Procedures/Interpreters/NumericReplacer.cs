@@ -4,12 +4,26 @@ namespace SOM.Procedures
 { 
     public class NumericReplacer :  KeyValReplacer
     {
+
+        #region FIELDS
+
+        #endregion
+
+        #region CTOR
+
         [CompilableCtorMeta()]
-        public NumericReplacer(string Source) : base(Source) {  }
+        public NumericReplacer(string Source) : base(Source)
+        {
+        }
+
+        #endregion
+
+        #region METHODS
+
         public override string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            StringBuilder result = new StringBuilder(); 
+            StringBuilder result = new StringBuilder();
             foreach (var contentline in base.ParseLines(content))
             {
                 string line = contentline;
@@ -19,22 +33,24 @@ namespace SOM.Procedures
                     continue;
                 }
                 foreach (var item in KeyVals)
-                { 
+                {
                     int cnt = 0;
-                    string pattern = "([^\\d]|^)(" + item.Key + ")([^\\d]|$)"; 
+                    string pattern = "([^\\d]|^)(" + item.Key + ")([^\\d]|$)";
                     while (Regex.IsMatch(line, pattern))
                     {
-                        line = Regex.Replace(line, pattern,  
-                            m => $"{m.Groups[1].Value}{item.Value}{m.Groups[3].Value}"  
-                            , RegexOptions.Singleline); 
+                        line = Regex.Replace(line, pattern,
+                            m => $"{m.Groups[1].Value}{item.Value}{m.Groups[3].Value}"
+                            , RegexOptions.Singleline);
                         if (cnt++ > 5)
                             break;
-                    }; 
+                    };
                 }
                 line = Regex.Replace(line, $"\r|\n", "");
                 result.AppendLine(line);
-            } 
+            }
             return result.ToString();
         }
+
+        #endregion
     } 
 }
