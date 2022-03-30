@@ -5,10 +5,10 @@
         [string] $with ,
         [Parameter(Mandatory = $false, Position = 0)] 
         [string] $message = 'refactor build '  
-    )
-    cd 'C:\Users\Tim\source\repos\SledgeOMatic';   
+    ) 
     if ($with -match ' release ' ){
         # taskkill /IM "SOM.exe" /F
+        cd 'C:\Users\Tim\source\repos\SledgeOMatic'; 
         dotnet build --configuration Debug;
         dotnet build --configuration Release;
         dotnet publish SledgeOMatic -p:PublishProfile=FolderProfile   
@@ -24,7 +24,7 @@
     #explorer.exe C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\
     explorer.exe C:\_som\
 } 
-Deploy -with " release commit "    
+cls; Deploy -with " release commit "    
 #  som config
 #  som compile -p IG -m Debug
 
