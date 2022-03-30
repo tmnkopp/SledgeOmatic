@@ -17,9 +17,7 @@
         Remove-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\*.json -Force 
     }
     if ($with -match ' commit ' ){
-        $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ })
-        $message = $message + $m  
-        $message = $message + $m
+        $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
         cd 'C:\Users\Tim\source\repos\SledgeOMatic';  
         git add .; git commit -m ('config refactor' + $m) ; git push; 
     }  
