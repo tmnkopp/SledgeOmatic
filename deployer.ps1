@@ -9,9 +9,9 @@
     if ($with -match ' release ' ){
         # taskkill /IM "SOM.exe" /F
         cd 'C:\Users\Tim\source\repos\SledgeOMatic'; 
-        dotnet build --configuration Debug;
-        dotnet build --configuration Release;
-        dotnet publish SledgeOMatic -p:PublishProfile=FolderProfile   
+        dotnet build --configuration Debug ;
+        dotnet build --configuration Release ;
+        dotnet publish SledgeOMatic -p:PublishProfile=FolderProfile ; 
         Copy-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\SOM.exe -Destination c:\_som\SOM.exe -Force  
         #Remove-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\*.pdb -Force
         #Remove-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\*.json -Force 
