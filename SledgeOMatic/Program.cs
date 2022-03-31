@@ -60,8 +60,6 @@ namespace SOM
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .ReadFrom.Configuration(configuration)
-                .WriteTo.RollingFile($"{basepath}log.txt" ) 
-                .WriteTo.Console()
                 .CreateLogger();
 
             var services = new ServiceCollection();

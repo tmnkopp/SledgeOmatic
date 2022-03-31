@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p SomDocParser -m Cache"
+      "commandLineArgs": "config"
     }
   }
 }
