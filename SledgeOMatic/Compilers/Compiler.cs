@@ -115,7 +115,7 @@ namespace SOM.Compilers
             var args = new CompilerEventArgs(Source, Dest); 
             PreCompile(args);
             DirectoryInfo DI = new DirectoryInfo($"{Source}");
-            foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.TopDirectoryOnly))
+            foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
                 string content = Reader.Read(file.FullName);
                 content = ContentPreFormatter(content);
