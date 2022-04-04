@@ -115,6 +115,7 @@ namespace SOM.Compilers
             var args = new CompilerEventArgs(Source, Dest); 
             PreCompile(args);
             DirectoryInfo DI = new DirectoryInfo($"{Source}");
+             
             foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
                 string content = Reader.Read(file.FullName);
@@ -127,8 +128,16 @@ namespace SOM.Compilers
                 args.CompiledFileName = CompiledFileName;
                 args.ContentCompiled = content;
                 Compiling(args);
- 
-                CommitFile(content, $"{Dest}\\{CompiledFileName}");
+
+                string SavePath = file.FullName
+                    .Replace(Source, Dest)
+                    .Replace(file.Name, CompiledFileName);
+
+                string SaveDir = SavePath.Replace(CompiledFileName, "");
+                if (!Directory.Exists(SaveDir))
+                    Directory.CreateDirectory(SaveDir);
+                 
+                CommitFile(content, $"{SavePath}"); 
             }
             args = new CompilerEventArgs(Source, Dest);
             Compiled(args); 
@@ -150,12 +159,19 @@ namespace SOM.Compilers
         }
         private void CommitFile(string Content, string FileName)
         {
-            if (CompileMode == CompileMode.Commit)
+            this.somContext.Logger.Information($"FileName: {FileName}");
+
+            if (CompileMode == CompileMode.Commit){ 
                 new FileWriter($"{FileName}").Write(Content);
-            if (CompileMode == CompileMode.Debug)
+            }
+            if (CompileMode == CompileMode.Debug){ 
+                this.somContext.Logger.Debug($"FileName: {FileName}"); 
                 Cache.Append($"\n\n som! -p {FileName} \n!som \n\n{Content}\n");
-            if (CompileMode == CompileMode.Cache)
+             }
+                
+            if (CompileMode == CompileMode.Cache){ 
                 Cache.Append($"{Content}\n");
+            }      
         }
         #endregion
     }

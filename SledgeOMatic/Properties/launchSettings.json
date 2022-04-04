@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p format -m Cache  "
+      "commandLineArgs": "compile -p format -m Commit"
     }
   }
 }

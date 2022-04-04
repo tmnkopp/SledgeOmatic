@@ -42,7 +42,7 @@ namespace SOM.IO
         }
         public void Write(string writeme)
         {
-            _filename = _filename.Replace("\\\\", "\\");
+            _filename = _filename.Replace("\\\\", "\\"); 
             try
             { 
                 File.WriteAllText($"{_filename}", writeme, Encoding.Unicode);
