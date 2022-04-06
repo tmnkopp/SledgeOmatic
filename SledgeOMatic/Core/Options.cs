@@ -50,6 +50,8 @@ namespace SOM
         public ParseMode ParseMode { get; set; }
         [Option('d', "Dir", Default = "")]
         public string Dir { get; set; }
+        [Option('a', "Args", Default = "")]
+        public string Args { get; set; }
         [Option('f', "Filter", Default = "")]
         public string Filter { get; set; }
         [Option('p', "ConfigFile", Default = "config")]

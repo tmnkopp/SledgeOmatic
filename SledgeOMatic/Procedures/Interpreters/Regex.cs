@@ -13,8 +13,7 @@ using SOM.Extentions;
 namespace SOM.Procedures
 {
     public class RegexReplacer : KeyValReplacer, ICompilable
-    {
-
+    { 
         #region FIELDS
 
         #endregion
@@ -28,13 +27,12 @@ namespace SOM.Procedures
 
         #endregion
 
-        #region METHODS
-
+        #region METHODS 
         public override string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-
+            base.PopulateKeyVals(somContext);
             foreach (var line in base.ParseLines(content))
             {
                 string replacement = line;

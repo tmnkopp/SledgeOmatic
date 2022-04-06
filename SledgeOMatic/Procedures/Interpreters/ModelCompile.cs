@@ -4,6 +4,7 @@ using SOM.IO;
 using SOM.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -63,7 +64,11 @@ namespace SOM.Procedures
                 {
                     string path = item.ToStringFormat(_format);
                     path = path.Replace("{1}", item.DataType);
-                    string fmt = item.ToStringFormat(Reader.Read(path));
+                    path = path.Replace("~", somContext.BasePath); 
+                    string rte = "";
+                    using (TextReader tr = File.OpenText(path))
+                        rte = tr.ReadToEnd();
+                    string fmt = item.ToStringFormat(rte);
                     result.Append(fmt);
                 }
             }

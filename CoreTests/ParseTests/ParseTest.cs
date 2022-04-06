@@ -14,25 +14,7 @@ namespace UnitTests
 {
     [TestClass]
     public class ParserTests
-    {
-        [TestMethod]
-        public void LineExtractor_Extracts()
-        {
-            Cache.Write("");
-            StringBuilder sb = new StringBuilder();
-            DirectoryParser parser = new DirectoryParser(); 
-            parser.Parser = new LineExtractor("frmval", 1);
-            parser.Parser.ParseMode = ParseMode.Verbose;
-            parser.PathExcludePattern = @"Archive|bin\\|obj\\";
-            //parser.ParseDirectory("D:\\dev\\CyberScope\\CyberScopeBranch\\CSwebdev\\database\\SPROCS\\*.sql");
-            parser.ParseDirectory(@"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\*.vb");
-            sb.Append(parser.ToString()); 
-  
-            Cache.Write(sb.ToString());
-            Cache.CacheEdit();
-            Assert.IsNotNull(parser);
-        }
-
+    { 
         [TestMethod]
         public void BlockExtractor_Extracts()
         {

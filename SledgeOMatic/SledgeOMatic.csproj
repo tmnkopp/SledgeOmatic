@@ -7,7 +7,9 @@
     <OutputType>Exe</OutputType>
     <StartupObject></StartupObject>
     <Description>compile -p unittest -m Debug
-config</Description>
+config
+som parse -p Archive
+parse -p som</Description>
     <PackageReleaseNotes>compile -e '\$|pycache'</PackageReleaseNotes>
     <ApplicationIcon />
   </PropertyGroup>

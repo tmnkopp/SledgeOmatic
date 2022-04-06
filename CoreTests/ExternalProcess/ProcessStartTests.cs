@@ -43,7 +43,7 @@ namespace CoreTests
         {
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = @"powershell.exe";
+            startInfo.FileName = @"notepad.exe";
             startInfo.Arguments = @"& 'D:\PS\test.ps1'";
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
@@ -52,7 +52,7 @@ namespace CoreTests
             process.StartInfo = startInfo;
             process.Start();
 
-            Assert.IsNotNull(Cache.Read());
+            Assert.IsNotNull(process);
         }
         static long Factorial(int num)
         {
@@ -61,22 +61,10 @@ namespace CoreTests
             }else{
                 return num * Factorial(num - 1);
             } 
-        }
-        [TestMethod]
-        public void Cache_Writes()
-        { 
-            Cache.Write(""); 
-            Cache.WriteLine($" ");
-            Cache.Inspect();
         } 
         interface ILogger{
             void Log(string message);
-        }
-        class CacheLogger : ILogger{
-            public void Log(string message){
-                Cache.WriteLine($"{message}");
-            }
-        }
+        } 
         static class RangeProvider{ 
             public static IEnumerable<int> Provide(){
                 for (var i = 0; i < 100; i++){

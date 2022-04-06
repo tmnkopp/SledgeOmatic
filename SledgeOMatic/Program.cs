@@ -6,19 +6,22 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SOM.Compilers;
 using Serilog;
-using System.IO;  
+using System.IO;
+using SOM.Parsers;
+using SOM.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+
 namespace SOM
 {
     class Program
-    {
-        public int MyProperty { get; set; } = 0;
+    { 
         static void Main(string[] args)
         { 
             ServiceProvider serviceProvider = RegisterServices(args);
             IConfiguration config = serviceProvider.GetService<IConfiguration>();
             Serilog.ILogger logger = serviceProvider.GetService<Serilog.ILogger>();
-            ISomContext somContext = serviceProvider.GetService<ISomContext>(); 
-            ICompiler compiler = serviceProvider.GetService<ICompiler>();
+            ISomContext somContext = serviceProvider.GetService<ISomContext>();  
             IParseProcessor parseProcessor = serviceProvider.GetService<IParseProcessor>();
             ICompileProcessor compileProcessor = serviceProvider.GetService<ICompileProcessor>();
             IConfigProcessor configProcessor = serviceProvider.GetService<IConfigProcessor>();
@@ -44,12 +47,9 @@ namespace SOM
         }
         private static ServiceProvider RegisterServices(string[] args)
         {
+            SomBootstrapper.Run();
             string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-            if (string.IsNullOrEmpty(basepath))
-            {
-                Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User);
-                basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-            }  
+             
             IConfiguration configuration = new ConfigurationBuilder()
                   .SetBasePath(basepath)
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -69,6 +69,8 @@ namespace SOM
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
             services.AddSingleton(configuration); 
             services.AddTransient<ICompiler, Compiler>(); 
+            services.AddTransient<IDirectoryParser, DirectoryParser>(); 
+            services.AddSingleton<ICacheService, CacheService>(); 
             services.AddTransient<ISomContext, SomContext>(); 
             services.AddTransient<ICompileProcessor, CompileProcessor>(); 
             services.AddTransient<IParseProcessor, ParseProcessor>(); 

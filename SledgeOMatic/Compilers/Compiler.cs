@@ -1,5 +1,4 @@
-﻿using SOM.Extentions;
-using SOM.IO;
+﻿using SOM.Extentions; 
 using SOM.Models;
 using SOM.Procedures;
 using System;
@@ -18,8 +17,18 @@ namespace SOM.Compilers
     public class Compiler : ICompiler
     {
         #region Props
-        public string Source { get; set; } = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-        public string Dest { get; set; } = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+        private string src = "~"; 
+        public string Source
+        {
+            get => src.Replace("~", somContext.Config.GetSection("AppSettings:BasePath").Value);
+            set { src = value; }
+        } 
+        private string dst = "~";
+        public string Dest
+        {
+            get => dst.Replace("~", somContext.Config.GetSection("AppSettings:BasePath").Value);
+            set { dst = value; }
+        } 
         private string _fileFilter = null;
         public string FileFilter
         {
@@ -94,7 +103,7 @@ namespace SOM.Compilers
             this.somContext = somContext;
             ContentCompilers = new List<ICompilable>();
             FilenameCompilers = new List<ICompilable>();
-            Cache.Write("");
+            somContext.Cache.Write("");
         }
         #endregion
 
@@ -118,7 +127,10 @@ namespace SOM.Compilers
              
             foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
             {
-                string content = Reader.Read(file.FullName);
+                string content = "";
+                using (TextReader tr = File.OpenText(file.FullName))
+                    content = tr.ReadToEnd();
+                 
                 content = ContentPreFormatter(content);
                 content = CompileContent(content);
                 content = ContentPostFormatter(content);
@@ -162,15 +174,15 @@ namespace SOM.Compilers
             this.somContext.Logger.Information($"FileName: {FileName}");
 
             if (CompileMode == CompileMode.Commit){ 
-                new FileWriter($"{FileName}").Write(Content);
+                File.WriteAllText($"{FileName}", Content, Encoding.Unicode); 
             }
             if (CompileMode == CompileMode.Debug){ 
-                this.somContext.Logger.Debug($"FileName: {FileName}"); 
-                Cache.Append($"\n\n som! -p {FileName} \n!som \n\n{Content}\n");
+                this.somContext.Logger.Debug($"FileName: {FileName}");
+                this.somContext.Cache.Append($"\n\n som! -p {FileName} \n!som \n\n{Content}\n");
              }
                 
-            if (CompileMode == CompileMode.Cache){ 
-                Cache.Append($"{Content}\n");
+            if (CompileMode == CompileMode.Cache){
+                this.somContext.Cache.Append($"{Content}\n");
             }      
         }
         #endregion

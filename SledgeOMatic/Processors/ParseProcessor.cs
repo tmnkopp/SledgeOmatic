@@ -21,22 +21,22 @@ namespace SOM
     }
     public class ParseProcessor: IParseProcessor
     {
-        private readonly ICompiler compiler;
+        private readonly IDirectoryParser parser;
         private readonly IConfiguration config;
         private readonly ILogger logger;
         public ParseProcessor(
-              ICompiler compiler
+              IDirectoryParser parser
             , IConfiguration config
             , ILogger logger
             )
         {
-            this.compiler = compiler;
+            this.parser = parser;
             this.config = config;
             this.logger = logger;
         }
         public void Process(ParseOptions o) {
-            Console.Clear(); 
-            string configPath = config.GetSection("AppSettings:ParseConfig").Value;
+            string basePath = config.GetSection("AppSettings:BasePath").Value;
+            string configPath = (config.GetSection("AppSettings:ParseConfig").Value ?? "~").Replace("~", basePath);
             string configFile = $"{configPath}{o.ConfigFile}.yaml".Replace(@"\\", @"\");
             logger.Information("{o}", configFile);
 
@@ -50,8 +50,7 @@ namespace SOM
                 var val = Convert.ChangeType(dfd.ParseTypeArgs[i], ctor_params[i].ParameterType);
                 dfd.ParseTypeArgs[i] = val;
             }
-    
-            DirectoryParser parser = new DirectoryParser();
+             
             parser.Directories.AddRange(dfd.Directories); 
             parser.Parser = (IParser<string>)Activator.CreateInstance(ptype, dfd.ParseTypeArgs.ToArray());
             parser.Parser.ParseMode = o.ParseMode;

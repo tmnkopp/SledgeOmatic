@@ -8,14 +8,41 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SOM.Extentions;
+using System.IO;
+
 namespace SOM.Procedures
 {
     #region Base
     public abstract class BaseKeyValReplacer : BaseCompiler
     {
         protected Dictionary<string, string> KeyVals { get; set; }
+        protected string Source { get; set; }
         public BaseKeyValReplacer()
         {
+        }
+        protected void PopulateKeyVals(ISomContext somContext)
+        {
+            string src = ""; 
+            if (Source.ToLower().EndsWith(".json"))
+            {
+                Source = Source.Replace("~", somContext.BasePath);
+                using (TextReader tr = File.OpenText(Source))
+                    src = tr.ReadToEnd();
+                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(src);
+            }
+            if (Source.ToLower().EndsWith(".sql"))
+            {
+                Source = Source.Replace("~", somContext.BasePath);
+                using (TextReader tr = File.OpenText(Source))
+                    src = tr.ReadToEnd();
+                KeyValDBReader dbreader = new KeyValDBReader(src);
+                dbreader.ExecuteRead();
+                this.KeyVals = dbreader.Data;
+            }
+            if (this.IsValidJson(Source))
+            {
+                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Source);
+            }
         }
         protected bool IsValidJson(string strInput)
         {
@@ -67,22 +94,7 @@ namespace SOM.Procedures
         } 
         public KeyValReplacer(string Source)
         {
-            if (Source.ToLower().EndsWith(".json"))
-            {
-                base.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Reader.Read(Source));
-            }
-            if (Source.ToLower().EndsWith(".sql"))
-            {
-                IReader reader = new FileReader(Source);
-                string sql = reader.Read();
-                KeyValDBReader dbreader = new KeyValDBReader(sql);
-                dbreader.ExecuteRead();
-                base.KeyVals = dbreader.Data;
-            }
-            if (base.IsValidJson(Source))
-            {
-                base.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Source);
-            }
+            this.Source = Source;
         }
         public KeyValReplacer(Dictionary<string, string> Dict)
         {

@@ -42,10 +42,11 @@ namespace SOM
         }
         public void Process(CompileOptions o) 
         {
-            string configPath = config.GetSection("AppSettings:CompileConfig").Value;
+            string configPath = config.GetSection("AppSettings:CompileConfig").Value ?? "~";
+            string basePath = config.GetSection("AppSettings:BasePath").Value;
             string configFile = o.Path;
             if (!string.IsNullOrEmpty(o.Path.ToString()))  {
-                 o.Path = o.Path.Replace("~", configPath); 
+                configPath = configPath.Replace("~", basePath); 
                 if (!o.Path.Contains(":")) o.Path = $"{configPath}{o.Path}"; 
                 o.Path = o.Path.Replace(@"\\", @"\");
                 configFile = (o.Path.Contains(".yaml")) ? o.Path : $"{o.Path}.yaml"; 
@@ -99,7 +100,7 @@ namespace SOM
                     }); 
                 }
             } 
-            if (o.CompileMode != CompileMode.Commit) Cache.Inspect(); 
+            if (o.CompileMode != CompileMode.Commit) somContext.Cache.Inspect(); 
         }
         private List<object> GetParms(YamlMappingNode propitems)
         {

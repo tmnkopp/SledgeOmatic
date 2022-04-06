@@ -21,14 +21,15 @@ namespace CoreTests
             var som = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
             var config = new TestServices().Configuration;
             var logger = new Mock<ILogger>().Object;
-            ISomContext somContext = new SomContext(config, logger); 
+            var cache = new CacheService(config, logger);
+            ISomContext somContext = new SomContext(config, logger, cache);
             var compiler = new Compiler(somContext);
             compiler.Source = som;
             compiler.FileFilter = "*.som";
             compiler.CompileMode = CompileMode.Cache;
             compiler.ContentCompilers.Add(new ModelCompile("aspnet_Users", ".*")); 
-            compiler.Compile(); 
-            Cache.Inspect();
+            compiler.Compile();
+            cache.Inspect();
             Assert.IsNotNull(compiler); 
         }
         [TestMethod] 
@@ -37,7 +38,8 @@ namespace CoreTests
             var som = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
             var config = new TestServices().Configuration;
             var logger = new Mock<ILogger>().Object;
-            ISomContext somContext = new SomContext(config, logger);
+            var cache = new CacheService(config, logger);
+            ISomContext somContext = new SomContext(config, logger, cache);
             var compiler = new Compiler(somContext);
             compiler.Source = som;
             compiler.FileFilter = "*.som";
@@ -45,7 +47,7 @@ namespace CoreTests
             compiler.ContentCompilers.Add(new RegexReplacer("{\"FOO\":\"BAR\"}"));
             compiler.ContentCompilers.Add(new NumericIncrementer(1000, 2000,  @"\d{4}"));
             compiler.Compile();
-            Cache.Inspect();
+            cache.Inspect();
             Assert.IsNotNull(compiler);
         }
     }
@@ -63,8 +65,9 @@ namespace CoreTests
             {
                 if (_config == null)
                 {
+                    var path = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
                     var builder = new ConfigurationBuilder()
-                        .SetBasePath(@"C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\")
+                        .SetBasePath(@$"{path}")
                         .AddJsonFile($"appsettings.json", optional: false);
                     _config = builder.Build();
                 }

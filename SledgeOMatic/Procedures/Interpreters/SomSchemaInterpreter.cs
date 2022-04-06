@@ -4,6 +4,7 @@ using SOM.IO;
 using SOM.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 namespace SOM.Procedures
@@ -63,8 +64,12 @@ namespace SOM.Procedures
                     {
                         string path = item.ToStringFormat(parseresult.Options.Template);
                         path = path.Replace("{1}", item.DataType);
-                        if (_Parser.ParseMode == ParseMode.Debug) Cache.Debug($"\n{path}");
-                        string fmt = item.ToStringFormat(Reader.Read(path));
+                        path = path.Replace("~", somContext.BasePath);
+                        if (_Parser.ParseMode == ParseMode.Debug) somContext.Cache.Append($"\n{path}");
+                        string rte = "";
+                        using (TextReader tr = File.OpenText(path))
+                            rte = tr.ReadToEnd();
+                        string fmt = item.ToStringFormat(rte);
                         result.Append(fmt);
                     }
                 }

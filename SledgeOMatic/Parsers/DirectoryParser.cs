@@ -20,44 +20,59 @@ namespace SOM.Parsers
         public string ResultFormat { get; set; }
         public string Dest { get; set; }
     }
-    public class DirectoryParser
+
+    public interface IDirectoryParser
+    {
+        Func<string, string> ContentFormatter { set; }
+        List<string> Directories { get; set; }
+        string FileFilter { get; set; }
+        IParser<string> Parser { get; set; }
+        string PathExcludePattern { get; set; }
+        string ResultFormat { get; set; }
+        Dictionary<string, string> Results { get; }
+
+        void Inspect();
+        void ParseDirectory();
+        void ParseDirectory(string Directory); 
+        void ParseToFile(string Filename);
+        string ToString();
+    }
+
+    public class DirectoryParser : IDirectoryParser
     {
         #region Props
-        public List<string> Directories { get; set; } = new List<string>(); 
+        public List<string> Directories { get; set; } = new List<string>();
         public Func<string, string> _ContentFormatter = (c) => (c);
         public Func<string, string> ContentFormatter
         {
             set { _ContentFormatter = value; }
         }
-        private string _ResultFormat; 
+        private string _ResultFormat;
         public string ResultFormat
         {
             get { return (string.IsNullOrWhiteSpace(_ResultFormat)) ? "{0}" : _ResultFormat; }
             set { _ResultFormat = value; }
         }
-        public Dictionary<string, string> Results { get; private set; } 
- 
-        public IParser<string> Parser { get; set; } 
+        public Dictionary<string, string> Results { get; private set; }
+
+        public IParser<string> Parser { get; set; }
         public string PathExcludePattern { get; set; } = @"\$";
         public string FileFilter { get; set; }
         #endregion
 
         #region Ctor
-
-        public DirectoryParser()
+        private readonly ISomContext somContext;
+        public DirectoryParser(ISomContext somContext)
         {
+            this.somContext = somContext;
             Results = new Dictionary<string, string>();
-            Cache.Write("");
-        }
-        public DirectoryParser(string Directory) : this()
-        {
-            Directories.Add(Directory);
-        }
+            somContext.Cache.Write("");
+        }  
         #endregion
 
         #region METHODS
 
-        public void ParseDirectory(string Directory) 
+        public void ParseDirectory(string Directory)
         {
             Directories.Add(Directory);
             ParseDirectory();
@@ -66,27 +81,32 @@ namespace SOM.Parsers
         {
             Results.Clear();
             foreach (var dir in Directories)
-            { 
-                string ff = (from p in dir.Split(@"\").Reverse() select p).FirstOrDefault(); 
+            {
+                string ff = (from p in dir.Split(@"\").Reverse() select p).FirstOrDefault();
                 string filter = (!string.IsNullOrWhiteSpace(ff)) ? ff : FileFilter;
 
                 DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(filter, "")}");
                 foreach (var file in DI.GetFiles(filter, SearchOption.AllDirectories))
                 {
+                    somContext.Logger.Information($"{file.DirectoryName} {file.Name}");
                     if (this.Parser.ParseMode == ParseMode.Debug)
-                        Console.WriteLine($"[DBG]: {file.DirectoryName} {file.Name}"); 
+                        Console.WriteLine($"[DBG]: {file.DirectoryName} {file.Name}");
 
-                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern)) 
+                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
                         continue;
-                    
-                    string content = Reader.Read(file.FullName);
-                    StringBuilder sb = new StringBuilder(); 
+
+                    string content = "";
+                    using (TextReader tr = File.OpenText(file.FullName))
+                        content = tr.ReadToEnd();
+                     
+                    StringBuilder sb = new StringBuilder();
                     foreach (var item in this.Parser.Parse(content))
                     {
-                        if (!string.IsNullOrWhiteSpace(item)) 
-                            sb.Append(_ContentFormatter(item) + "\n"); 
-                    } 
-                    if (sb.ToString() != ""){
+                        if (!string.IsNullOrWhiteSpace(item))
+                            sb.Append(_ContentFormatter(item) + "\n");
+                    }
+                    if (sb.ToString() != "")
+                    {
                         if (!Results.ContainsKey(file.FullName))
                         {
                             string fresult = sb.ToString();
@@ -94,26 +114,23 @@ namespace SOM.Parsers
                             fresult = fresult.Replace("/r", "\n");
                             Results.Add($"{file.FullName}", $"{fresult}");
                         }
-                    }     
+                    }
                 }
-            } 
-        }
-        public void ParseTo(IWriter Writer)
-        {
-            ParseDirectory();
-            Writer.Write(ToString());
-        }
+            }
+        } 
         public void ParseToFile(string Filename)
-        {
-            var writer = new FileWriter(Filename);
+        { 
             ParseDirectory();
-            writer.Write(ToString(), true);
+            Filename = Filename.Replace("~", somContext.BasePath);
+            using (StreamWriter w = File.AppendText($"{Filename}")) { }
+            File.WriteAllText($"{Filename}", ToString(), Encoding.Unicode); 
         }
         public void Inspect()
         {
             ParseDirectory();
-            Cache.Inspect(ToString());
-        } 
+            somContext.Cache.Write(ToString());
+            somContext.Cache.Inspect();
+        }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -130,7 +147,7 @@ namespace SOM.Parsers
                     sb.Append($"{kvp.Value}\n");
             }
             return sb.ToString();
-        } 
+        }
         #endregion
     }
 }

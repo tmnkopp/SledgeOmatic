@@ -21,9 +21,10 @@ namespace SOM.Procedures
         #region METHODS
 
         public override string Compile(ISomContext somContext)
-        {
+        { 
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
+            base.PopulateKeyVals(somContext);
             foreach (var contentline in base.ParseLines(content))
             {
                 string line = contentline;
