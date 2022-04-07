@@ -171,16 +171,14 @@ namespace SOM.Compilers
         }
         private void CommitFile(string Content, string FileName)
         {
-            this.somContext.Logger.Information($"FileName: {FileName}");
-
+            this.somContext.Logger.Debug($"FileName: {FileName}"); 
             if (CompileMode == CompileMode.Commit){ 
                 File.WriteAllText($"{FileName}", Content, Encoding.Unicode); 
             }
             if (CompileMode == CompileMode.Debug){ 
                 this.somContext.Logger.Debug($"FileName: {FileName}");
                 this.somContext.Cache.Append($"\n\n som! -p {FileName} \n!som \n\n{Content}\n");
-             }
-                
+             } 
             if (CompileMode == CompileMode.Cache){
                 this.somContext.Cache.Append($"{Content}\n");
             }      

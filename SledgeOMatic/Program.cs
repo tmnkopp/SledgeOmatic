@@ -11,7 +11,8 @@ using SOM.Parsers;
 using SOM.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 namespace SOM
 {
     class Program
@@ -25,7 +26,7 @@ namespace SOM
             IParseProcessor parseProcessor = serviceProvider.GetService<IParseProcessor>();
             ICompileProcessor compileProcessor = serviceProvider.GetService<ICompileProcessor>();
             IConfigProcessor configProcessor = serviceProvider.GetService<IConfigProcessor>();
-  
+   
             var exit = Parser.Default.ParseArguments<CompileOptions, ParseOptions, ConfigOptions>(args)
                 .MapResult(
                 (CompileOptions o) => { 

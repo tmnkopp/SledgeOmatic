@@ -17,6 +17,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace SOM 
 {
@@ -52,78 +53,37 @@ namespace SOM
                 configFile = (o.Path.Contains(".yaml")) ? o.Path : $"{o.Path}.yaml"; 
             }
             logger.Information("{o}", configFile);
-            compiler.CompileMode = o.CompileMode; 
-            var yaml = new YamlStream();
-            using (TextReader tr = File.OpenText(configFile))
-                yaml.Load(tr);
-            var root = (YamlMappingNode)yaml.Documents[0].RootNode;
-
-            List<object> oparms;
-            foreach (var rootitem in root.Children)  {
-                PropertyInfo pi = compiler.GetType().GetProperty(rootitem.Key.ToString());
-                if (pi != null)  { 
-                    if (pi.PropertyType.FullName.Contains("List`1"))  { 
-                        foreach (var propitems in ((YamlSequenceNode)rootitem.Value).Children)
-                        {
-                            string stype = ((YamlMappingNode)propitems).FirstOrDefault().Key.ToString();
-                            oparms = GetParms((YamlMappingNode)propitems);
-
-                            var typ = Assm().GetTypes().Where(t => t.Name == stype && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
-                            Type gtyp = Type.GetType($"{typ.FullName}, SOM");
-                            var obj = Activator.CreateInstance(gtyp, oparms.ToArray());
-                            pi.PropertyType.GetMethod("Add").Invoke(pi.GetValue(compiler), new object[] { obj });
-                        }
-                    }
-                    else  {
-                        pi.SetValue(compiler, rootitem.Value.ToString(), null);
-                    }
-                }
-                MethodInfo[] methods = compiler.GetType().GetMethods().Where(m => m.Name.ToLower() == rootitem.Key.ToString().ToLower()).ToArray();
-                if (methods.Count() > 0)
-                {
-                    oparms = new List<object>();
-                    foreach (var parmValue in ((YamlSequenceNode)rootitem.Value).Children)
-                        oparms.Add(parmValue.ToString()); 
-
-                    foreach (MethodInfo m in methods) 
-                        if (m.Name == rootitem.Key.ToString() && m.GetParameters().Count() == oparms.Count()) 
-                            m.Invoke(compiler, oparms.ToArray());  
-                } 
-                if (Regex.IsMatch(rootitem.Key.ToString().ToLower(), $"compilation"))
-                { 
-                    ((YamlSequenceNode)rootitem.Value).Children.ToList().ForEach(ncomp => {
-                        ((YamlMappingNode)ncomp).Children.ToList().ForEach(nprop => {
-                            var propinfo = compiler.GetType().GetProperties().Where(p => p.Name == nprop.Key.ToString()).FirstOrDefault();
-                            propinfo?.SetValue(compiler, nprop.Value.ToString(), null);
-                        });
-                        compiler.Compile();
-                    }); 
-                }
-            } 
-            if (o.CompileMode != CompileMode.Commit) somContext.Cache.Inspect(); 
-        }
-        private List<object> GetParms(YamlMappingNode propitems)
-        {
-            List<object> oparms = new List<object>();
-            string stype = "";
-            foreach (var prop in (YamlMappingNode)propitems)
+            compiler.CompileMode = o.CompileMode;
+             
+            string raw = File.ReadAllText(configFile);
+            var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
+            var def = deser.Deserialize<CompileDefinition>(raw);
+ 
+            def.ContentCompilers.ForEach(c =>
             {
-                stype = prop.Key.ToString();
-                if (prop.Value.GetType() == typeof(YamlSequenceNode))
-                {
-                    foreach (var parm in ((YamlSequenceNode)prop.Value).Children)
-                        oparms.Add(parm.ToString());
-                }
-                if (prop.Value.GetType() == typeof(YamlScalarNode))
-                {
-                    oparms.Add(prop.Value.ToString());
-                }
-            }
-            return oparms;
-        }
-        private Assembly Assm() {
-            Assembly assmsom = Assembly.GetExecutingAssembly();
-            return assmsom;
+                var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault(); 
+                ICompilable obj = (ICompilable)Activator.CreateInstance(typ, c.Args.ToArray());
+                compiler.ContentCompilers.Add(obj); 
+            });
+            def.FilenameCompilers.ForEach(c =>
+            {
+                var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
+                ICompilable obj = (ICompilable)Activator.CreateInstance(typ, c.Args.ToArray());
+                compiler.FilenameCompilers.Add(obj);
+            }); 
+            def.Compilations.ForEach(c =>
+            {
+                compiler.FileFilter = c.FileFilter;
+                compiler.Source = (c.Source ?? "~").Replace("~", somContext.BasePath);
+                compiler.Dest = (c.Dest ?? "~").Replace("~", somContext.BasePath);
+                compiler.Compile();
+            });
+            if (o.CompileMode != CompileMode.Commit) somContext.Cache.Inspect();
+           
+        } 
+        private Type[] AssmTypes() {
+            Assembly assm = Assembly.GetExecutingAssembly();
+            return assm.GetTypes();
         }
     }
 }
