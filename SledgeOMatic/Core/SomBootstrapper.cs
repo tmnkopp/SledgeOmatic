@@ -14,8 +14,9 @@ namespace SOM
         {
             string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User); 
             if (string.IsNullOrEmpty(basepath)) 
-                Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User); 
-       
+                Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User);
+            basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+
             DirectoryInfo DI;
             string[] dirnames = new string[] {
                 basepath, $"{basepath}parse", $"{basepath}compile", $"{basepath}logs"
