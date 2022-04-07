@@ -25,7 +25,7 @@ namespace SOM
                 DI = new DirectoryInfo(dir);
                 if (!DI.Exists) Directory.CreateDirectory(dir);
             } 
-            string[] filenames = new string[] { "som.cache"  }; 
+            string[] filenames = new string[] { "som.cache", "somexec.ps1" }; 
             foreach (string filename in filenames)
             {
                 using (StreamWriter w = File.AppendText($"{basepath}\\{filename}"))  {  }
