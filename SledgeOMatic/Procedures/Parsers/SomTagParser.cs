@@ -10,14 +10,16 @@ using System.Text.RegularExpressions;
 namespace SOM.Procedures
 {
 
-    public class SomTagParser : BaseParser, IParser<CommandParseResult> 
+    public class SomTagParser : IParser<CommandParseResult> 
     {  
         private string _parsetag = "";
         public SomTagParser(string ParseTag) {
             _parsetag = ParseTag;
-        } 
-        public IEnumerable<CommandParseResult> Parse(string content)
+        }
+        public IEnumerable<CommandParseResult> Parse(ISomContext somContext)
         {
+            string content = somContext.Content;
+
             content = $"\n{content}\n";
             MatchCollection mc = Regex.Matches(content, @"\n.*som!"+ _parsetag + "\\s?(.*)", RegexOptions.IgnoreCase);
             foreach (Match prefix in mc)

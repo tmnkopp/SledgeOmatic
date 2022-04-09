@@ -25,8 +25,7 @@ namespace CoreTests
             ISomContext somContext = new SomContext(config, logger, cache);
             var compiler = new Compiler(somContext);
             compiler.Source = som;
-            compiler.FileFilter = "*.som";
-            compiler.CompileMode = CompileMode.Cache;
+            compiler.FileFilter = "*.som"; 
             compiler.ContentCompilers.Add(new ModelCompile("aspnet_Users", ".*")); 
             compiler.Compile();
             cache.Inspect();
@@ -42,8 +41,7 @@ namespace CoreTests
             ISomContext somContext = new SomContext(config, logger, cache);
             var compiler = new Compiler(somContext);
             compiler.Source = som;
-            compiler.FileFilter = "*.som";
-            compiler.CompileMode = CompileMode.Cache;
+            compiler.FileFilter = "*.som"; 
             compiler.ContentCompilers.Add(new RegexReplacer("{\"FOO\":\"BAR\"}"));
             compiler.ContentCompilers.Add(new NumericIncrementer(1000, 2000,  @"\d{4}"));
             compiler.Compile();

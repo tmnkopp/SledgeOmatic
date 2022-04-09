@@ -13,6 +13,7 @@ namespace SOM
         ILogger Logger { get;  }
         ICacheService Cache { get;  }
         string Content { get; set; }
+        ISomOptions Options { get; set; }
         string BasePath { get; }
     }
     public class SomContext: ISomContext
@@ -20,6 +21,7 @@ namespace SOM
         public IConfiguration Config { get => this.config ; }
         public ILogger Logger { get => this.logger;  }
         public ICacheService Cache { get => this.cacheService;  }
+        public ISomOptions Options { get; set; }
         public string Content { get; set; } = ""; 
         public string BasePath => this.config.GetSection("AppSettings:BasePath").Value;
 

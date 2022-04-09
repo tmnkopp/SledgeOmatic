@@ -23,7 +23,7 @@ namespace SOM
 {
     public interface ICompileProcessor
     {
-        void Process(CompileOptions o);
+        void Process(ISomContext somContext);
     }
     public class CompileProcessor : ICompileProcessor
     {
@@ -41,19 +41,18 @@ namespace SOM
             this.config = this.somContext.Config;
             this.logger = this.somContext.Logger; 
         }
-        public void Process(CompileOptions o) 
+        public void Process(ISomContext somContext) 
         {
             string configPath = config.GetSection("AppSettings:CompileConfig").Value ?? "~";
             string basePath = config.GetSection("AppSettings:BasePath").Value;
-            string configFile = o.Path;
-            if (!string.IsNullOrEmpty(o.Path.ToString()))  {
+            string configFile = somContext.Options.Path;
+            if (!string.IsNullOrEmpty(configFile.ToString()))  {
                 configPath = configPath.Replace("~", basePath); 
-                if (!o.Path.Contains(":")) o.Path = $"{configPath}{o.Path}"; 
-                o.Path = o.Path.Replace(@"\\", @"\");
-                configFile = (o.Path.Contains(".yaml")) ? o.Path : $"{o.Path}.yaml"; 
+                if (!configFile.Contains(":")) configFile = $"{configPath}{configFile}";
+                configFile = configFile.Replace(@"\\", @"\");
+                configFile = (configFile.Contains(".yaml")) ? configFile : $"{configFile}.yaml"; 
             }
-            logger.Information("{o}", configFile);
-            compiler.CompileMode = o.CompileMode;
+            logger.Information("{o}", configFile); 
              
             string raw = File.ReadAllText(configFile);
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
@@ -78,7 +77,7 @@ namespace SOM
                 compiler.Dest = (c.Dest ?? "~").Replace("~", somContext.BasePath);
                 compiler.Compile();
             });
-            if (o.CompileMode != CompileMode.Commit) somContext.Cache.Inspect();
+            if (somContext.Options.Mode != SomMode.Commit) somContext.Cache.Inspect();
            
         } 
         private Type[] AssmTypes() {

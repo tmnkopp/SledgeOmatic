@@ -35,8 +35,8 @@ namespace SOM.Procedures
             string content = somContext.Content;
 
             for (int i = 12; i > 0; i -= 4)
-            {
-                var parsed = new SomDocParser(i).Parse(content);
+            { 
+                var parsed = new SomDocParser(i).Parse(somContext); 
                 foreach (var pr in parsed)
                 {
                     Type typ = Type.GetType($"{pr.CommandType.FullName}, SOM");
@@ -46,19 +46,19 @@ namespace SOM.Procedures
                     var parseItem = pr.Parsed;
                     var oparms = pr.Parms(ctor.GetParameters());
 
-                    somContext.Logger.Information("{o} {p}", pr.CommandType.FullName, string.Join(", ", oparms.ToArray()));
-
-
+                    somContext.Logger.Information("SomTagInterpreter: Indent{i} {o} {p}", i, pr.CommandType.FullName, string.Join(", ", oparms.ToArray()));
+                     
                     ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
                     somContext.Content = parseItem;
                     parseItem = obj.Compile(somContext);
-                    if (!pr.Options.Verbose && !verbose)
-                        parseItem = RemoveTags(parseItem);
-
+                    parseItem = RemoveTags(parseItem); 
                     content = content.Replace(pr.Parsed, parseItem);
+                    somContext.Content = content;
+                    if (pr.Options.Verbose)
+                        somContext.Cache.Write(content);
                 }
             }
-            return content;
+            return somContext.Content;
         }
         public string RemoveTags(string tagged)
         {

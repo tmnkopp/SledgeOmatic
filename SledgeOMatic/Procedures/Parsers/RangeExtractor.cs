@@ -14,7 +14,7 @@ using SOM.Data;
 namespace SOM.Procedures
 {
     
-    public class RangeExtractor : BaseParser, IParser<string>
+    public class RangeExtractor :IParser<string>
     { 
         private string _extractPattern;
         private string _fromWhere;
@@ -26,17 +26,15 @@ namespace SOM.Procedures
             _fromWhere = FromWhere;
             _toWhere = (ToWhere!= "") ? ToWhere : "~~~~"; 
         }
-        public virtual IEnumerable<string> Parse(string content)
-        { 
+        public IEnumerable<string> Parse(ISomContext somContext)
+        {
+            string content = somContext.Content;
             string _fromPattern = $"(?={_fromWhere})";
             string[] lines = Regex.Split(content, _fromPattern);
             lines = (from fs in lines where Regex.IsMatch(fs, _extractPattern) select fs).ToArray();
-            
-            if (this.ParseMode == ParseMode.Debug)  Console.WriteLine($"{_fromPattern}");
-
+       
             foreach (var line in lines)
-            {
-                if (this.ParseMode == ParseMode.Debug)  Console.WriteLine($"{line}"); 
+            { 
                 if (Regex.IsMatch(line, _extractPattern))
                 {
                     int toPos = line.IndexOf(_toWhere);

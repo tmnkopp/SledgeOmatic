@@ -29,16 +29,21 @@ namespace SOM
             this.logger = logger;
         }
         public void Process(ConfigOptions o) {
-            Console.Clear();
-            var cnt = 0;
-            Console.Write($"{string.Join("\n", from t in types() let c = cnt++ select $"({c}) {t}")}\n");
+         
+            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+
+            logger.Information($"basepath: {basepath}");
+            logger.Information($"Bootstrap: {o.Bootstrap}");
+            logger.Information($"Args: {o.Args}");
+            logger.Information($"Path: {o.Path}");
+
+            var splitArgs = o.Args?.Split(new[] { "/p" }, StringSplitOptions.None);
+            logger.Information($"\n{string.Join("\n", from t in splitArgs where !string.IsNullOrWhiteSpace(t) select t)}");
+             
             var AppSettings = config.GetSection("AppSettings").GetChildren();
-            foreach (var item in AppSettings) 
-                logger.Information("{k} {v}", item.Key, item.Value);
+            foreach (var item in AppSettings) logger.Information("{k} {v}", item.Key, item.Value);
 
-            //Bootstrapper.Run();
-            // logger.LogInformation($"CompileConfig: {o}", config.GetSection("AppSettings:CompileConfig").Value);
-
+            if (o.Bootstrap) SomBootstrapper.Run(o); 
         }
         private static List<Type> types()
         { 

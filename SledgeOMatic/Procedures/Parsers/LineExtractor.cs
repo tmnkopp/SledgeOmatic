@@ -10,7 +10,7 @@ using SOM.Procedures ;
 
 namespace SOM.Procedures
 {
-    public class LineExtractor : BaseParser, IParser<string>
+    public class LineExtractor : IParser<string>
     {
         private string _extractTarget;
         private int _numberOfLines = 4; 
@@ -19,15 +19,13 @@ namespace SOM.Procedures
         {
             _extractTarget = ExtractTarget;
             _numberOfLines = NumberOfLines; 
-        } 
-        public IEnumerable<string> Parse(string content)
-        { 
+        }  
+        public IEnumerable<string> Parse(ISomContext somContext){ 
+            string content = somContext.Content;
             content = content.Replace("\r", "\n").Replace("\n\n", "\n");
             content = $"{new string('\n', _numberOfLines)}{content}{new string('\n', _numberOfLines)}";
             string[] lines = content.Split('\n');
             int findingCnt = 0;
-            if (this.ParseMode == ParseMode.Debug)
-                Console.WriteLine($"[Debug]: _extractTarget {_extractTarget} {Regex.Match(content, _extractTarget).Success}");
             for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
             { 
                 Match match = Regex.Match(lines[lineIndex], _extractTarget); 
@@ -40,7 +38,7 @@ namespace SOM.Procedures
                     {
                         if (takeIndex < lines.Length && takeIndex > 0)
                         { 
-                            if ( ParseMode == ParseMode.Default)
+                            if (somContext.Options.Mode == SomMode.Cache)
                                 result.Append( lines[takeIndex] + "\n"  );
                             else
                                 result.Append($"{lines[takeIndex]} [LN {takeIndex.ToString()}]\n");  

@@ -50,7 +50,7 @@ namespace SOM.Procedures
         {
             string content = somContext.Content;
             IParser<CommandParseResult> _Parser = new SomTagParser("SCHEMA");
-            foreach (var parseresult in _Parser.Parse(content))
+            foreach (var parseresult in _Parser.Parse(somContext))
             {
                 StringBuilder result = new StringBuilder();
                 IEnumerable<AppModelItem> _AppModelItems = _SchemaProvider
@@ -65,7 +65,7 @@ namespace SOM.Procedures
                         string path = item.ToStringFormat(parseresult.Options.Template);
                         path = path.Replace("{1}", item.DataType);
                         path = path.Replace("~", somContext.BasePath);
-                        if (_Parser.ParseMode == ParseMode.Debug) somContext.Cache.Append($"\n{path}");
+                
                         string rte = "";
                         using (TextReader tr = File.OpenText(path))
                             rte = tr.ReadToEnd();

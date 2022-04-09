@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SOM.Compilers
-{
-    public enum CompileMode
-    {
-        Debug, Cache, Commit
-    }
+namespace SOM 
+{ 
     public enum SomMode
     {
         Debug, Cache, Commit

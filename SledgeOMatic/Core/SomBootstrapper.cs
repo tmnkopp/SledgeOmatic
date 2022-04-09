@@ -8,16 +8,26 @@ using System.Threading.Tasks;
 
 namespace SOM
 {
+    
     public static class SomBootstrapper
     {
-        public static void Run()
+        public static void Run(ConfigOptions o)
         {
-            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User); 
-            if (string.IsNullOrEmpty(basepath)) 
-                Environment.SetEnvironmentVariable("som", "c:\\_som\\", EnvironmentVariableTarget.User);
-            basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-
             DirectoryInfo DI;
+            if (!string.IsNullOrWhiteSpace(o.Path))
+            {
+                DI = new DirectoryInfo(o.Path);
+                if (!DI.Exists) Directory.CreateDirectory(o.Path);
+                Environment.SetEnvironmentVariable("som", o.Path, EnvironmentVariableTarget.User);
+            }  
+            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User).Trim(); 
+            if (string.IsNullOrWhiteSpace(basepath))
+            {
+                string err = "\nProvide a path for som:\n";
+                err += " -p \" c:\\basepath_to_som  \" ";
+                Console.WriteLine(err);
+                return;
+            }
             string[] dirnames = new string[] {
                 basepath, $"{basepath}parse", $"{basepath}compile", $"{basepath}logs"
             }; 

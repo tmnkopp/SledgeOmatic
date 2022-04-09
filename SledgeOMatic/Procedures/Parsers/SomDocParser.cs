@@ -6,15 +6,16 @@ using System.Text.RegularExpressions;
 
 namespace SOM.Procedures
 {
-    public class SomDocParser : BaseParser, IParser<CommandParseResult>
+    public class SomDocParser : IParser<CommandParseResult>
     {
         private int indent = 0;
         public SomDocParser( int Indent )
         {
             this.indent = Indent; 
         }
-        public IEnumerable<CommandParseResult> Parse(string content)
+        public IEnumerable<CommandParseResult> Parse(ISomContext somContext)
         {
+            string content = somContext.Content;
             StringBuilder sb = new StringBuilder();
             content = $"\n{content}\n"; 
  
@@ -22,6 +23,7 @@ namespace SOM.Procedures
             string pattern = @".*som!(\w+) ?(.+)\n";
             string regex = $"{indent}{pattern}";
             var mc = Regex.Matches(content, regex, RegexOptions.Multiline);
+            
             foreach (Match prefix in mc)
             {
                 if (prefix?.Groups.Count > 0)

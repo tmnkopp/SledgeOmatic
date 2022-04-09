@@ -39,8 +39,7 @@ namespace SOM.Compilers
             set { _fileFilter = value; }
         }
         public List<ICompilable> ContentCompilers { get; set; }
-        public List<ICompilable> FilenameCompilers { get; set; }
-        public CompileMode CompileMode { get; set; }
+        public List<ICompilable> FilenameCompilers { get; set; } 
         #endregion
 
         #region Events 
@@ -59,7 +58,7 @@ namespace SOM.Compilers
         {
             OnCompiled?.Invoke(this, e);
             string onCompiledPs = $"{this.Source}\\OnCompiled.ps1";
-            if (this.CompileMode == CompileMode.Commit && File.Exists(onCompiledPs))
+            if (somContext.Options.Mode == SomMode.Commit && File.Exists(onCompiledPs))
             {
                 ProcessStartInfo psi = new ProcessStartInfo()
                 {
@@ -108,24 +107,19 @@ namespace SOM.Compilers
         #endregion
 
         #region Methods  
-        public void Compile(string FileFilter, string Dest)
-        {
-            this.Dest = Dest;
-            this.FileFilter = FileFilter;
-            Compile();
-        }
-        public void Compile(string FileFilter)
-        {
-            this.FileFilter = FileFilter;
-            Compile();
-        }
+  
         public virtual void Compile()
         {
             var args = new CompilerEventArgs(Source, Dest); 
             PreCompile(args);
+
+            string ff = (from p in Source.Split(@"\").Reverse() select p).FirstOrDefault();
+            string filter = (!string.IsNullOrWhiteSpace(ff)) ? ff : "*.*";
+
             DirectoryInfo DI = new DirectoryInfo($"{Source}");
-             
-            foreach (FileInfo file in DI.GetFiles(FileFilter, SearchOption.AllDirectories))
+
+            SearchOption SearchDepth = (SearchOption)somContext.Options.SearchDepth;
+            foreach (FileInfo file in DI.GetFiles(FileFilter, SearchDepth))
             {
                 string content = "";
                 using (TextReader tr = File.OpenText(file.FullName))
@@ -158,6 +152,7 @@ namespace SOM.Compilers
         {
             somContext.Content = content;
             foreach (ICompilable proc in ContentCompilers) {
+                somContext.Logger.Information(proc.ToString());
                 this.somContext.Content = proc.Compile(somContext);
             }     
             return _ContentPostFormatter(this.somContext.Content);
@@ -172,14 +167,14 @@ namespace SOM.Compilers
         private void CommitFile(string Content, string FileName)
         {
             this.somContext.Logger.Debug($"FileName: {FileName}"); 
-            if (CompileMode == CompileMode.Commit){ 
+            if (somContext.Options.Mode == SomMode.Commit){ 
                 File.WriteAllText($"{FileName}", Content, Encoding.Unicode); 
             }
-            if (CompileMode == CompileMode.Debug){ 
+            if (somContext.Options.Mode == SomMode.Debug){ 
                 this.somContext.Logger.Debug($"FileName: {FileName}");
-                this.somContext.Cache.Append($"\n\n som! -p {FileName} \n!som \n\n{Content}\n");
+                this.somContext.Cache.Append($"{FileName}\n{Content}\n");
              } 
-            if (CompileMode == CompileMode.Cache){
+            if (somContext.Options.Mode == SomMode.Cache){
                 this.somContext.Cache.Append($"{Content}\n");
             }      
         }

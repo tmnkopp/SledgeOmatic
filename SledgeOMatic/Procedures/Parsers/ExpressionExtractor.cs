@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace SOM.Procedures 
 {
-    public class ExpressionExtractor : BaseParser, IParser<string>
+    public class ExpressionExtractor : IParser<string>
     {
         private List<string> _patterns = new List<string>();
         public ExpressionExtractor(string Patterns)
         {
             _patterns = Patterns.Split(",").ToList();
         }
-        public IEnumerable<string> Parse(string content)
+        public IEnumerable<string> Parse(ISomContext somContext)
         {
+            string content = somContext.Content;
             content = content.Replace("\r", "\n").Replace("\n\n", "\n");
             string[] lines = content.Split('\n');
             int linecnt = 0;
@@ -29,7 +30,7 @@ namespace SOM.Procedures
                     if (match.Success)
                     {
                         StringBuilder result = new StringBuilder();
-                        if (ParseMode == ParseMode.Default)
+                        if (somContext.Options.Mode == SomMode.Cache)
                             result.Append(line + "\n");
                         else
                             result.Append($"{line}[LN {linecnt.ToString()}]\n");

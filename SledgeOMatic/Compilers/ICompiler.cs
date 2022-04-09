@@ -10,8 +10,7 @@ namespace SOM.Compilers
         #region Props 
         public string Source { get; set; }
         public string Dest { get; set; }
-        public string FileFilter { get; set; }
-        public CompileMode CompileMode { get; set; }
+        public string FileFilter { get; set; } 
         public List<ICompilable> ContentCompilers { get; set; }
         public List<ICompilable> FilenameCompilers { get; set; }
         #endregion

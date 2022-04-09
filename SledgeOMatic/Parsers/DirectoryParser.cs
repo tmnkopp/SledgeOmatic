@@ -12,14 +12,6 @@ using System.Threading.Tasks;
 
 namespace SOM.Parsers
 {
-    public class DirectoryParseDefinition{
-        public List<string> Directories{ get; set; } 
-        public string ParseType { get; set; }
-        public List<object> ParseTypeArgs { get; set; }
-        public string FileFilter { get; set; } 
-        public string ResultFormat { get; set; }
-        public string Dest { get; set; }
-    }
 
     public interface IDirectoryParser
     {
@@ -30,11 +22,8 @@ namespace SOM.Parsers
         string PathExcludePattern { get; set; }
         string ResultFormat { get; set; }
         Dictionary<string, string> Results { get; }
-
-        void Inspect();
-        void ParseDirectory();
-        void ParseDirectory(string Directory); 
-        void ParseToFile(string Filename);
+         
+        void ParseDirectory();  
         string ToString();
     }
 
@@ -70,37 +59,28 @@ namespace SOM.Parsers
         }  
         #endregion
 
-        #region METHODS
-
-        public void ParseDirectory(string Directory)
-        {
-            Directories.Add(Directory);
-            ParseDirectory();
-        }
+        #region METHODS 
         public void ParseDirectory()
         {
             Results.Clear();
             foreach (var dir in Directories)
             {
                 string ff = (from p in dir.Split(@"\").Reverse() select p).FirstOrDefault();
-                string filter = (!string.IsNullOrWhiteSpace(ff)) ? ff : FileFilter;
-
+                string filter = (!string.IsNullOrWhiteSpace(ff)) ? ff : "*.*"; 
                 DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(filter, "")}");
-                foreach (var file in DI.GetFiles(filter, SearchOption.AllDirectories))
+                SearchOption SearchDepth = (SearchOption)somContext.Options.SearchDepth;
+                foreach (var file in DI.GetFiles(filter, SearchDepth))
                 {
-                    somContext.Logger.Information($"{file.DirectoryName} {file.Name}");
-                    if (this.Parser.ParseMode == ParseMode.Debug)
-                        Console.WriteLine($"[DBG]: {file.DirectoryName} {file.Name}");
+                    somContext.Logger.Information($"{file.DirectoryName} {file.Name}"); 
 
                     if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
                         continue;
-
-                    string content = "";
-                    using (TextReader tr = File.OpenText(file.FullName))
-                        content = tr.ReadToEnd();
                      
+                    using (TextReader tr = File.OpenText(file.FullName))
+                        somContext.Content = tr.ReadToEnd();
+            
                     StringBuilder sb = new StringBuilder();
-                    foreach (var item in this.Parser.Parse(content))
+                    foreach (var item in this.Parser.Parse(somContext))
                     {
                         if (!string.IsNullOrWhiteSpace(item))
                             sb.Append(_ContentFormatter(item) + "\n");
@@ -117,24 +97,11 @@ namespace SOM.Parsers
                     }
                 }
             }
-        } 
-        public void ParseToFile(string Filename)
-        { 
-            ParseDirectory();
-            Filename = Filename.Replace("~", somContext.BasePath);
-            using (StreamWriter w = File.AppendText($"{Filename}")) { }
-            File.WriteAllText($"{Filename}", ToString(), Encoding.Unicode); 
-        }
-        public void Inspect()
-        {
-            ParseDirectory();
-            somContext.Cache.Write(ToString());
-            somContext.Cache.Inspect();
-        }
+        }  
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            if (this.Parser.ParseMode != ParseMode.Default)
+            if (somContext.Options.Mode != SomMode.Cache)
             {
                 foreach (KeyValuePair<string, string> kvp in Results)
                     sb.Append($"{kvp.Key}\n");
