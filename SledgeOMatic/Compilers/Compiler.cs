@@ -152,7 +152,8 @@ namespace SOM.Compilers
         {
             somContext.Content = content;
             foreach (ICompilable proc in ContentCompilers) {
-                somContext.Logger.Information(proc.ToString());
+                if (this.somContext.Options.Verbose)
+                    somContext.Logger.Information(proc.ToString());
                 this.somContext.Content = proc.Compile(somContext);
             }     
             return _ContentPostFormatter(this.somContext.Content);

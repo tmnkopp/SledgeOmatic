@@ -71,7 +71,8 @@ namespace SOM.Parsers
                 SearchOption SearchDepth = (SearchOption)somContext.Options.SearchDepth;
                 foreach (var file in DI.GetFiles(filter, SearchDepth))
                 {
-                    somContext.Logger.Information($"{file.DirectoryName} {file.Name}"); 
+                    if (this.somContext.Options.Verbose) 
+                        somContext.Logger.Information($"{file.DirectoryName} {file.Name}"); 
 
                     if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
                         continue;
