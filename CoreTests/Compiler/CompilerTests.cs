@@ -1,17 +1,15 @@
 ﻿using CommandLine;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SOM;
 using SOM.Compilers;
-using SOM.IO; 
+using SOM.IO;
 using SOM.Procedures;
 using System;
 
 namespace CoreTests
-{ 
+{
     [TestClass]
     public class CompilerTests
     { 
@@ -47,31 +45,6 @@ namespace CoreTests
             compiler.Compile();
             cache.Inspect();
             Assert.IsNotNull(compiler);
-        }
-    }
-    public class TestServices
-    {
-        private IConfiguration _config;
-        public TestServices()
-        {
-            IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<IConfiguration>(Configuration);
-        }
-        public IConfiguration Configuration
-        {
-            get
-            {
-                if (_config == null)
-                {
-                    var path = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-                    var builder = new ConfigurationBuilder()
-                        .SetBasePath(@$"{path}")
-                        .AddJsonFile($"appsettings.json", optional: false);
-                    _config = builder.Build();
-                }
-
-                return _config;
-            }
         }
     }
 }

@@ -12,19 +12,33 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using SOM.Parsers;
 using System.Linq;
+using CoreTests;
+using Moq;
+using Serilog;
+using Microsoft.Extensions.Configuration;
+using SOM;
 
 namespace UnitTests
 { 
     [TestClass]
     public class ParseTests
     { 
+        private ISomContext somContext;
+        public ParseTests()
+        {
+            var config = new TestServices().Configuration;
+            var logger = new Mock<ILogger>().Object;
+            var cache = new CacheService(config, logger);
+            somContext = new SomContext(config, logger, cache);
+        }
         [TestMethod]
         public void LineExtractor_Extracts()
         {
             string content = "111\n222\n333\n-target-\n444\n555\n666\n111\n222\n333\n-target-\n444\n555\n666\n";
             LineExtractor parser = new LineExtractor("-target-", 2);
             StringBuilder result = new StringBuilder();
-            foreach (var item in parser.Parse(content))
+            somContext.Content = content;
+            foreach (var item in parser.Parse(somContext))
                 result.Append(item);
             string expected = "222\n333\n-target-\n444\n555";
             Assert.AreEqual(expected, result.ToString());
@@ -35,8 +49,9 @@ namespace UnitTests
         {
             string content = "1\n2\n3\n-target-\n1\n2\n3\n-target-\n1\n5\n3";
             StringBuilder result = new StringBuilder();
-            RangeExtractor parser = new RangeExtractor("-target-", "2", "1"); 
-            foreach (var item in parser.Parse(content))
+            RangeExtractor parser = new RangeExtractor("-target-", "2", "1");
+            somContext.Content = content;
+            foreach (var item in parser.Parse(somContext))
                 result.Append(item);
             Assert.AreEqual("2\n3\n-target-\n12\n3\n-target-\n1", result.ToString());
         }
@@ -45,8 +60,9 @@ namespace UnitTests
         {
             string content = "1\n2\n3\n<-target->\n1\n2\n3\n<-target->\n1\n5\n3";
             StringBuilder result = new StringBuilder();
-            RangeExtractor parser = new RangeExtractor("-target-", "<", ">"); 
-            foreach (var item in parser.Parse(content))
+            RangeExtractor parser = new RangeExtractor("-target-", "<", ">");
+            somContext.Content = content;
+            foreach (var item in parser.Parse(somContext))
                 result.Append(item);
             Assert.AreEqual("<-target-><-target->", result.ToString());
         }
