@@ -75,6 +75,7 @@ namespace SOM.Procedures
         public virtual string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
+            PopulateKeyVals(somContext);
             foreach (var item in KeyVals)
             {
                 content = content.Replace(item.Key, item.Value);
@@ -94,7 +95,7 @@ namespace SOM.Procedures
         } 
         public KeyValReplacer(string Source)
         {
-            this.Source = Source;
+            this.Source = Source; 
         }
         public KeyValReplacer(Dictionary<string, string> Dict)
         {

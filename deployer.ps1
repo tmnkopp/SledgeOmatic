@@ -8,7 +8,13 @@
         cd 'C:\Users\Tim\source\repos\SledgeOMatic'; 
         dotnet build --configuration Debug ; dotnet build --configuration Release ;
         dotnet publish SledgeOMatic -p:PublishProfile=FolderProfile ; 
-        Copy-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\SOM.exe -Destination c:\_som\SOM.exe -Force  
+        Copy-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\SOM.exe -Destination c:\_som\SOM.exe -Force 
+     
+        (Get-Content C:\_som\appsettings.json) `
+        -replace '(Database|Server)=.*;', '' `
+        -replace 'ConnectionStrings', 'ConnectionStrings' |
+        Out-File C:\_som\appsettings.local
+
     }
     if ($with -match ' commit ' ){
         $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
