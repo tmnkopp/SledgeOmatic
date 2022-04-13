@@ -46,32 +46,22 @@ namespace SOM.Procedures
             return KeyVals;
         }
         protected bool IsValidJson(string strInput)
-        {
-            if (string.IsNullOrWhiteSpace(strInput)) { return false; }
+        { 
             strInput = strInput.Trim();
-            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || //For object
-                (strInput.StartsWith("[") && strInput.EndsWith("]"))) //For array
+            if (strInput.StartsWith("{") && strInput.EndsWith("}"))
             {
                 try
                 {
                     var obj = JToken.Parse(strInput);
                     return true;
-                }
-                catch (JsonReaderException jex)
-                {
-                    Console.WriteLine($"JsonReaderException: {jex.Message}");
-                    return false;
-                }
+                } 
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         public virtual string Compile(ISomContext somContext)
         {
@@ -87,9 +77,6 @@ namespace SOM.Procedures
     #endregion 
     public class KeyValReplacer : BaseKeyValReplacer, ICompilable
     {
-        public KeyValReplacer()
-        { 
-        } 
         public KeyValReplacer(string Source)
         {
             this.Source = Source; 
