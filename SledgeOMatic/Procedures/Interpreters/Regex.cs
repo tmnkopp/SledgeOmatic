@@ -32,7 +32,7 @@ namespace SOM.Procedures
         {
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            base.PopulateKeyVals(somContext);
+            var keyvals = base.PopulateKeyVals(somContext);
             foreach (var line in base.ParseLines(content))
             {
                 string replacement = line;
@@ -41,7 +41,7 @@ namespace SOM.Procedures
                     result.AppendLine(replacement);
                     continue;
                 }
-                foreach (var item in KeyVals)
+                foreach (var item in keyvals)
                 {
                     var match = Regex.Match(replacement, item.Key);
                     if (match.Success)

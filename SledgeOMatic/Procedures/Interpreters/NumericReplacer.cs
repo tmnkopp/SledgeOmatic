@@ -24,7 +24,7 @@ namespace SOM.Procedures
         { 
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            base.PopulateKeyVals(somContext);
+            var keyvals = base.PopulateKeyVals(somContext);
             foreach (var contentline in base.ParseLines(content))
             {
                 string line = contentline;
@@ -33,7 +33,7 @@ namespace SOM.Procedures
                     result.AppendLine(line);
                     continue;
                 }
-                foreach (var item in KeyVals)
+                foreach (var item in keyvals)
                 {
                     int cnt = 0;
                     string pattern = "([^\\d]|^)(" + item.Key + ")([^\\d]|$)";

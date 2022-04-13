@@ -14,21 +14,21 @@ namespace SOM.Procedures
 {
     #region Base
     public abstract class BaseKeyValReplacer : BaseCompiler
-    {
-        protected Dictionary<string, string> KeyVals { get; set; }
+    { 
         protected string Source { get; set; }
         public BaseKeyValReplacer()
         {
-        }
-        protected void PopulateKeyVals(ISomContext somContext)
+        } 
+        protected Dictionary<string, string> PopulateKeyVals(ISomContext somContext)
         {
-            string src = ""; 
+            string src = "";
+            Dictionary<string, string> KeyVals = new Dictionary<string, string>(); 
             if (Source.ToLower().EndsWith(".json"))
             {
                 Source = Source.Replace("~", somContext.BasePath);
                 using (TextReader tr = File.OpenText(Source))
                     src = tr.ReadToEnd();
-                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(src);
+                KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(src);
             }
             if (Source.ToLower().EndsWith(".sql"))
             {
@@ -37,12 +37,13 @@ namespace SOM.Procedures
                     src = tr.ReadToEnd();
                 KeyValDBReader dbreader = new KeyValDBReader(src);
                 dbreader.ExecuteRead();
-                this.KeyVals = dbreader.Data;
+                KeyVals = dbreader.Data;
             }
             if (this.IsValidJson(Source))
             {
-                this.KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Source);
-            }
+                KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Source);
+            } 
+            return KeyVals;
         }
         protected bool IsValidJson(string strInput)
         {
@@ -75,17 +76,13 @@ namespace SOM.Procedures
         public virtual string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            PopulateKeyVals(somContext);
-            foreach (var item in KeyVals)
+            var keyvals = PopulateKeyVals(somContext);
+            foreach (var item in keyvals)
             {
                 content = content.Replace(item.Key, item.Value);
             }
             return content;
-        }
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this.KeyVals, Formatting.Indented);
-        }
+        } 
     } 
     #endregion 
     public class KeyValReplacer : BaseKeyValReplacer, ICompilable
@@ -96,10 +93,6 @@ namespace SOM.Procedures
         public KeyValReplacer(string Source)
         {
             this.Source = Source; 
-        }
-        public KeyValReplacer(Dictionary<string, string> Dict)
-        {
-            base.KeyVals = Dict;
         } 
     } 
 }

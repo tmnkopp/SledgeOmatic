@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p IG -d 0 -m Commit"
+      "commandLineArgs": "compile -p IG -d 0 -m Cache"
     }
   }
 }
