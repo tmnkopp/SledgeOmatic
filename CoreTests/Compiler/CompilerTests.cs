@@ -58,9 +58,13 @@ namespace CoreTests
             var logger = new Mock<ILogger>().Object;
             var cache = new CacheService(config, logger);
             ISomContext somContext = new SomContext(config, logger, cache) { Content = readall }; 
-            var obj = new Inserter(@"(?<after>using SOM\.Procedures)", "FOO");
+            var obj = new Inserter(@"(?<appendto>using SOM\.Procedures)", "FOO");
             var result = obj.Compile(somContext);
-            Assert.IsNotNull(obj);
+            obj = new Inserter(@"(?<prependto>using SOM\.Procedures)", "BAR");
+            result = obj.Compile(somContext);
+            //obj = new Inserter(@"using SOM\.Procedures", "FOO");
+            //result = obj.Compile(somContext);
+            Assert.IsNotNull(result);
         }
     }
     public class Inserter : ICompilable
@@ -80,8 +84,23 @@ namespace CoreTests
                 content = Regex.Replace(content, this.SearchPattern,
                     m =>
                     {
-                        if (m.Groups.Count > 0)
+                        if (m.Groups.Count == 1)
                             return $"{m.Groups[0].Value}\n{this.NewContent}\n";
+                        if (m.Groups.Count == 2) {
+                            if (m.Groups[1].Name.ToLower() == "appendto")
+                            {
+                                return $"{m.Groups[0].Value}\n{this.NewContent}\n";
+                            }
+                            if (m.Groups[1].Name.ToLower() == "prependto")
+                            {
+                                return $"{this.NewContent}\n{m.Groups[0].Value}\n";
+                            }
+                            if (m.Groups[1].Name.ToLower() == "replace")
+                            {
+                                return $"{this.NewContent}";
+                            }
+                        }
+                            
                         return this.NewContent;
                     }
                     , RegexOptions.Singleline);
