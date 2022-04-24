@@ -58,23 +58,25 @@ namespace CoreTests
             var logger = new Mock<ILogger>().Object;
             var cache = new CacheService(config, logger);
             ISomContext somContext = new SomContext(config, logger, cache) { Content = readall }; 
-            var obj = new Inserter(@"(?<appendto>using SOM\.Procedures)", "FOO");
-            var result = obj.Compile(somContext);
-            obj = new Inserter(@"(?<prependto>using SOM\.Procedures)", "BAR");
-            result = obj.Compile(somContext);
+            var obj = new Inserter(@"(using SOM\.Procedures)", "FOO", @"$1\n$2\n");
+            somContext.Content = obj.Compile(somContext);
+            obj = new Inserter(@"(using SOM\.Procedures)", "BAR", @"$2\n$1\n");
+            somContext.Content = obj.Compile(somContext);
             //obj = new Inserter(@"using SOM\.Procedures", "FOO");
             //result = obj.Compile(somContext);
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(somContext.Content);
         }
     }
     public class Inserter : ICompilable
     {
         private string SearchPattern;
         private string NewContent; 
-        public Inserter(string SearchPattern, string NewContent)
+        private string Format; 
+        public Inserter(string SearchPattern, string NewContent, string Format)
         {
             this.SearchPattern = SearchPattern;
             this.NewContent = NewContent;
+            this.Format = Format ?? @"$1\n$2\n";
         }
         public string Compile(ISomContext somContext)
         {
@@ -84,23 +86,11 @@ namespace CoreTests
                 content = Regex.Replace(content, this.SearchPattern,
                     m =>
                     {
-                        if (m.Groups.Count == 1)
-                            return $"{m.Groups[0].Value}\n{this.NewContent}\n";
-                        if (m.Groups.Count == 2) {
-                            if (m.Groups[1].Name.ToLower() == "appendto")
-                            {
-                                return $"{m.Groups[0].Value}\n{this.NewContent}\n";
-                            }
-                            if (m.Groups[1].Name.ToLower() == "prependto")
-                            {
-                                return $"{this.NewContent}\n{m.Groups[0].Value}\n";
-                            }
-                            if (m.Groups[1].Name.ToLower() == "replace")
-                            {
-                                return $"{this.NewContent}";
-                            }
-                        }
-                            
+                        if (m.Groups.Count > 0) {
+                            return this.Format
+                            .Replace("$1", this.NewContent)
+                            .Replace("$2", m.Groups[0].Value);
+                        }  
                         return this.NewContent;
                     }
                     , RegexOptions.Singleline);
