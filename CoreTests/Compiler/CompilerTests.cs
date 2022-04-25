@@ -58,47 +58,15 @@ namespace CoreTests
             var logger = new Mock<ILogger>().Object;
             var cache = new CacheService(config, logger);
             ISomContext somContext = new SomContext(config, logger, cache) { Content = readall }; 
-            var obj = new Inserter(@"(using SOM\.Procedures)", "FOO", @"$1\n$2\n");
+            var obj = new Insert(@"(using SOM\.Procedures)", "FOO", @"$1\n$2\n");
             somContext.Content = obj.Compile(somContext);
-            obj = new Inserter(@"(using SOM\.Procedures)", "BAR", @"$2\n$1\n");
+            obj = new Insert(@"(using SOM\.Procedures)", "BAR", @"$2\n$1\n");
             somContext.Content = obj.Compile(somContext);
             //obj = new Inserter(@"using SOM\.Procedures", "FOO");
             //result = obj.Compile(somContext);
             Assert.IsNotNull(somContext.Content);
         }
-    }
-    public class Inserter : ICompilable
-    {
-        private string SearchPattern;
-        private string NewContent; 
-        private string Format; 
-        public Inserter(string SearchPattern, string NewContent, string Format)
-        {
-            this.SearchPattern = SearchPattern;
-            this.NewContent = NewContent;
-            this.Format = Format ?? @"$1\n$2\n";
-        }
-        public string Compile(ISomContext somContext)
-        {
-            string content = somContext.Content;
-            if (Regex.IsMatch(content, this.SearchPattern))
-            {
-                content = Regex.Replace(content, this.SearchPattern,
-                    m =>
-                    {
-                        if (m.Groups.Count > 0) {
-                            return this.Format
-                            .Replace("$1", this.NewContent)
-                            .Replace("$2", m.Groups[0].Value);
-                        }  
-                        return this.NewContent;
-                    }
-                    , RegexOptions.Singleline);
-            };
-            return content;
-        }
-    }
-
+    } 
 }
 
 

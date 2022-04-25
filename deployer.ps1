@@ -5,10 +5,10 @@
         [string] $with 
     ) 
     if ($with -match ' release ' ){ 
-        cd 'C:\Users\Tim\source\repos\SledgeOMatic'; 
+        cd 'D:\repos\SledgeOMatic'; 
         dotnet build --configuration Debug ; dotnet build --configuration Release ;
         dotnet publish SledgeOMatic -p:PublishProfile=FolderProfile ; 
-        Copy-Item -Path C:\Users\Tim\source\repos\SledgeOMatic\SledgeOMatic\bin\publish\SOM.exe -Destination c:\_som\SOM.exe -Force 
+        Copy-Item -Path D:\repos\SledgeOMatic\SledgeOMatic\bin\publish\SOM.exe -Destination c:\_som\SOM.exe -Force 
      
         (Get-Content C:\_som\appsettings.json) `
         -replace '(Database|Server)=.*;', '' `
@@ -18,7 +18,7 @@
     }
     if ($with -match ' commit ' ){
         $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
-        cd 'C:\Users\Tim\source\repos\SledgeOMatic';  
+        cd 'D:\repos\SledgeOMatic';  
         git add .; git commit -m ('refactor context ' + $m) ; git push; 
     }   
     explorer.exe C:\_som\
