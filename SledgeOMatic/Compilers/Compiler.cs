@@ -140,7 +140,7 @@ namespace SOM.Compilers
                     .Replace(file.Name, CompiledFileName);
 
                 string SaveDir = SavePath.Replace(CompiledFileName, "");
-                if (!Directory.Exists(SaveDir))
+                if (!Directory.Exists(SaveDir) && somContext.Options.Mode == SomMode.Commit)
                     Directory.CreateDirectory(SaveDir);
                  
                 CommitFile(content, $"{SavePath}"); 
