@@ -1,27 +1,15 @@
-using CommandLine;
+ 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SOM;
-using SOM.Compilers;
-using SOM.Data;
-using SOM.Extentions;
-using SOM.IO;
-using SOM.Models;
-using SOM.Procedures;
-using SOMAPI.Services;
+using Moq;
+using Serilog;
+using SOM; 
+using SOM.IO; 
+using SOM.Procedures; 
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
+using System.Collections.Generic; 
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Text.RegularExpressions;
-using YamlDotNet.RepresentationModel;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
+using System.Linq; 
+using YamlDotNet.Serialization; 
 namespace CoreTests
 {
     public static class Assm {
@@ -30,12 +18,28 @@ namespace CoreTests
             return AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(assm => assm.GetTypes());
         }
-    }
-
+    } 
     [TestClass]
     public class ProviderTests
-    {  
+    {
+
         [TestMethod]
+        public void KeyValReplacer_Provides()
+        {
+            string readall = @"
+                1-1-1
+                1-2-1.1
+            ";
+            var config = new TestServices().Configuration;
+            var logger = new Mock<ILogger>().Object;
+            var cache = new CacheService(config, logger);
+            ISomContext somContext = new SomContext(config, logger, cache) { Content = readall };
+            var obj = new KeyValReplacer(@"C:\Users\Tim\Documents\SQL Server Management Studio\SQLQuery1.sql");
+            somContext.Content = obj.Compile(somContext); 
+            Assert.IsNotNull(somContext.Content);
+    }
+
+    [TestMethod]
         public void yamlProvider_Provides()
         {
             var yml = @"    

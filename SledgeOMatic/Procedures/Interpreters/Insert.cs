@@ -7,15 +7,23 @@ namespace SOM.Procedures
 {
     public class Insert : ICompilable
     {
+        #region PROPS 
         private string _searchPattern;
         private string _newContent;
         private string _format;
+        #endregion
+
+        #region CTOR 
+        [CompilableCtorMeta()]
         public Insert(string SearchPattern, string Format, string NewContent)
         {
             this._searchPattern = SearchPattern;
             this._newContent = NewContent.Replace(@"\n", System.Environment.NewLine);
             this._format = Format.Replace(@"\n", System.Environment.NewLine);
         }
+        #endregion
+
+        #region METHODS 
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
@@ -35,6 +43,7 @@ namespace SOM.Procedures
                     , RegexOptions.Singleline);
             };
             return content;
-        }
+        } 
+        #endregion
     }
 }

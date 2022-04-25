@@ -5,7 +5,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic; 
 using Newtonsoft.Json.Linq; 
-using System.IO; 
+using System.IO;
+using System.Data.SqlClient;
+
 namespace SOM.Procedures
 { 
     public class KeyValReplacer : BaseCompiler, ICompilable
@@ -31,9 +33,19 @@ namespace SOM.Procedures
                 Source = Source.Replace("~", somContext.BasePath);
                 using (TextReader tr = File.OpenText(Source))
                     src = tr.ReadToEnd();
-                KeyValDBReader dbreader = new KeyValDBReader(src);
-                dbreader.ExecuteRead();
-                KeyVals = dbreader.Data;
+
+                var con = somContext.Config.GetSection("ConnectionStrings")["default"];
+                using (SqlConnection conn = new SqlConnection(con))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(src, conn); 
+                    using (SqlDataReader read = cmd.ExecuteReader())
+                        while (read.Read()){
+                            if (!KeyVals.ContainsKey(read[0].ToString())) 
+                                KeyVals.Add(read[0].ToString(), read[1].ToString());
+                 
+                        }        
+                } 
             }
             if (this.IsValidJson(Source))
             {
