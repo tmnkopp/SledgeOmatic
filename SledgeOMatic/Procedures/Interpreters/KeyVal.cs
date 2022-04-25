@@ -27,6 +27,7 @@ namespace SOM.Procedures
                 using (TextReader tr = File.OpenText(Source))
                     src = tr.ReadToEnd();
                 KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(src);
+                return KeyVals;
             }
             if (Source.ToLower().EndsWith(".sql"))
             {
@@ -42,10 +43,10 @@ namespace SOM.Procedures
                     using (SqlDataReader read = cmd.ExecuteReader())
                         while (read.Read()){
                             if (!KeyVals.ContainsKey(read[0].ToString())) 
-                                KeyVals.Add(read[0].ToString(), read[1].ToString());
-                 
+                                KeyVals.Add(read[0].ToString(), read[1].ToString()); 
                         }        
-                } 
+                }
+                return KeyVals;
             }
             if (this.IsValidJson(Source))
             {
