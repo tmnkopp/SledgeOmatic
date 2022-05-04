@@ -53,15 +53,14 @@ namespace CoreTests
         [TestMethod]
         public void Inserter_Inserts()
         {
-            string readall = File.ReadAllText(@"C:\Users\timko\source\repos\SledgeOmatic\SledgeOMatic\Procedures\Interpreters\Modulo.cs");
+            string readall = File.ReadAllText(@"D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2022\2022_A_IG_0.aspx");
             var config = new TestServices().Configuration;
             var logger = new Mock<ILogger>().Object;
             var cache = new CacheService(config, logger);
             ISomContext somContext = new SomContext(config, logger, cache) { Content = readall }; 
-            var obj = new Insert(@"(using SOM\.Procedures)", "FOO", @"$1\n$2\n");
+            var obj = new Insert(@"(<tr>.*?SectionHead.*?<\/tr>)", "<tr><td colspan='6'></td></tr>", @"$1\n$2\n");
             somContext.Content = obj.Compile(somContext);
-            obj = new Insert(@"(using SOM\.Procedures)", "BAR", @"$2\n$1\n");
-            somContext.Content = obj.Compile(somContext);
+            
             //obj = new Inserter(@"using SOM\.Procedures", "FOO");
             //result = obj.Compile(somContext);
             Assert.IsNotNull(somContext.Content);

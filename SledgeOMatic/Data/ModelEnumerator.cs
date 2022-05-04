@@ -64,9 +64,9 @@ namespace SOM.Procedures
             }; 
             if (sdr["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
                 _AppModelItem.MaxLen = Convert.ToInt32(sdr["CHARACTER_MAXIMUM_LENGTH"]);
-            if (sdr.HasColumn("ControlType"))
-                if (sdr["ControlType"] != DBNull.Value)
-                    _AppModelItem.ControlType = sdr["ControlType"].ToString();
+            if (sdr["ControlType"] != DBNull.Value)
+                _AppModelItem.ControlType = sdr["ControlType"].ToString();
+
 
             return _AppModelItem;
         } 

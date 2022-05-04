@@ -4,6 +4,7 @@ using SOM.Models;
 using SOM.Procedures;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -49,12 +50,22 @@ namespace SOM.Data
         }
         public IEnumerable<string> GetTables(string Filter)
         {
+            List<string> tables = new List<string>();
             string sql = $" SELECT CONVERT(NVARCHAR(5), ROW_NUMBER() OVER (ORDER BY TABLE_NAME))  K, TABLE_NAME V FROM INFORMATION_SCHEMA.TABLES ";
-            if (Filter != "")
-                sql += $" WHERE TABLE_NAME LIKE '%{Filter}%' ";
-            KeyValDBReader reader = new KeyValDBReader(sql);
-            reader.ExecuteRead();
-            return reader.Data.Values.ToList();
+            if (Filter != "")  sql += $" WHERE TABLE_NAME LIKE '%{Filter}%' ";
+             
+            using (SqlConnection conn = new SqlConnection(_config.GetSection("ConnectionStrings")["default"]))
+            {
+                conn.Open();
+                SqlCommand oCmd = new SqlCommand(sql, conn);
+                SqlDataReader oReader; 
+                using (oReader = oCmd.ExecuteReader())
+                {
+                    while (oReader.Read())
+                        tables.Add(oReader["V"].ToString()); 
+                }
+            } 
+            return tables.ToList();
         }
     }
 }

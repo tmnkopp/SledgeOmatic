@@ -15,7 +15,7 @@ namespace SOM.Procedures
 
         #region CTOR 
         [CompilableCtorMeta()]
-        public Insert(string SearchPattern, string Format, string NewContent)
+        public Insert(string SearchPattern, string NewContent, string Format)
         {
             this._searchPattern = SearchPattern;
             this._newContent = NewContent.Replace(@"\n", System.Environment.NewLine);
@@ -27,16 +27,16 @@ namespace SOM.Procedures
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            if (Regex.IsMatch(content, this._searchPattern))
+            if (Regex.IsMatch(content, this._searchPattern, RegexOptions.Singleline))
             {
                 content = Regex.Replace(content, this._searchPattern,
                     m =>
                     {
                         if (m.Groups.Count > 0)
                         {
-                            return this._format
-                            .Replace("$1", this._newContent)
-                            .Replace("$2", m.Groups[0].Value);
+                            return this._format 
+                            .Replace("$1", m.Groups[0].Value)
+                            .Replace("$2", this._newContent);
                         }
                         return this._newContent;
                     }
