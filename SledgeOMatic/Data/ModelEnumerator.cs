@@ -63,9 +63,8 @@ namespace SOM.Procedures
                 OrdinalPosition = Convert.ToInt32(sdr["ORDINAL_POSITION"])
             }; 
             if (sdr["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
-                _AppModelItem.MaxLen = Convert.ToInt32(sdr["CHARACTER_MAXIMUM_LENGTH"]);
-            if (sdr["ControlType"] != DBNull.Value)
-                _AppModelItem.ControlType = sdr["ControlType"].ToString();
+                _AppModelItem.MaxLen = Convert.ToInt32(sdr["CHARACTER_MAXIMUM_LENGTH"]); 
+            //if (sdr["ControlType"] != DBNull.Value) _AppModelItem.ControlType = sdr["ControlType"].ToString();
 
 
             return _AppModelItem;
