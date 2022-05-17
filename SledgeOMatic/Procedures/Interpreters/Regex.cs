@@ -48,7 +48,7 @@ namespace SOM.Procedures
                     {
                         replacement = Regex.Replace(
                               replacement
-                            , item.Key
+                            , match.Value
                             , m =>
                             {
                                 if (m.Groups.Count > 2)

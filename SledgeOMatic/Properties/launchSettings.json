@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p som -m Cache -v "
+      "commandLineArgs": "compile -p REFAC -m Cache -v "
     }
   }
 }
