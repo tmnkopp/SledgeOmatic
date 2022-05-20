@@ -14,16 +14,16 @@ namespace SOM.Procedures
 
         private int _seed = 0;
         private int _reset = 0;
-        private string _indexName = "[index]";
+        private string _pattern = @"";
 
         #endregion
 
         #region CTOR
 
         [CompilableCtorMeta()]
-        public Indexer(int Seed, int Reset, string IndexName)
+        public Indexer(int Seed, int Reset, string IndexPattern)
         {
-            _indexName = IndexName;
+            _pattern = IndexPattern;
             _seed = Seed;
             _reset = Reset;
         }
@@ -44,9 +44,25 @@ namespace SOM.Procedures
                     result.AppendLine(line);
                     continue;
                 }
-                if (line.Contains(_indexName))
-                    index++;
-                result.AppendFormat("{0}\n", line.Replace("" + _indexName + "", ReSetter(index).ToString()));
+                var m = Regex.Match(line, _pattern);
+                if (m.Success)
+                {
+                    var val = ReSetter(index).ToString();
+                    if (m.Groups.Count == 1) 
+                        result.AppendFormat("{0}\n", line.Replace(m.Value, val));
+                    if (m.Groups.Count == 2){
+                        val = m.Groups[0].Value.Replace(m.Groups[1].Value, val);
+                        result.AppendFormat("{0}\n", line.Replace(m.Value, val));
+                    }
+                    if (m.Groups.Count == 4 ) 
+                        result.AppendFormat("{0}\n", line.Replace(m.Groups[0].Value, $"{m.Groups[1].Value}{val}{m.Groups[3].Value}"));
+                 
+                    index++; 
+                }
+                else
+                { 
+                    result.AppendFormat("{0}\n", line);
+                } 
             }
             return result.ToString().TrimTrailingNewline();
         }
