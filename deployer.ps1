@@ -19,7 +19,7 @@
     if ($with -match ' commit ' ){
         $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
         cd 'D:\repos\SledgeOMatic';  
-        git add .; git commit -m ('refactor context ' + $m) ; git push; 
+        git add .; git commit -m ('refactor context fix:' + $m) ; git push; 
     }   
     explorer.exe C:\_som\
 } 

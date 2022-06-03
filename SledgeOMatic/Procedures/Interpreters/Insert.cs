@@ -33,10 +33,12 @@ namespace SOM.Procedures
                     m =>
                     {
                         if (m.Groups.Count > 0)
-                        {
-                            return this._format 
-                            .Replace("$1", m.Groups[0].Value)
-                            .Replace("$2", this._newContent);
+                        { 
+                            for (int i = 0; i < m.Groups.Count; i++)
+                            {
+                                this._format = this._format.Replace($"${i}", m.Groups[i].Value);
+                            }
+                            return this._format.Replace("$R", this._newContent);
                         }
                         return this._newContent;
                     }
