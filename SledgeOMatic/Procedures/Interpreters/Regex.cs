@@ -59,9 +59,10 @@ namespace SOM.Procedures
                             , RegexOptions.Singleline);
                     }
                 }
+                replacement = Regex.Replace(replacement, $@"\n|\r", "");
                 result.AppendLine(replacement);
             }
-            return result.ToString().RemoveEmptyLines();
+            return result.ToString();
         }
 
         #endregion

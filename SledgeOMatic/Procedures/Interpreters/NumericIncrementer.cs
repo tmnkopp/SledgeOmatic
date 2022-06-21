@@ -31,9 +31,7 @@ namespace SOM.Procedures
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            StringBuilder result = new StringBuilder();
-            content = content.Replace($"\r", $"\n");
-            content = content.Replace($"\n\n", $"\n");
+            StringBuilder result = new StringBuilder(); 
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
@@ -53,6 +51,7 @@ namespace SOM.Procedures
                         }
                         , RegexOptions.Singleline);
                 };
+                target = Regex.Replace(target, $@"\n|\r", "");
                 result.AppendLine($"{target}");
             }
             return result.ToString();
