@@ -21,11 +21,11 @@ namespace SOM.Procedures
         #region CTOR
 
         [CompilableCtorMeta()]
-        public Indexer(int Seed, int Reset, string IndexPattern)
+        public Indexer(object Seed, object Reset, string IndexPattern)
         {
             _pattern = IndexPattern;
-            _seed = Seed;
-            _reset = Reset;
+            _seed = (int)Convert.ToInt32(Seed);
+            _reset = (int)Convert.ToInt32(Reset);
         }
 
         #endregion
