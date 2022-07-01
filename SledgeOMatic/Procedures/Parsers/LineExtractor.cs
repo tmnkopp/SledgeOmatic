@@ -22,33 +22,32 @@ namespace SOM.Procedures
         }  
         public IEnumerable<string> Parse(ISomContext somContext){ 
             string content = somContext.Content;
-            content = content.Replace("\r", "\n").Replace("\n\n", "\n");
+            content = content.Replace("\r", "\n");
+            content = content.Replace("\n\n", "\n");
             content = $"{new string('\n', _numberOfLines)}{content}{new string('\n', _numberOfLines)}";
-            string[] lines = content.Split('\n');
-            int findingCnt = 0;
-            for (int lineIndex = _numberOfLines; lineIndex < lines.Length - _numberOfLines; lineIndex++)
-            { 
-                Match match = Regex.Match(lines[lineIndex], _extractTarget); 
+            Match match = Regex.Match(content, _extractTarget);
+            if(!match.Success)
+                yield return "";
+
+            string[] lines = content.Split('\n'); 
+            for (int i = _numberOfLines; i < lines.Length; i++)
+            {
+                match = Regex.Match(lines[i], _extractTarget);
                 if (match.Success)
                 {
                     StringBuilder result = new StringBuilder();
-                    findingCnt++;
-                    int cursor = lineIndex;
-                    for (int takeIndex = lineIndex - _numberOfLines; takeIndex <= lineIndex + _numberOfLines; takeIndex++)
+                    for (int j = i - _numberOfLines; j < i+ _numberOfLines; j++)
                     {
-                        if (takeIndex < lines.Length && takeIndex > 0)
-                        { 
-                            if (somContext.Options.Mode == SomMode.Cache)
-                                result.Append( lines[takeIndex] + "\n"  );
-                            else
-                                result.Append($"{lines[takeIndex]} [LN {takeIndex.ToString()}]\n");  
-                        } 
-                        cursor = takeIndex;
+                        if (somContext.Options.Mode == SomMode.Debug){
+                            result.AppendLine($"{lines[j]} [LN {j}]");
+                        }    
+                        else
+                            result.AppendLine(lines[j]);
                     }
-                    lineIndex = cursor + 1;
                     yield return result.ToString().TrimTrailingNewline();
                 }
-            } 
+            }
+            yield return "";  
         }   
     }
 }
