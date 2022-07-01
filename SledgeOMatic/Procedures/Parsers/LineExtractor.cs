@@ -36,7 +36,7 @@ namespace SOM.Procedures
                 if (match.Success)
                 {
                     StringBuilder result = new StringBuilder();
-                    for (int j = i - _numberOfLines; j < i+ _numberOfLines; j++)
+                    for (int j = i - _numberOfLines; j < i + _numberOfLines; j++)
                     {
                         if (somContext.Options.Mode == SomMode.Debug){
                             result.AppendLine($"{lines[j]} [LN {j}]");
