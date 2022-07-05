@@ -73,7 +73,7 @@ namespace SOM.Parsers
                 { 
                     if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern, RegexOptions.IgnoreCase)){
                         if (this.somContext.Options.Verbose)
-                            somContext.Logger.Information($"EXCLUDE: {file.DirectoryName} {file.Name}");
+                            somContext.Logger.Warning($"EXCLUDE: {file.DirectoryName} {file.Name}");
                         continue;
                     }
                     if (this.somContext.Options.Verbose) 
