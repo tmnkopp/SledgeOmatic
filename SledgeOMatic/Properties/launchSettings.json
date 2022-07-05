@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "parse  -p DB -d 1 -v -m Cache  "
+      "commandLineArgs": "parse  -p CS -d 1 -v -m Cache  "
     }
   }
 }

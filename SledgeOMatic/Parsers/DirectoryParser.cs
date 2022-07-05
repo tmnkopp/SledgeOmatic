@@ -70,13 +70,15 @@ namespace SOM.Parsers
                 DirectoryInfo DI = new DirectoryInfo($"{dir.Replace(filter, "")}");
                 SearchOption SearchDepth = (SearchOption)somContext.Options.SearchDepth;
                 foreach (var file in DI.GetFiles(filter, SearchDepth))
-                {
-                    if (this.somContext.Options.Verbose) 
-                        somContext.Logger.Information($"{file.DirectoryName} {file.Name}"); 
-
-                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern))
+                { 
+                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern, RegexOptions.IgnoreCase)){
+                        if (this.somContext.Options.Verbose)
+                            somContext.Logger.Information($"EXCLUDE: {file.DirectoryName} {file.Name}");
                         continue;
-                     
+                    }
+                    if (this.somContext.Options.Verbose) 
+                        somContext.Logger.Information($"{file.DirectoryName} {file.Name}");
+
                     using (TextReader tr = File.OpenText(file.FullName))
                         somContext.Content = tr.ReadToEnd();
             
