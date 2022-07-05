@@ -7,6 +7,7 @@ namespace SOM.Parsers
         public string ParseType { get; set; }
         public List<object> ParseTypeArgs { get; set; }
         public string FileFilter { get; set; } 
+        public string PathExcludePattern { get; set; } 
         public string ResultFormat { get; set; }
         public string Dest { get; set; }
     }

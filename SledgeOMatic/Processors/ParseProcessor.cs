@@ -54,6 +54,9 @@ namespace SOM
             parser.Parser = (IParser<string>)Activator.CreateInstance(ptype, dfd.ParseTypeArgs.ToArray()); 
             parser.FileFilter = dfd.FileFilter;
             parser.ResultFormat = dfd.ResultFormat;
+            if(!string.IsNullOrWhiteSpace(dfd.PathExcludePattern)){
+                parser.PathExcludePattern = dfd.PathExcludePattern;
+            }
             if (string.IsNullOrWhiteSpace(dfd.Dest)) {
                 parser.ParseDirectory();
                 somContext.Cache.Write(parser.ToString());
