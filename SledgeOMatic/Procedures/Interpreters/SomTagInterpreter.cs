@@ -70,7 +70,9 @@ namespace SOM.Procedures
                 if (!Regex.IsMatch(line, $@"(som!\w+|\w+!som)") )
                     sb.AppendLine(line);
             }
-            return sb.ToString();
+            string ret = sb.ToString();
+            ret = ret.Replace("\r", "\n").Replace("\n\n", "\n");
+            return ret;
         }
         public static ConstructorInfo GetConstructorInfo(Type typ)
         {
