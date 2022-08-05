@@ -19,9 +19,9 @@ namespace SOM.Procedures
             StringBuilder sb = new StringBuilder();
             content = $"\n{content}\n"; 
  
-            string indent = @"^ {" + this.indent + "}";
+            string indentPattern = this.indent > 0 ?  @"^ {" + this.indent + "}" : "^";
             string pattern = @".*som!(\w+) ?(.+)\n";
-            string regex = $"{indent}{pattern}";
+            string regex = $"{indentPattern}{pattern}";
             var mc = Regex.Matches(content, regex, RegexOptions.Multiline);
             
             foreach (Match prefix in mc)
@@ -30,7 +30,7 @@ namespace SOM.Procedures
                 {
                     var CommandName = prefix.Groups[1].Value; 
                     string matchedContent = content.Substring(prefix.Index, content.Length - prefix.Index);
-                    string postRegex = indent + ".*" + CommandName + "!som.*";
+                    string postRegex = indentPattern + ".*" + CommandName + "!som.*";
                     Match postfix = Regex.Match(matchedContent, postRegex, RegexOptions.Multiline);
 
                     string RawParsed = matchedContent.Substring(0, matchedContent.Length-1);

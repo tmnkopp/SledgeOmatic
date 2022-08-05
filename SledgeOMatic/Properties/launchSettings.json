@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p ED -d 0 -m Cache -v  "
+      "commandLineArgs": "compile -p ED -d 0 -m Commit -v  "
     }
   }
 }

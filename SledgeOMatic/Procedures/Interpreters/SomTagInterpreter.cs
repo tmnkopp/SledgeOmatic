@@ -34,7 +34,7 @@ namespace SOM.Procedures
         {
             string content = somContext.Content;
 
-            for (int i = 12; i > 0; i -= 4)
+            for (int i = 12; i >= 0; i -= 4)
             { 
                 var parsed = new SomDocParser(i).Parse(somContext); 
                 foreach (var pr in parsed)
