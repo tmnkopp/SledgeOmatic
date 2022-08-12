@@ -8,12 +8,18 @@ namespace SOM.Procedures
     public class Insert : ICompilable
     {
         #region PROPS 
+        public string _prop;
+        public string Prop { get; set; }
         private string _searchPattern;
         private string _newContent;
         private string _format;
         #endregion
 
         #region CTOR 
+        public Insert()
+        {
+
+        }
         [CompilableCtorMeta()]
         public Insert(string SearchPattern, string NewContent, string Format)
         {

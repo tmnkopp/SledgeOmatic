@@ -30,7 +30,7 @@ namespace SOM.Procedures
             SomParseOptions o = (SomParseOptions)this.Options;
             var props = o.GetType().GetProperties();
             oparms = (from a in o.ParamParsed select a.ToString().Trim()).ToList<object>();
-    
+            
             for (int p = 0; p < parms.Count(); p++)
             {
                 if (p < oparms.Count)

@@ -168,14 +168,15 @@ namespace SOM.Compilers
         private void CommitFile(string Content, string FileName)
         {
             if (this.somContext.Options.Verbose)
-                this.somContext.Logger.Debug($"CommitFile: {FileName}"); 
+                this.somContext.Logger.Debug($"Commit FileName: {FileName}"); 
             if (somContext.Options.Mode == SomMode.Commit){ 
                 File.WriteAllText($"{FileName}", Content, Encoding.Unicode); 
             }
             if (somContext.Options.Mode == SomMode.Debug){  
                 this.somContext.Cache.Append($"{FileName}\n{Content}\n");
-             } 
-            if (somContext.Options.Mode == SomMode.Cache){
+            } 
+            if (somContext.Options.Mode == SomMode.Cache || this.somContext.Options.Verbose)
+            {
                 this.somContext.Cache.Append($"{Content}\n");
             }      
         }
