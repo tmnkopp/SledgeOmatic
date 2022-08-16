@@ -13,10 +13,7 @@ using SOM.Extentions;
 namespace SOM.Procedures
 {
     public class RegexReplacer : KeyValReplacer, ICompilable
-    { 
-        #region FIELDS
-
-        #endregion
+    {  
 
         #region CTOR
 

@@ -50,16 +50,15 @@ namespace CoreTests
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict.Add("Prop", "vale");
 
-            ICompilable obj = new CompilableFactory(somContext).Create(typeof(Insert));
+            ICompilable obj = new CompilableFactory().Create(typeof(Insert));
             Console.Write(new { obj });
         } 
     }
     public class CompilableFactory{
-        private ISomContext context;
+ 
         private ICompilable obj;
-        public CompilableFactory(ISomContext somContext)
+        public CompilableFactory()
         {
-            this.context = somContext;
         }
         public ICompilable Create(Type type)
         {

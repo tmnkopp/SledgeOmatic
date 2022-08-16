@@ -5,10 +5,6 @@ namespace SOM.Procedures
     public class NumericReplacer :  KeyValReplacer
     {
 
-        #region FIELDS
-
-        #endregion
-
         #region CTOR
 
         [CompilableCtorMeta()]
