@@ -10,6 +10,8 @@ namespace SOM.Procedures
         #region PROPS 
         public string _prop;
         public string Prop { get; set; }
+        public string _prop1;
+        public string Prop1 { get; set; }
         private string _searchPattern;
         private string _newContent;
         private string _format;

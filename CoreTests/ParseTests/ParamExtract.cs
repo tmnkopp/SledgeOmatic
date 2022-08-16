@@ -11,6 +11,7 @@ using Serilog;
 using System.Linq;
 using SOM.Core;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace CoreTests
 { 
@@ -29,12 +30,15 @@ namespace CoreTests
             cache = new CacheService(config, logger);
         }
         [TestMethod]
-        public void ParamExtractor_extractor()
+        public void ParamExtractor_extracts()
         {
             ISomContext somContext = new SomContext(config, logger, cache);
             somContext.Content = @" 
-                    -p /p:name=value /p:name1=value  --> 
-            "; 
+                    -p /p:Prop=value /p:Prop1=value1   
+            ";
+            somContext.Content = @" 
+                    -p /p Prop /p Prop1 
+            ";
             var parser = new ParamExtractor();
             var parms = (from kvp in parser.Parse(somContext) select kvp).ToDictionary(i=>i.Key, i=>i.Value); 
             foreach (var kvp in parms)
@@ -45,12 +49,10 @@ namespace CoreTests
         [TestMethod]
         public void Field_extractor()
         {
-            ISomContext somContext = new SomContext(config, logger, cache);
-
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("Prop", "vale");
-
-            ICompilable obj = new CompilableFactory().Create(typeof(Insert));
+            ICompilable obj;
+            obj = new CompilableFactory().Create(typeof(Insert), " -p /p Prop /p Prop1 ");
+            Console.Write(new { obj });
+            obj = new CompilableFactory().Create(typeof(Insert), "  -p /p:Prop=value /p:Prop1=value1   ");
             Console.Write(new { obj });
         } 
     }
@@ -60,9 +62,39 @@ namespace CoreTests
         public CompilableFactory()
         {
         }
-        public ICompilable Create(Type type)
+        public ICompilable Create(Type type, string paramString)
         {
-            this.obj = (ICompilable)Activator.CreateInstance(type); 
+            paramString = paramString.Split("\n")[0];
+            var m = Regex.Match(paramString, $"(/p:.*)\n");
+            if (m.Success)
+            { 
+                var props = new Dictionary<string, string>();
+                foreach (var item in Regex.Split(m.Groups[1].Value, $"/p:"))
+                {
+                    if (item.Contains("="))
+                        props.Add(item.Split("=")[0], item.Split("=")[1]); 
+                }
+
+                this.obj = (ICompilable)Activator.CreateInstance(type);
+
+                (from p in obj.GetType().GetProperties()
+                 where props.ContainsKey(p.Name)
+                 select p).ToList().ForEach(p => {
+                     p.SetValue(obj, props[p.Name], null);
+                 });
+            }
+
+            m = Regex.Match(paramString, $@"(/p\s.*)\n");
+            if (m.Success)
+            {
+                var oparms = new List<object>();
+                foreach (var item in Regex.Split(m.Groups[1].Value, $"/p\\s"))
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                        oparms.Add(item);
+                }
+                this.obj = (ICompilable)Activator.CreateInstance(type, oparms.ToArray());
+            }
             return obj;
         }
         public ICompilable Create(Type type, ParameterInfo[] oparms)
@@ -78,6 +110,6 @@ namespace CoreTests
                 p.SetValue(obj, props[p.Name], null);
             }); 
             return obj;
-        }
+        } 
     }
 }

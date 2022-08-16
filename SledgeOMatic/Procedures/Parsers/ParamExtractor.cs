@@ -20,7 +20,17 @@ namespace SOM.Procedures
                     if (item.Contains("="))
                         yield return new KeyValuePair<string, string>(item.Split("=")[0], item.Split("=")[1]);
                 }
-            } 
+            }
+            m = Regex.Match(content, $@"(/p\s.*)\n");
+            if (m.Success)
+            {
+                int cnt = 0;
+                foreach (var item in Regex.Split(m.Groups[1].Value, $"/p\\s"))
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                        yield return new KeyValuePair<string, string>($"{cnt++}", item); 
+                }
+            }
         }
     }
 }
