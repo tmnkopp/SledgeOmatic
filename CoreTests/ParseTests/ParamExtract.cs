@@ -12,6 +12,7 @@ using System.Linq;
 using SOM.Core;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace CoreTests
 { 
@@ -47,17 +48,22 @@ namespace CoreTests
             } 
         }
         [TestMethod]
-        public void Field_extractor()
+        public void FactoryCreates()
         {
             ICompilable obj;
-            obj = new GenericFactory<ICompilable>().Create("SOM.Procedures.Insert", @"  
+            obj = GenericFactory<ICompilable>.Create("SOM.Procedures.Insert");
+            var ser = JsonConvert.SerializeObject(obj);
+            Console.Write(ser);
+            obj = GenericFactory<ICompilable>.Create("SOM.Procedures.Insert", @"  
                 -p /p Prop /p Prop1 /p Prop2 
             ");
-            Console.Write(new { obj });
-            obj = new GenericFactory<ICompilable>().Create("SOM.Procedures.Insert", @"   
+            ser = JsonConvert.SerializeObject(obj);
+            Console.Write(ser);
+            obj = GenericFactory<ICompilable>.Create("SOM.Procedures.Insert", @"   
                 -p /p:Prop=value /p:Prop1=value1    
             ");
-            Console.Write(new { obj });
+            ser = JsonConvert.SerializeObject(obj);
+            Console.Write(ser);
         } 
     } 
 }

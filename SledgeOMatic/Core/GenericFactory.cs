@@ -6,17 +6,26 @@ using System.Text.RegularExpressions;
 
 namespace SOM.Core
 {
-    public class GenericFactory<T>
+    public static class GenericFactory<T>
     {
-        private T obj;
-        public GenericFactory()
-        {
+        public static T Create(string FullTypeName, List<object> parms)
+        { 
+            Type type = Type.GetType($"{FullTypeName}, SOM");
+            T obj = (T)Activator.CreateInstance(type, parms.ToArray());
+            return obj;
         }
-        public T Create(string FullTypeName, string paramString)
+        public static T Create(string FullTypeName, string paramString = "")
         {
+            T obj = default; 
             Type type = Type.GetType($"{FullTypeName}, SOM");
             paramString = Regex.Replace(paramString, $@"\r|\t", "");
-            var m = Regex.Match(paramString, $@"(/p:.*)\n");
+            if (string.IsNullOrWhiteSpace(paramString))
+            {
+                obj = (T)Activator.CreateInstance(type);
+                return obj; 
+            }
+
+            var m = Regex.Match(paramString, $@"(/p:.*)");
             if (m.Success)
             {
                 var props = new Dictionary<string, string>();
@@ -26,27 +35,29 @@ namespace SOM.Core
                         props.Add(item.Split("=")[0], item.Split("=")[1].TrimEnd());
                 }
 
-                this.obj = (T)Activator.CreateInstance(type);
+                obj = (T)Activator.CreateInstance(type);
 
                 (from p in obj.GetType().GetProperties()
                  where props.ContainsKey(p.Name)
                  select p).ToList().ForEach(p => {
                      p.SetValue(obj, props[p.Name], null);
                  });
+                return obj;
             }
 
-            m = Regex.Match(paramString, $@"(/p\s.*)\n");
+            m = Regex.Match(paramString, $@"(/p\s.*)");
             if (m.Success)
             {
                 var oparms = new List<object>();
-                foreach (var item in Regex.Split(m.Groups[1].Value, $"\\s/p\\s"))
+                foreach (var item in Regex.Split(m.Groups[1].Value, $"(\\s|^)/p\\s"))
                 {
                     if (!string.IsNullOrWhiteSpace(item))
                         oparms.Add(item.TrimEnd());
                 }
-                this.obj = (T)Activator.CreateInstance(type, oparms.ToArray());
+                obj = (T)Activator.CreateInstance(type, oparms.ToArray());
+                return obj;
             }
-            return this.obj;
+            return obj;
         }
     }
 }

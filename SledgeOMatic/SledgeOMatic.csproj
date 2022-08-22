@@ -20,6 +20,8 @@ parse -p Archive -m Default</Description>
     <Compile Remove="Bootstrapper.cs" />
     <Compile Remove="Compilers\CompilationBuilder.cs" />
     <Compile Remove="IO\Utils.cs" />
+    <Compile Remove="Procedures\Interpreters\SomSchemaInterpreter.cs" />
+    <Compile Remove="Procedures\Parsers\SomTagParser.cs" />
   </ItemGroup>
 
   <ItemGroup>

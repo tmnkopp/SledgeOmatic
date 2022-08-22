@@ -15,8 +15,7 @@ namespace SOM.Procedures
         }
         public IEnumerable<CommandParseResult> Parse(ISomContext somContext)
         {
-            string content = somContext.Content;
-            StringBuilder sb = new StringBuilder();
+            string content = somContext.Content; 
             content = $"\n{content}\n"; 
  
             string indentPattern = this.indent > 0 ?  @"^ {" + this.indent + "}" : "^";

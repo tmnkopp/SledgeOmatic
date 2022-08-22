@@ -1,4 +1,5 @@
-﻿using SOM.Data;
+﻿using SOM.Core;
+using SOM.Data;
 using SOM.Extentions;
 using SOM.IO;
 using SOM.Models;
@@ -37,18 +38,12 @@ namespace SOM.Procedures
             for (int i = 12; i >= 0; i -= 4)
             { 
                 var parsed = new SomDocParser(i).Parse(somContext); 
-                foreach (var pr in parsed)
-                {
-                    Type typ = Type.GetType($"{pr.CommandType.FullName}, SOM");
-                    CompilableCtorMeta ccm = GetCompilableCtorMeta(pr.CommandType);
-                    ConstructorInfo ctor = GetConstructorInfo(typ);
-
-                    var parseItem = pr.Parsed;
-                    var oparms = pr.Parms(ctor.GetParameters());
-
-                    somContext.Logger.Information("SomTagInterpreter: Indent{i} {o} {p}", i, pr.CommandType.FullName, string.Join(", ", oparms.ToArray()));
+                foreach (CommandParseResult pr in parsed)
+                {   
+                    var parseItem = pr.Parsed;  
+                    somContext.Logger.Information("{@CommandParseResult}", new{ pr.RawOptions });
                      
-                    ICompilable obj = (ICompilable)Activator.CreateInstance(typ, oparms.ToArray());
+                    ICompilable obj = GenericFactory<ICompilable>.Create(pr.CommandType.FullName, pr.Options.Params); 
                     somContext.Content = parseItem;
                     parseItem = obj.Compile(somContext);
                     parseItem = RemoveTags(parseItem); 
@@ -81,16 +76,7 @@ namespace SOM.Procedures
                     from a in attr
                     where a.Invokable
                     select con).FirstOrDefault();
-        }
-        public static CompilableCtorMeta GetCompilableCtorMeta(Type CommandType)
-        {
-            return (from cons in CommandType.GetConstructors()
-                    let attr = (CompilableCtorMeta[])cons.GetCustomAttributes(typeof(CompilableCtorMeta), false)
-                    from a in attr
-                    where a.Invokable
-                    select a).FirstOrDefault();
-        }
-
+        } 
         #endregion
 
     }

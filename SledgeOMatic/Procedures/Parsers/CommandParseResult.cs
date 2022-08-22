@@ -19,28 +19,14 @@ namespace SOM.Procedures
         public SomParseOptions Options  { 
             get
             {
-                return new CommandLine
+                var options = new CommandLine
                 .Parser(with => with.HelpWriter = null)
                 .ParseArguments<SomParseOptions>(Args)
                 .MapResult(o => o, o => default(SomParseOptions));
-            } 
-        }
-        public List<object> Parms(ParameterInfo[] parms) {
-            var oparms = new List<object>();
-            SomParseOptions o = (SomParseOptions)this.Options;
-            var props = o.GetType().GetProperties();
-            oparms = (from a in o.ParamParsed select a.ToString().Trim()).ToList<object>();
-            
-            for (int p = 0; p < parms.Count(); p++)
-            {
-                if (p < oparms.Count)
-                    oparms[p] = Convert.ChangeType(oparms[p], parms[p].ParameterType);
-                else
-                    oparms.Add(null);
-            }
 
-            return oparms;
-        }
+                return options;
+            } 
+        } 
         public CommandParseResult()
         { 
         } 
