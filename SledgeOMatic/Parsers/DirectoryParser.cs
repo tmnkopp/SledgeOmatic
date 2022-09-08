@@ -73,11 +73,11 @@ namespace SOM.Parsers
                 { 
                     if (Regex.IsMatch($"{file.FullName}", PathExcludePattern, RegexOptions.IgnoreCase)){
                         if (this.somContext.Options.Verbose)
-                            somContext.Logger.Warning($"EXCLUDE: {file.DirectoryName} {file.Name}");
+                            somContext.Logger.Warning($"EXCLUDE: {file.FullName}");
                         continue;
                     }
                     if (this.somContext.Options.Verbose) 
-                        somContext.Logger.Information($"{file.DirectoryName} {file.Name}");
+                        somContext.Logger.Information($"{file.FullName}");
 
                     using (TextReader tr = File.OpenText(file.FullName))
                         somContext.Content = tr.ReadToEnd();
