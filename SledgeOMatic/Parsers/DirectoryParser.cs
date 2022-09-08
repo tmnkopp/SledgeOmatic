@@ -71,7 +71,7 @@ namespace SOM.Parsers
                 SearchOption SearchDepth = (SearchOption)somContext.Options.SearchDepth;
                 foreach (var file in DI.GetFiles(filter, SearchDepth))
                 { 
-                    if (Regex.IsMatch($"{file.DirectoryName}", PathExcludePattern, RegexOptions.IgnoreCase)){
+                    if (Regex.IsMatch($"{file.FullName}", PathExcludePattern, RegexOptions.IgnoreCase)){
                         if (this.somContext.Options.Verbose)
                             somContext.Logger.Warning($"EXCLUDE: {file.DirectoryName} {file.Name}");
                         continue;

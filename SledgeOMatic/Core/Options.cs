@@ -50,7 +50,7 @@ namespace SOM
         [Option('m', "Mode", Default = SomMode.Cache)]
         public SomMode Mode { get; set; }
         [Option('d', "SearchDepth", Default = 1, HelpText = "SearchOption.AllDirectories = 1")]
-        public int SearchDepth { get; set; }
+        public int SearchDepth { get; set; } 
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
     } 
