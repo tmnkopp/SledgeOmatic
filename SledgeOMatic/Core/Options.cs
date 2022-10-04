@@ -38,7 +38,7 @@ namespace SOM
     }
 
     [Serializable]
-    [Verb("parse", HelpText = @"Command Runner: som compile -p SomDocParser -m Cache")]
+    [Verb("parse", HelpText = @"Command Runner: som parse -p CS -v -d 1 --help ")]
     public class ParseOptions : ISomOptions
     {
         [Option('a', "Args", Default = "")]
