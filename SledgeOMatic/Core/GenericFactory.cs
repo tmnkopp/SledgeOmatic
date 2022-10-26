@@ -40,7 +40,9 @@ namespace SOM.Core
                 (from p in obj.GetType().GetProperties()
                  where props.ContainsKey(p.Name)
                  select p).ToList().ForEach(p => {
-                     p.SetValue(obj, props[p.Name], null);
+                     object result = props[p.Name];
+                     result = Convert.ChangeType(result, p.PropertyType); 
+                     p.SetValue(obj, result, null);
                  });
                 return obj;
             }

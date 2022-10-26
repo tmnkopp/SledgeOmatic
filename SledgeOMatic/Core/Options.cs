@@ -66,7 +66,7 @@ namespace SOM
         [Option('p', "Path", HelpText = "-p \" c:\\basepath_to_som  \"")]
         public string Path
         {
-            get { return path.Trim().Replace(@"\\",@"\"); }
+            get { return path?.Trim().Replace(@"\\",@"\"); }
             set { path = value; }
         }
 

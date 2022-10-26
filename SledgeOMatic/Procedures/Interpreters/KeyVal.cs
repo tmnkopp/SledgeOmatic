@@ -12,7 +12,11 @@ namespace SOM.Procedures
 { 
     public class KeyValReplacer : BaseCompiler, ICompilable
     {
-        protected string Source { get; set; }
+        public string Source { get; set; }
+        public KeyValReplacer()
+        {
+
+        }
         public KeyValReplacer(string Source)
         {
             this.Source = Source; 

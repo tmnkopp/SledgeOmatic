@@ -13,24 +13,28 @@ namespace SOM.Procedures
 {
     public class ModelCompile : BaseCompiler, ICompilable
     {
-        #region FIELDS
 
+        #region PROPS  
+        public string Model { get; set; }
+        public string FieldPattern { get; set; }
+        #endregion 
+
+        #region FIELDS 
         private ISchemaProvider _SchemaProvider;
         private string _format;
-        private string _modelName;
-        private string _predpattern;
-
         #endregion
 
         #region CTOR
-
-        [CompilableCtorMeta()]
-        public ModelCompile(string Model, string PredPattern)
+        public ModelCompile()
         {
-            this._modelName = Model;
-            this._predpattern = PredPattern ?? ".*";
-        }
 
+        }
+        [CompilableCtorMeta()]
+        public ModelCompile(string Model, string FieldPattern)
+        {
+            this.Model = Model;
+            this.FieldPattern = FieldPattern ?? ".*";
+        } 
         #endregion
 
         #region METHODS
@@ -41,7 +45,7 @@ namespace SOM.Procedures
             StringBuilder result = new StringBuilder();
 
             _SchemaProvider = new SchemaProvider(somContext.Config);
-            _SchemaProvider.LoadModel(this._modelName);
+            _SchemaProvider.LoadModel(this.Model);
 
             var lines = (from s in Regex.Split(content, $@"\r|\n")
                          where !string.IsNullOrWhiteSpace(s)
@@ -51,12 +55,12 @@ namespace SOM.Procedures
             var postfix = lines[lines.Count() - 1];
 
             _format = string.Join(' ', lines).Replace(prefix, "").Replace(postfix, "");
-            _format = Regex.Replace(_format, @"\s\/n", "\n");
-            _format = Regex.Replace(_format, @"\s\/t", "\t");
+            _format = Regex.Replace(_format, somContext.Config.GetSection("AppSettings")["NewLine"] ?? @"\s?\/n", $"\n");
+            _format = Regex.Replace(_format, somContext.Config.GetSection("AppSettings")["Tab"] ?? @"\s?\/t", $"\t");
 
             IEnumerable<AppModelItem> _AppModelItems = _SchemaProvider
                 .AppModelItems.Select(i => i)
-                .Where(i => Regex.IsMatch(i.Name, _predpattern)).AsEnumerable();
+                .Where(i => Regex.IsMatch(i.Name, FieldPattern)).AsEnumerable();
 
             if (Regex.IsMatch(_format, $@"^.*\w:\\"))
             {

@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using SOM.Core;
 
 namespace SOM 
 {
@@ -60,14 +61,16 @@ namespace SOM
  
             def.ContentCompilers.ForEach(c =>
             {
-                var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault(); 
-                ICompilable obj = (ICompilable)Activator.CreateInstance(typ, c.Args.ToArray());
+                var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
+                logger.Information("ContentCompilers: {o}", JsonConvert.SerializeObject(c));
+                ICompilable obj = GenericFactory<ICompilable>.Create(typ.FullName, c.Params);
                 compiler.ContentCompilers.Add(obj); 
             });
             def.FilenameCompilers.ForEach(c =>
             {
                 var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
-                ICompilable obj = (ICompilable)Activator.CreateInstance(typ, c.Args.ToArray());
+                logger.Information("FilenameCompilers: {o}", JsonConvert.SerializeObject(c));
+                ICompilable obj = GenericFactory<ICompilable>.Create(typ.FullName, c.Params);
                 compiler.FilenameCompilers.Add(obj);
             }); 
             def.Compilations.ForEach(c =>

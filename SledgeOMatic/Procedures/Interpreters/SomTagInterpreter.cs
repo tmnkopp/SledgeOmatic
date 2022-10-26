@@ -14,19 +14,23 @@ namespace SOM.Procedures
 {
     public class SomTagInterpreter : ICompilable
     {
-        #region FIELDS
-
-        private bool verbose = true;
-
+        #region PROPS 
+        public string Options { get; set; }
         #endregion
 
-        #region CTOR
+        #region FIELDS 
+        private bool verbose = true;
+        #endregion
 
+        #region CTOR 
+        public SomTagInterpreter()
+        {
+
+        }
         public SomTagInterpreter(string Options)
         {
             verbose = Options.Contains("-v");
-        }
-
+        } 
         #endregion
 
         #region METHODS
@@ -41,7 +45,7 @@ namespace SOM.Procedures
                 foreach (CommandParseResult pr in parsed)
                 {   
                     var parseItem = pr.Parsed;  
-                    somContext.Logger.Information("{@CommandParseResult}", new{ pr.RawOptions });
+                    somContext.Logger.Information("{o}", new{ RawOptions= pr.RawOptions });
                      
                     ICompilable obj = GenericFactory<ICompilable>.Create(pr.CommandType.FullName, pr.Options.Params); 
                     somContext.Content = parseItem;

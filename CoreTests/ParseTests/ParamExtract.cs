@@ -64,6 +64,22 @@ namespace CoreTests
             ");
             ser = JsonConvert.SerializeObject(obj);
             Console.Write(ser);
+        }         
+        [TestMethod]
+        public void CompilerCreates()
+        {
+            ISomContext somContext = new SomContext(config, logger, cache);
+            somContext.Content = @" 
+                    ED0000
+            ";
+
+            NumericReplacer obj = new NumericReplacer();
+            obj.Source = @"C:\_som\compile\regexreplace.json";
+            obj.Compile(somContext);
+            var ser = JsonConvert.SerializeObject(obj);
+            ICompilable ic = GenericFactory<ICompilable>.Create("SOM.Procedures.NumericReplacer", new List<object> { @"C:\_som\compile\regexreplace.json" });
+            ser = JsonConvert.SerializeObject(ic);
+            Console.Write(ser);
         } 
     } 
 }

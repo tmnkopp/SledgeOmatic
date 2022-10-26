@@ -10,8 +10,7 @@ namespace SOM.Procedures
         #region PROPS  
         public string MatchPattern { get; set; } 
         public string Format { get; set; }
-        #endregion
-
+        #endregion 
         #region CTOR 
         public Insert()
         { 
@@ -37,7 +36,7 @@ namespace SOM.Procedures
                         { 
                             for (int i = 0; i < m.Groups.Count; i++)
                             {
-                                this.Format = this.Format.Replace($"${i}", m.Groups[i].Value);
+                                this.Format = this.Format.Replace($"{{{i}}}", m.Groups[i].Value);
                             } 
                         }
                         return this.Format;

@@ -2,11 +2,12 @@
 using System.Text.RegularExpressions;
 namespace SOM.Procedures
 { 
-    public class NumericReplacer :  KeyValReplacer
-    {
-
-        #region CTOR
-
+    public class NumericReplacer : KeyValReplacer
+    { 
+        #region CTOR 
+        public NumericReplacer()
+        { 
+        }
         [CompilableCtorMeta()]
         public NumericReplacer(string Source) : base(Source)
         {

@@ -18,7 +18,7 @@ namespace SOM.Procedures
          string Compile(ISomContext somContext);
     }
     public abstract class BaseCompiler
-    {
+    { 
         protected virtual IEnumerable<string> ParseLines(string content){
             content = content.Replace($"\r", $"\n");
             content = content.Replace($"\n\n", $"\n");

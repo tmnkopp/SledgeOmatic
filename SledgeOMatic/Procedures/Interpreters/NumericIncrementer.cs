@@ -6,24 +6,24 @@ namespace SOM.Procedures
 {
     public class NumericIncrementer : BaseCompiler, ICompilable
     {
-        #region FIELDS
-
-        private int _base = 0;
-        private int _seed = 0;
-        private string _incrementPattern = "";
-
+        #region PROPS  
+        public int Seed { get; set; }
+        public int Base { get; set; }
+        public string NumericPattern { get; set; }
         #endregion
-        
-        #region CTOR
 
+        #region CTOR 
+        public NumericIncrementer()
+        {
+
+        }
         [CompilableCtorMeta()]
         public NumericIncrementer(object Seed, object Base, string NumericPattern)
         {
-            _seed = (int)Convert.ToInt32(Seed);
-            _base = (int)Convert.ToInt32(Base);
-            _incrementPattern = NumericPattern;
-        }
-
+            this.Seed = (int)Convert.ToInt32(Seed);
+            this.Base = (int)Convert.ToInt32(Base);
+            this.NumericPattern = NumericPattern;
+        } 
         #endregion
 
         #region METHODS
@@ -31,7 +31,8 @@ namespace SOM.Procedures
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            StringBuilder result = new StringBuilder(); 
+            StringBuilder result = new StringBuilder();
+            somContext.Logger.Information("{o}", new { NumericPattern=this.NumericPattern });
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
@@ -40,13 +41,13 @@ namespace SOM.Procedures
                     continue;
                 }
                 string target = line;
-                string pattern = "([^\\d]|^)(" + _incrementPattern + ")([^\\d]|$)";
+                string pattern = "([^\\d]|^)(" + this.NumericPattern + ")([^\\d]|$)";
                 if (Regex.IsMatch(target, pattern))
                 {
                     target = Regex.Replace(target, pattern,
                         m =>
                         {
-                            int nextint = (_base - _seed) + Convert.ToInt32(m.Groups[2].Value) + 0;
+                            int nextint = (this.Base - this.Seed) + Convert.ToInt32(m.Groups[2].Value) + 0;
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);

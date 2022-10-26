@@ -35,14 +35,31 @@ namespace SOM
             logger.Information($"basepath: {basepath}");
             logger.Information($"Bootstrap: {o.Bootstrap}");
             logger.Information($"Args: {o.Args}");
-            logger.Information($"Path: {o.Path}");
+            logger.Information($"Path: {o.Path}"); 
 
-            var splitArgs = o.Args?.Split(new[] { "/p" }, StringSplitOptions.None);
+            var splitArgs = o.Args?.Split(new[] { "/p" }, StringSplitOptions.None) ?? new string[]{ };
             logger.Information($"\n{string.Join("\n", from t in splitArgs where !string.IsNullOrWhiteSpace(t) select t)}");
              
             var AppSettings = config.GetSection("AppSettings").GetChildren();
             foreach (var item in AppSettings) logger.Information("{k} {v}", item.Key, item.Value);
+            StringBuilder sb = new StringBuilder();
+            StringBuilder sb1 = new StringBuilder();
 
+            sb.AppendLine($"");
+            types().ForEach(t =>
+            { 
+                sb.AppendLine($"\n- CompilerType:'{t.Name}'"); 
+                sb.Append($"  Params: '");
+                string parms = "";
+                (from p in t.GetProperties() select p).ToList().ForEach(p => {
+                    parms += $" /p:{p.Name}={p.PropertyType.Name}"; 
+                 });
+                sb.Append($" {parms}");
+                sb.Append($"'");
+                sb1.Append($"\nsom!{t.Name} -p {parms} \n{t.Name}!som\n");
+            });
+            logger.Information(sb.ToString());
+            logger.Information(sb1.ToString());
             if (o.Bootstrap) SomBootstrapper.Run(o); 
         }
         private static List<Type> types()

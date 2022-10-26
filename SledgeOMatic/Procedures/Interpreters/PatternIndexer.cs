@@ -12,20 +12,23 @@ namespace SOM.Procedures
 
     public class PatternIndexer : BaseCompiler, ICompilable
     {
-        #region FIELDS
-
-        private int seed = 0;
-        private string Pattern = "(index)";
-
+        #region PROPS  
+        public int Seed { get; set; }
+        public string MatchPattern { get; set; } = "(index)";
+        #endregion
+        #region FIELDS 
         #endregion
 
         #region CTOR
+        public PatternIndexer()
+        {
 
+        }
         [CompilableCtorMeta()]
         public PatternIndexer(string Pattern, int Seed)
         {
-            this.seed = Seed;
-            this.Pattern = Pattern;
+            this.Seed = Seed;
+            this.MatchPattern = Pattern;
         }
 
         #endregion
@@ -45,11 +48,11 @@ namespace SOM.Procedures
                     continue;
                 }
                 var rslt = line;
-                if (Regex.IsMatch(rslt, this.Pattern))
+                if (Regex.IsMatch(rslt, this.MatchPattern))
                 {
-                    rslt = Regex.Replace(rslt, this.Pattern,
+                    rslt = Regex.Replace(rslt, this.MatchPattern,
                         (Match m) => (
-                            m.Groups[0].Value.Replace(m.Groups[1].Value, (this.seed++).ToString())
+                            m.Groups[0].Value.Replace(m.Groups[1].Value, (this.Seed++).ToString())
                     ));
                 }
                 result.AppendFormat("{0}\n", rslt);

@@ -11,21 +11,24 @@ namespace SOM.Procedures
 {
     public class Incrementer : BaseCompiler, ICompilable
     {
-        #region FIELDS
 
-        private int _amount = 0;
-        private string _pattern = @"\d";
-
+        #region PROPS  
+        public int Amount { get; set; } 
+        public string Pattern { get; set; } = @"";
+        #endregion
+        #region FIELDS 
         #endregion
 
         #region CTOR
+        public Incrementer()
+        {
 
+        }
         [CompilableCtorMeta()]
         public Incrementer(int Amount, string Pattern)
         {
-            _amount = (int)Convert.ToInt32(Amount);
-            _pattern = Pattern;
-
+            this.Amount = (int)Convert.ToInt32(Amount);
+            this.Pattern = Pattern; 
         }
 
         #endregion
@@ -45,13 +48,13 @@ namespace SOM.Procedures
                     continue;
                 }
                 string target = line;
-                string pattern = "([^\\d]|^)(" + _pattern + ")([^\\d]|$)";
+                string pattern = "([^\\d]|^)(" + this.Pattern + ")([^\\d]|$)";
                 if (Regex.IsMatch(target, pattern))
                 {
                     target = Regex.Replace(target, pattern,
                         m =>
                         {
-                            int nextint = (_amount) + Convert.ToInt32(m.Groups[2].Value) + 0;
+                            int nextint = (this.Amount) + Convert.ToInt32(m.Groups[2].Value) + 0;
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);

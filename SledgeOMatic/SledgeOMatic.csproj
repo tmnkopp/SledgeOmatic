@@ -6,12 +6,7 @@
     <AssemblyName>SOM</AssemblyName>
     <OutputType>Exe</OutputType>
     <StartupObject></StartupObject>
-    <Description>compile -p unittest -m Debug
-compile -p REFAC -m Cache  -v 
-config  -b -p "c:\_som\ "  -a "/p param1 /p param2"
-parse -p Archive
-parse -p som
-parse -p Archive -m Default</Description>
+    <Description>compile  -p refac -v</Description>
     <PackageReleaseNotes>compile -e '\$|pycache'</PackageReleaseNotes>
     <ApplicationIcon />
   </PropertyGroup>

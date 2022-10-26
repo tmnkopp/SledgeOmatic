@@ -10,22 +10,27 @@ namespace SOM.Procedures
 { 
     public class Indexer : BaseCompiler, ICompilable
     {
-        #region FIELDS
 
-        private int _seed = 0;
-        private int _reset = 0;
-        private string _pattern = @"";
+        #region PROPS  
+        public int Seed { get; set; }
+        public int Reset { get; set; }
+        public string Pattern { get; set; } = @"";
+        #endregion
 
+        #region FIELDS 
         #endregion
 
         #region CTOR
+        public Indexer()
+        {
 
+        }
         [CompilableCtorMeta()]
         public Indexer(object Seed, object Reset, string IndexPattern)
         {
-            _pattern = IndexPattern;
-            _seed = (int)Convert.ToInt32(Seed);
-            _reset = (int)Convert.ToInt32(Reset);
+            this.Pattern = IndexPattern;
+            this.Seed = (int)Convert.ToInt32(Seed);
+            this.Reset = (int)Convert.ToInt32(Reset);
         }
 
         #endregion
@@ -36,7 +41,7 @@ namespace SOM.Procedures
         {
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            int index = _seed;
+            int index = this.Seed;
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
@@ -44,7 +49,7 @@ namespace SOM.Procedures
                     result.AppendLine(line);
                     continue;
                 }
-                var m = Regex.Match(line, _pattern);
+                var m = Regex.Match(line, this.Pattern);
                 if (m.Success)
                 {
                     var val = ReSetter(index).ToString();
@@ -68,9 +73,9 @@ namespace SOM.Procedures
         }
         private int ReSetter(int index)
         {
-            if (_reset <= 1)
+            if (this.Reset <= 1)
                 return index;
-            return (_seed + 1) + ((index) % _reset);
+            return (this.Seed + 1) + ((index) % this.Reset);
         }
 
         #endregion
