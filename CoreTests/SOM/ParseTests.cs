@@ -23,13 +23,32 @@ namespace UnitTests
     [TestClass]
     public class ParseTests
     { 
-        private ISomContext somContext;
+        private ISomContext somContext; 
         public ParseTests()
         {
             var config = new TestServices().Configuration;
             var logger = new Mock<ILogger>().Object;
             var cache = new CacheService(config, logger);
             somContext = new SomContext(config, logger, cache);
+        }
+        [TestMethod]
+        public void sequence_extractor()
+        {
+            string content = "ASDF 333XXX 777 999 111 ";
+            List<int> nums = new List<int>();
+            System.Text.RegularExpressions.Match m = Regex.Match(content, @"([^\\d])(\d{3})([^\\d])", RegexOptions.IgnoreCase); 
+            while(m.Success)
+            {
+                content = content.Remove(0, m.Index+m.Length-1);
+                nums.Add(Convert.ToInt32(m.Groups[2].Value));
+                m = Regex.Match(content, @"([^\\d])(\d{3})([^\\d])", RegexOptions.IgnoreCase);
+            }
+            nums.Sort();
+            foreach (var n in nums)
+            {
+                Console.WriteLine(n);
+            }
+            
         }
         [TestMethod]
         public void LineExtractor_Extracts()

@@ -7,8 +7,8 @@ namespace SOM.Procedures
     public class NumericIncrementer : BaseCompiler, ICompilable
     {
         #region PROPS  
-        public int Seed { get; set; }
-        public int Base { get; set; }
+        public int From { get; set; }
+        public int To { get; set; }
         public string NumericPattern { get; set; }
         #endregion
 
@@ -18,10 +18,10 @@ namespace SOM.Procedures
 
         }
         [CompilableCtorMeta()]
-        public NumericIncrementer(object Seed, object Base, string NumericPattern)
+        public NumericIncrementer(object From, object To, string NumericPattern)
         {
-            this.Seed = (int)Convert.ToInt32(Seed);
-            this.Base = (int)Convert.ToInt32(Base);
+            this.From = (int)Convert.ToInt32(From);
+            this.To = (int)Convert.ToInt32(To);
             this.NumericPattern = NumericPattern;
         } 
         #endregion
@@ -47,7 +47,7 @@ namespace SOM.Procedures
                     target = Regex.Replace(target, pattern,
                         m =>
                         {
-                            int nextint = (this.Base - this.Seed) + Convert.ToInt32(m.Groups[2].Value) + 0;
+                            int nextint = (this.To - this.From) + Convert.ToInt32(m.Groups[2].Value) + 0;
                             return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
                         }
                         , RegexOptions.Singleline);
