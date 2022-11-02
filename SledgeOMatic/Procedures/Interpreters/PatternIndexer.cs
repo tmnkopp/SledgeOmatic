@@ -14,11 +14,9 @@ namespace SOM.Procedures
     {
         #region PROPS  
         public int Seed { get; set; }
-        public string MatchPattern { get; set; } = "(index)";
+        public string Pattern { get; set; } = "(index)";
         #endregion
-        #region FIELDS 
-        #endregion
-
+        
         #region CTOR
         public PatternIndexer()
         {
@@ -28,7 +26,7 @@ namespace SOM.Procedures
         public PatternIndexer(string Pattern, int Seed)
         {
             this.Seed = Seed;
-            this.MatchPattern = Pattern;
+            this.Pattern = Pattern;
         }
 
         #endregion
@@ -48,9 +46,9 @@ namespace SOM.Procedures
                     continue;
                 }
                 var rslt = line;
-                if (Regex.IsMatch(rslt, this.MatchPattern))
+                if (Regex.IsMatch(rslt, this.Pattern))
                 {
-                    rslt = Regex.Replace(rslt, this.MatchPattern,
+                    rslt = Regex.Replace(rslt, this.Pattern,
                         (Match m) => (
                             m.Groups[0].Value.Replace(m.Groups[1].Value, (this.Seed++).ToString())
                     ));

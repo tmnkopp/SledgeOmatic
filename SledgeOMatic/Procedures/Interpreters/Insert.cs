@@ -8,7 +8,7 @@ namespace SOM.Procedures
     public class Insert : ICompilable
     {
         #region PROPS  
-        public string MatchPattern { get; set; } 
+        public string Pattern { get; set; } 
         public string Format { get; set; }
         #endregion 
         #region CTOR 
@@ -18,7 +18,7 @@ namespace SOM.Procedures
         [CompilableCtorMeta()]
         public Insert(string MatchPattern,  string Format)
         {
-            this.MatchPattern = MatchPattern; 
+            this.Pattern = MatchPattern; 
             this.Format = Format.Replace(@"\n", System.Environment.NewLine);
         }
         #endregion
@@ -27,9 +27,9 @@ namespace SOM.Procedures
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            if (Regex.IsMatch(content, this.MatchPattern, RegexOptions.Singleline))
+            if (Regex.IsMatch(content, this.Pattern, RegexOptions.Singleline))
             {
-                content = Regex.Replace(content, this.MatchPattern,
+                content = Regex.Replace(content, this.Pattern,
                     m =>
                     {
                         if (m.Groups.Count > 0)

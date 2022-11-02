@@ -9,7 +9,7 @@ namespace SOM.Procedures
         #region PROPS  
         public int From { get; set; }
         public int To { get; set; }
-        public string NumericPattern { get; set; }
+        public string Pattern { get; set; }
         #endregion
 
         #region CTOR 
@@ -18,11 +18,11 @@ namespace SOM.Procedures
 
         }
         [CompilableCtorMeta()]
-        public NumericIncrementer(object From, object To, string NumericPattern)
+        public NumericIncrementer(object From, object To, string Pattern)
         {
             this.From = (int)Convert.ToInt32(From);
             this.To = (int)Convert.ToInt32(To);
-            this.NumericPattern = NumericPattern;
+            this.Pattern = Pattern;
         } 
         #endregion
 
@@ -32,7 +32,7 @@ namespace SOM.Procedures
         {
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            somContext.Logger.Information("{o}", new { NumericPattern=this.NumericPattern });
+            somContext.Logger.Information("{o}", new { NumericPattern=this.Pattern });
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
@@ -41,7 +41,7 @@ namespace SOM.Procedures
                     continue;
                 }
                 string target = line;
-                string pattern = "([^\\d]|^)(" + this.NumericPattern + ")([^\\d]|$)";
+                string pattern = "([^\\d]|^)(" + this.Pattern + ")([^\\d]|$)";
                 if (Regex.IsMatch(target, pattern))
                 {
                     target = Regex.Replace(target, pattern,
