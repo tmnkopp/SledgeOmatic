@@ -1,7 +1,7 @@
 ﻿function Deploy { 
     [CmdletBinding()]
         param ( 
-        [Parameter(Mandatory = $false, Position = 0)][string] $with ,
+        [Alias("r")][Parameter(Mandatory = $false, Position = 0)][string] $with ,
         [Alias("p")][Parameter(Mandatory = $false, Position = 1)][string] $Path
     ) 
     if ($with -match ' release ' ){ 
@@ -22,6 +22,6 @@
     }   
     explorer.exe 'C:\_som\'
 } 
-cls; Deploy -with "  commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
-#release
+cls; Deploy -with " release commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
+#   release
  
