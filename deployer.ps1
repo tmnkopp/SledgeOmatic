@@ -2,7 +2,7 @@
     [CmdletBinding()]
         param ( 
         [Parameter(Mandatory = $false, Position = 0)][string] $with ,
-        [Alias("p")][Parameter(Mandatory = $false, Position = 0)][string] $Path
+        [Alias("p")][Parameter(Mandatory = $false, Position = 1)][string] $Path
     ) 
     if ($with -match ' release ' ){ 
         cd $Path; 
@@ -18,10 +18,10 @@
     }
     if ($with -match ' commit ' ){
         $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
-        cd $Path;  
-        git add .; git commit -m ('refactor context fix:' + $m) ; git push; 
+        cd $Path;  git add .; git commit -m ('refactor context fix:' + $m) ; git push; 
     }   
     explorer.exe 'C:\_som\'
 } 
-cls; Deploy -with " release commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
+cls; Deploy -with "  commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
+#release
  
