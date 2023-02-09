@@ -1,14 +1,14 @@
 ﻿function Deploy { 
     [CmdletBinding()]
         param ( 
-        [Parameter(Mandatory = $false, Position = 0)] 
-        [string] $with 
+        [Parameter(Mandatory = $false, Position = 0)][string] $with ,
+        [Alias("p")][Parameter(Mandatory = $false, Position = 0)][string] $Path
     ) 
     if ($with -match ' release ' ){ 
-        cd 'D:\repos\SledgeOMatic'; 
+        cd $Path; 
         dotnet build --configuration Debug ; dotnet build --configuration Release ;
         dotnet publish SledgeOMatic -p:PublishProfile=FolderProfile ; 
-        Copy-Item -Path D:\repos\SledgeOMatic\SledgeOMatic\bin\publish\SOM.exe -Destination c:\_som\SOM.exe -Force 
+        Copy-Item -Path ($Path + '\SledgeOMatic\bin\publish\SOM.exe') -Destination c:\_som\SOM.exe -Force 
      
         (Get-Content C:\_som\appsettings.json) `
         -replace '(Database|Server)=.*;', '' `
@@ -18,10 +18,10 @@
     }
     if ($with -match ' commit ' ){
         $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
-        cd 'D:\repos\SledgeOMatic';  
+        cd $Path;  
         git add .; git commit -m ('refactor context fix:' + $m) ; git push; 
     }   
     explorer.exe C:\_som\
 } 
-cls; Deploy -with " release commit "    
+cls; Deploy -with "  commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
  

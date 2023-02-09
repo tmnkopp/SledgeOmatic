@@ -170,7 +170,7 @@ namespace SOM.Compilers
             if (this.somContext.Options.Verbose)
                 this.somContext.Logger.Debug($"Commit FileName: {FileName}"); 
             if (somContext.Options.Mode == SomMode.Commit){ 
-                File.WriteAllText($"{FileName}", Content, Encoding.Unicode); 
+                File.WriteAllText($"{FileName}", Content, Encoding.UTF8); 
             }
             if (somContext.Options.Mode == SomMode.Debug){  
                 this.somContext.Cache.Append($"{FileName}\n{Content}\n");

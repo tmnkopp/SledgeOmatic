@@ -27,8 +27,8 @@ namespace SOM.IO
             using (TextReader tr = File.OpenText(this.CachePath))
                 return tr.ReadToEnd();
         }
-        public void Write(string content) => File.WriteAllText(this.CachePath, content);
-        public void Append(string content) => File.WriteAllText(this.CachePath, $"{this.Read()}{content}");  
+        public void Write(string content) => File.WriteAllText(this.CachePath, content, Encoding.UTF8);
+        public void Append(string content) => File.WriteAllText(this.CachePath, $"{this.Read()}{content}", Encoding.UTF8);  
         public void Inspect()
         { 
             Process p = new Process();
