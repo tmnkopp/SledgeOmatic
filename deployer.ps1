@@ -23,5 +23,5 @@
     }   
     explorer.exe 'C:\_som\'
 } 
-cls; Deploy -with "  commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
+cls; Deploy -with " release commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
  
