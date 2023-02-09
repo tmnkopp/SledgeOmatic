@@ -21,7 +21,7 @@
         cd $Path;  
         git add .; git commit -m ('refactor context fix:' + $m) ; git push; 
     }   
-    explorer.exe C:\_som\
+    explorer.exe 'C:\_som\'
 } 
 cls; Deploy -with "  commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  
  
