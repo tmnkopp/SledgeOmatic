@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p dcall  -m Commit -v "
+      "commandLineArgs": "compile -p CIO -m Cache -v "
     }
   }
 }
