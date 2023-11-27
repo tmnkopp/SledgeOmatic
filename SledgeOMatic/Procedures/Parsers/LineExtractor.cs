@@ -13,9 +13,9 @@ namespace SOM.Procedures
     public class LineExtractor : IParser<string>
     {
         private string _extractTarget;
-        private int _numberOfLines = 4; 
+        private int _numberOfLines = 2; 
         
-        public LineExtractor(string ExtractTarget, int NumberOfLines )
+        public LineExtractor(string ExtractTarget, int NumberOfLines = 2 )
         {
             _extractTarget = ExtractTarget;
             _numberOfLines = NumberOfLines; 

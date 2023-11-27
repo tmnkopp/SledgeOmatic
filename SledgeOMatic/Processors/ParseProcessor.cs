@@ -45,9 +45,12 @@ namespace SOM
             var dfd = deser.Deserialize<DirectoryParseDefinition>(raw); 
             Type ptype = (from t in this.IParserTypes where t.Name == dfd.ParseType select t).FirstOrDefault();
             var ctor_params = ptype.GetConstructors()[0].GetParameters();
+
+            var cmdargs = somContext.Options.GetArgs;
             for (int i = 0; i < ctor_params.Count(); i++)
             {
                 var val = Convert.ChangeType(dfd.ParseTypeArgs[i], ctor_params[i].ParameterType);
+                if (cmdargs.Count > i) val = Convert.ChangeType(cmdargs[i], ctor_params[i].ParameterType);
                 dfd.ParseTypeArgs[i] = val;
             } 
             parser.Directories.AddRange(dfd.Directories); 

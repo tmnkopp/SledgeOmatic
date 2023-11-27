@@ -8,6 +8,8 @@ using SOM.Procedures;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SOM
 {
@@ -18,7 +20,9 @@ namespace SOM
         int SearchDepth { get; set; }
         SomMode Mode { get; set; }
         bool Verbose { get; set; }
-    } 
+        List<string> GetArgs { get;  }
+
+    }
     [Serializable]
     [Verb("compile", HelpText = @"Command Runner: som compile -p SomDocParser -m Cache")]
     public class CompileOptions : ISomOptions
@@ -35,7 +39,13 @@ namespace SOM
         public int SearchDepth { get; set; }
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
-    }
+        public List<string> GetArgs
+        { 
+            get{
+                return (from s in new List<string>(Regex.Split(this.Args.Trim(), @"/p ")) where !string.IsNullOrWhiteSpace(s) select s.Trim()).ToList();
+            }
+        }
+}
 
     [Serializable]
     [Verb("parse", HelpText = @"Command Runner: som parse -p CS -v -d 1 --help ")]
@@ -53,12 +63,19 @@ namespace SOM
         public int SearchDepth { get; set; } 
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
+        public List<string> GetArgs
+        {
+            get
+            {
+                return (from s in new List<string>(Regex.Split(this.Args.Trim(), @"/p ")) where !string.IsNullOrWhiteSpace(s) select s.Trim()).ToList();
+            }
+        }
     } 
     [Serializable]
     [Verb("config", HelpText = "Config Runner.")]
     public class ConfigOptions
     {
-        [Option('a', "Args", HelpText = "-a \"/p param1 /p param2\"")]
+        [Option('a', "Args", HelpText = "-a \"/p:param1=value /p:param2=value \"")]
         public string Args { get; set; }
         [Option('b', "Bootstrap", HelpText = "Bootstraps Som")]
         public bool Bootstrap { get; set; } 

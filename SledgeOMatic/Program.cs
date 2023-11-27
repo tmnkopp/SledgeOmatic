@@ -53,7 +53,14 @@ namespace SOM
                 errs => 1);
         }
         private static ServiceProvider RegisterServices(string[] args)
-        { 
+        {
+
+            var dir = Environment.CurrentDirectory;
+            while(dir.Contains("\\bin"))
+            {
+                dir = Directory.GetParent(dir).ToString();
+            }
+       
             string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
              
             IConfiguration configuration = new ConfigurationBuilder()
