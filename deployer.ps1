@@ -16,10 +16,7 @@
         Out-File C:\_som\appsettings.local
 
     }
-    if ($with -match ' commit ' ){
-        $m = -join ((65..90) + (97..122) | Get-Random -Count 2 | % {[char]$_ +''+ $_ }) 
-        cd $Path;  git add .; git commit -m ('refactor context fix:' + $m) ; git push; 
-    }   
+  
     explorer.exe 'C:\_som\'
 } 
 cls; Deploy -with " release commit " -p 'C:\Users\timko\source\repos\SledgeOmatic'  

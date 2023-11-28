@@ -2,7 +2,7 @@
   "profiles": {
     "SledgeOmatic": {
       "commandName": "Project",
-      "commandLineArgs": "parse -p CS -m Cache  -a \"/p HttpContext\""
+      "commandLineArgs": "compile -p COMPILE_SOM -m Cache  -a \"/p HttpContext\""
     }
   }
 }

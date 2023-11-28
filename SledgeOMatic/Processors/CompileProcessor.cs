@@ -44,15 +44,9 @@ namespace SOM
         }
         public void Process(ISomContext somContext) 
         {
-            string configPath = config.GetSection("AppSettings:CompileConfig").Value ?? "~";
             string basePath = config.GetSection("AppSettings:BasePath").Value;
-            string configFile = somContext.Options.Path;
-            if (!string.IsNullOrEmpty(configFile.ToString()))  {
-                configPath = configPath.Replace("~", basePath); 
-                if (!configFile.Contains(":")) configFile = $"{configPath}{configFile}";
-                configFile = configFile.Replace(@"\\", @"\");
-                configFile = (configFile.Contains(".yaml")) ? configFile : $"{configFile}.yaml"; 
-            }
+            string configFile = $"{basePath}COMPILE_{somContext.Options.Path.Replace("COMPILE_","")}.yaml".Replace(@"\\", @"\");
+     
             logger.Information("{o}", configFile); 
              
             string raw = File.ReadAllText(configFile);
