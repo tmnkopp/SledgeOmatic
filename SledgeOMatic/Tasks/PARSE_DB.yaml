@@ -1,0 +1,8 @@
+Directories:  
+- 'C:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\*.sql'    
+ParseType: LineExtractor
+PathExcludePattern: 'archive'
+ParseTypeArgs:
+- 'fnIsObjVisible'
+- 5
+ResultFormat: '/r{{1}}/r{{0}}/r/r'

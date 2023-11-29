@@ -32,7 +32,7 @@ namespace SOM.Procedures
         {
             string content = somContext.Content;
             StringBuilder result = new StringBuilder();
-            somContext.Logger.Information("{o}", new { NumericPattern=this.Pattern });
+            somContext.Logger.Debug("{o}", new { NumericPattern=this.Pattern });
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))

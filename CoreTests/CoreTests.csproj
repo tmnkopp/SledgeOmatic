@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SOM-API\SOM-API\SOM-API.csproj" />
     <ProjectReference Include="..\SledgeOMatic\SledgeOmatic.csproj" />
   </ItemGroup>
 

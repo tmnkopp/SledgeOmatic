@@ -55,13 +55,10 @@ namespace SOM
         private static ServiceProvider RegisterServices(string[] args)
         {
 
-            var dir = Environment.CurrentDirectory;
-            while(dir.Contains("\\bin"))
-            {
-                dir = Directory.GetParent(dir).ToString();
-            }
-       
-            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
+            string basepath = Environment.CurrentDirectory;
+            while(basepath.Contains("\\bin"))
+                basepath = Directory.GetParent(basepath).ToString(); 
+            basepath = basepath + @"\";
              
             IConfiguration configuration = new ConfigurationBuilder()
                   .SetBasePath(basepath)
@@ -69,6 +66,11 @@ namespace SOM
                   .AddEnvironmentVariables()
                   .AddCommandLine(args)
                   .Build();
+
+            if (string.IsNullOrWhiteSpace(configuration.GetSection("AppSettings:BasePath").Value))
+            {
+                configuration.GetSection("AppSettings:BasePath").Value = basepath;
+            }
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()

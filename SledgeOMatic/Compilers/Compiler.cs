@@ -121,6 +121,8 @@ namespace SOM.Compilers
             SearchOption SearchDepth = (SearchOption)somContext.Options.SearchDepth;
             foreach (FileInfo file in DI.GetFiles(FileFilter, SearchDepth))
             {
+                somContext.Logger.Information("{o}", new { File = file.FullName });
+
                 string content = "";
                 using (TextReader tr = File.OpenText(file.FullName))
                     content = tr.ReadToEnd();

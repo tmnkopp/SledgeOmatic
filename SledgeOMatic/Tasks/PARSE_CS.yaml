@@ -1,0 +1,10 @@
+Directories:  
+- 'C:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\*.aspx.vb'    
+# - 'D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\Images\*.*'
+# - 'D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\Scripts\*.*'
+ParseType: LineExtractor
+PathExcludePattern: '\\bin|\\obj|\\debug|\\201\d|designer'
+ParseTypeArgs:
+- 'HttpRequest'
+- 4
+ResultFormat: '/r{{1}}/r{{0}}/r/r'

@@ -1,0 +1,8 @@
+Directories:      
+- 'D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\CustomControls\*.as*' 
+ParseType: LineExtractor
+PathExcludePattern: '\\bin|\\obj|\\debug|\.dll'
+ParseTypeArgs:
+- 'HttpRequest'
+- 6 
+ResultFormat: '/r{{1}}/r{{0}}/r/r'

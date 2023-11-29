@@ -36,7 +36,7 @@ namespace SOM
         }
         public void Process(ISomContext somContext) {
             string basePath = config.GetSection("AppSettings:BasePath").Value; 
-            string configFile = $"{basePath}PARSE_{somContext.Options.Path.Replace("PARSE_","")}.yaml".Replace(@"\\", @"\");
+            string configFile = $"{basePath}{somContext.Options.Path.Replace(@".yaml", @"")}.yaml".Replace(@"\\", @"\");
             logger.Information("{o}", configFile);
 
             string raw = File.ReadAllText(configFile);

@@ -1,0 +1,12 @@
+ContentCompilers: 
+- CompilerType: 'SomTagInterpreter'   
+  Params: '/p:Options= -v '
+FilenameCompilers:  
+- CompilerType: 'RegexReplacer' 
+  Params: '/p:Source=refac'   
+Compilations: 
+  - FileFilter: '*fields.soml'
+    Source: '~'
+    Dest: '~'
+
+    

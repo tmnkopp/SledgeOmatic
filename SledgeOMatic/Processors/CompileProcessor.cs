@@ -45,7 +45,7 @@ namespace SOM
         public void Process(ISomContext somContext) 
         {
             string basePath = config.GetSection("AppSettings:BasePath").Value;
-            string configFile = $"{basePath}COMPILE_{somContext.Options.Path.Replace("COMPILE_","")}.yaml".Replace(@"\\", @"\");
+            string configFile = $"{basePath}{somContext.Options.Path.Replace(@".yaml", @"")}.yaml".Replace(@"\\", @"\");
      
             logger.Information("{o}", configFile); 
              
