@@ -1,0 +1,19 @@
+ContentCompilers: 
+- CompilerType: 'NumericIncrementer'
+  Params: '  /p:From=58800  /p:To=60300 /p:Pattern=[5-6]\d\d\d\d' 
+- CompilerType: 'NumericIncrementer'
+  Params: '  /p:From=5010   /p:To=5050  /p:Pattern=50\d\d'
+- CompilerType: 'NumericIncrementer'
+  Params: '  /p:From=4509   /p:To=4550  /p:Pattern=45\d\d'  
+- CompilerType: 'RegexReplacer'
+  Params: ' /p:Source={ "Q1":"Q2", "148--PK_R":"149--PK_R" } '    
+FilenameCompilers:  
+- CompilerType: 'KeyValReplacer'
+  Params: ' /p:Source={  "Q1":"Q2", "7.59":"7.60", "_0_":"_FOO_" } ' 
+Compilations:     
+- FileFilter: '*_0_DBUpdate7.59_CIO_Q1_2024.sql'
+  Source: 'C:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\'
+  Dest: 'C:\temp\'  
+- FileFilter: '*_Q1_*'
+  Source: 'C:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\FismaForms\2024\'
+  Dest: 'C:\temp\'  
