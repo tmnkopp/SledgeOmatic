@@ -4,6 +4,10 @@
 appsettings.*
 config.*
 config/
+SledgeOMatic/Properties/launchSettings.json
+SledgeOMatic/_cache.txt
+SledgeOMatic/Tasks
+
 # User-specific files
 *.suo
 *.user
@@ -262,5 +266,3 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-/SledgeOMatic/Properties/launchSettings.json
-/SledgeOMatic/_cache.txt
