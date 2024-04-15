@@ -1,8 +1,16 @@
 {
   "profiles": {
-    "SledgeOmatic": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "COMPILE": {
       "commandName": "Project",
-      "commandLineArgs": "compile -p Tasks\\COMPILE_CIO -m Cache  "
+      "commandLineArgs": "compile -p Tasks\\COMPILE_MFA -m Cache"
+    },
+    "config": {
+      "commandName": "Project",
+      "commandLineArgs": "compile"
     }
   }
 }

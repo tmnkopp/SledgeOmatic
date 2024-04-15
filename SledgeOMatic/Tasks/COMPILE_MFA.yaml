@@ -1,0 +1,19 @@
+ContentCompilers: 
+- CompilerType: 'NumericIncrementer'
+  Params: '  /p:From=61750  /p:To=60300 /p:Pattern=617\d\d' 
+- CompilerType: 'NumericIncrementer'
+  Params: '  /p:From=5070   /p:To=5100  /p:Pattern=507\d'
+- CompilerType: 'NumericIncrementer'
+  Params: '  /p:From=4570   /p:To=4600  /p:Pattern=457\d'  
+- CompilerType: 'RegexReplacer'
+  Params: ' /p:Source={ "Q2":"Q3", "151--PK_R":"161--PK_R" } '    
+FilenameCompilers:  
+- CompilerType: 'KeyValReplacer'
+  Params: ' /p:Source={  "Q2":"Q3", "7.60":"7.62", "_1_":"_2_" } ' 
+Compilations:     
+- FileFilter: '*_1_DBUpdate7.60_MFA.sql'
+  Source: 'D:\temp\'
+  Dest: 'D:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\'  
+- FileFilter: '*_Q2_*'
+  Source: 'D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\MFA\2024\'
+  Dest: 'D:\dev\CyberScope\CyberScopeBranch\CSwebdev\code\CyberScope\MFA\2024\'  

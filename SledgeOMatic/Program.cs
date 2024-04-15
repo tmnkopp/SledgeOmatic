@@ -55,8 +55,8 @@ namespace SOM
         private static ServiceProvider RegisterServices(string[] args)
         {
 
-            string basepath = Environment.CurrentDirectory;
-            while(basepath.Contains("\\bin"))
+            string basepath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);  // Environment.CurrentDirectory;
+            while (basepath.Contains("\\bin"))
                 basepath = Directory.GetParent(basepath).ToString(); 
             basepath = basepath + @"\";
              
@@ -80,7 +80,9 @@ namespace SOM
             var services = new ServiceCollection();
             services.AddLogging(cfg => cfg.AddSerilog());
            
-            Log.Information($"Information: {basepath}"); 
+            Log.Information($"Information: {basepath}");
+             
+
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
             services.AddSingleton(configuration); 
             services.AddTransient<ICompiler, Compiler>(); 
