@@ -62,7 +62,7 @@ namespace SOM
              
             IConfiguration configuration = new ConfigurationBuilder()
                   .SetBasePath(basepath)
-                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) 
                   .AddEnvironmentVariables()
                   .AddCommandLine(args)
                   .Build();

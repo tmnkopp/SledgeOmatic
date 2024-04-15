@@ -6,7 +6,7 @@ config.*
 config/
 SledgeOMatic/Properties/launchSettings.json
 SledgeOMatic/_cache.txt
-SledgeOMatic/Tasks
+SledgeOMatic/Tasks/*.yaml
 
 # User-specific files
 *.suo

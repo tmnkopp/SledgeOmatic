@@ -18,6 +18,7 @@ namespace SOM.Compilers
             public string CompilerType { get; set; } 
             public List<object> Args { get; set; }
             public string Params { get; set; }
+            public string Description { get; set; }
         }
         public class Compilation
         {
