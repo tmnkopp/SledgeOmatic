@@ -67,10 +67,9 @@ namespace SOM
                   .AddCommandLine(args)
                   .Build();
 
-            if (string.IsNullOrWhiteSpace(configuration.GetSection("AppSettings:BasePath").Value))
-            {
+            if (string.IsNullOrWhiteSpace(configuration.GetSection("AppSettings:BasePath").Value)) 
                 configuration.GetSection("AppSettings:BasePath").Value = basepath;
-            }
+      
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()

@@ -20,13 +20,13 @@ namespace SOM.Compilers
         private string src = "~"; 
         public string Source
         {
-            get => src.Replace("~", somContext.Config.GetSection("AppSettings:BasePath").Value);
+            get => src.EndsWith('\\') ? src : src+'\\';  
             set { src = value; }
         } 
         private string dst = "~";
         public string Dest
         {
-            get => dst.Replace("~", somContext.Config.GetSection("AppSettings:BasePath").Value);
+            get => dst.EndsWith('\\') ? dst : dst + '\\';
             set { dst = value; }
         } 
         private string _fileFilter = null;
