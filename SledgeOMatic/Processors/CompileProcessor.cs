@@ -56,14 +56,14 @@ namespace SOM
             def.ContentCompilers.ForEach(c =>
             {
                 var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
-                logger.Information("ContentCompilers: {o}", JsonConvert.SerializeObject(c));
+                logger.Debug("ContentCompilers: {o}", JsonConvert.SerializeObject(c));
                 ICompilable obj = GenericFactory<ICompilable>.Create(typ.FullName, c.Params);
                 compiler.ContentCompilers.Add(obj); 
             });
             def.FilenameCompilers.ForEach(c =>
             {
                 var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
-                logger.Information("FilenameCompilers: {o}", JsonConvert.SerializeObject(c));
+                logger.Debug("FilenameCompilers: {o}", JsonConvert.SerializeObject(c));
                 ICompilable obj = GenericFactory<ICompilable>.Create(typ.FullName, c.Params);
                 compiler.FilenameCompilers.Add(obj);
             }); 

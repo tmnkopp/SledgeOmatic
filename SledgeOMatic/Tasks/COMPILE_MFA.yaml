@@ -1,7 +1,9 @@
 ContentCompilers: 
+- CompilerType: 'Extractor' 
+  Params: '  /p:From=DECLARE @PK_ReportingCycle  /p:To=--//updating  ' 
 - CompilerType: 'NumericIncrementer'
-  Description: 'PK_Quesiton'	
-  Params: '  /p:From=61750  /p:To=63500 /p:Pattern=617\d\d' 
+  Description: '   PK_Quesiton    '
+  Params: '  /p:From=61750  /p:To=63500 /p:Pattern=617\d\d'  
 - CompilerType: 'NumericIncrementer'
   Description: 'PK_FormPage'
   Params: '  /p:From=5070   /p:To=5110  /p:Pattern=507\d'
