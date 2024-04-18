@@ -9,3 +9,6 @@ SELECT MIN(PK_Question), MAX(PK_Question) FROM vwQuestions WHERE PK_FORM = '2023
 SELECT MIN(PK_QuestionGroup), MAX(PK_QuestionGroup) FROM vwQuestions WHERE PK_FORM = '2023-A-IG'  
 
 SELECT * FROM fsma_ReportingCycles WHERE Description LIKE '%CIO%' ORDER BY PK_ReportingCycle DESC
+
+SELECT * FROM vwOrgSubtoComponent WHERE PK_FORM='2024_A_IG' AND Component='Department of Justice'
+SELECT * FROM vwQuestions WHERE PK_FORM='2024-A-IG' 
