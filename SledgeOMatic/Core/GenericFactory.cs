@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -28,22 +31,31 @@ namespace SOM.Core
             var m = Regex.Match(paramString, $@"(/p:.*)");
             if (m.Success)
             {
-                var props = new Dictionary<string, string>();
+                var cmdProps = new Dictionary<string, string>();
                 foreach (var item in Regex.Split(m.Groups[1].Value, $"/p:"))
                 {
-                    if (item.Contains("="))
-                        props.Add(item.Split("=")[0], item.Split("=")[1].TrimEnd());
+                    if (item.Contains("=")){
+                        cmdProps.Add(item.Split("=")[0], item.Split("=")[1].TrimEnd());
+                    }     
                 }
 
                 obj = (T)Activator.CreateInstance(type);
+                 
+                PropertyInfo[] typeProps = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (PropertyInfo typeProp in typeProps)
+                { 
+                    string alias = $"^{typeProp.Name}$";
+                    InlineParam inlineParamAttr = (from a in typeProp.GetCustomAttributes(true) where a.GetType() == typeof(InlineParam) select a).FirstOrDefault() as InlineParam; 
+                    if (inlineParamAttr != null) 
+                        alias = $"^{typeProp.Name}$|{inlineParamAttr.Alias}";
 
-                (from p in obj.GetType().GetProperties()
-                 where props.ContainsKey(p.Name)
-                 select p).ToList().ForEach(p => {
-                     object result = props[p.Name];
-                     result = Convert.ChangeType(result, p.PropertyType); 
-                     p.SetValue(obj, result, null);
-                 });
+                    var cmdProperty = (from cmdProp in cmdProps where Regex.IsMatch(cmdProp.Key, alias) select cmdProp).FirstOrDefault();
+                    if (cmdProperty.Key != null)
+                    { 
+                        object result = Convert.ChangeType(cmdProperty.Value, typeProp.PropertyType);
+                        obj.GetType().GetProperties().Where(p => p.Name == typeProp.Name).FirstOrDefault().SetValue(obj, result, null); 
+                    } 
+                } 
                 return obj;
             }
 

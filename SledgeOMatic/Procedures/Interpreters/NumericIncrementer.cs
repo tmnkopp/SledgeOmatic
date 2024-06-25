@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
-
+using SOM.Core;
 namespace SOM.Procedures
 {
     public class NumericIncrementer : BaseCompiler, ICompilable
     {
-        #region PROPS  
+        #region PROPS   
+        [InlineParam(Alias ="PrevSeed")]
         public int From { get; set; }
+        [InlineParam(Alias = "NextSeed")]
         public int To { get; set; }
-        public string Pattern { get; set; }
+        public string Pattern { get; set; } 
         #endregion
 
         #region CTOR 
