@@ -58,7 +58,8 @@ namespace CoreTests
             var logger = new Mock<ILogger>().Object;
             var cache = new CacheService(config, logger);
             ISomContext somContext = new SomContext(config, logger, cache) { Content = readall }; 
-            var obj = new Insert(@"(<tr>.*?SectionHead.*?<\/tr>)",   @"$1\n$2\n");
+            //var obj = new Insert(@"(<tr>.*?SectionHead.*?<\/tr>)", @"\n\n\n{1}\n\n\n");
+            var obj = new Insert(@"(<tr>.*?SectionHead.*?)(<\/tr>)", @" [ {1} ] [ {2} ] ");
             somContext.Content = obj.Compile(somContext);
             
             //obj = new Inserter(@"using SOM\.Procedures", "FOO");
