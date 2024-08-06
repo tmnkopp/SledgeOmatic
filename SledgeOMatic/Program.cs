@@ -80,8 +80,7 @@ namespace SOM
             services.AddLogging(cfg => cfg.AddSerilog());
            
             Log.Information($"Information: {basepath}");
-             
-
+              
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
             services.AddSingleton(configuration); 
             services.AddTransient<ICompiler, Compiler>(); 
