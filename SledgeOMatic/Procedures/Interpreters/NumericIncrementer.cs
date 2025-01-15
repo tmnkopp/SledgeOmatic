@@ -42,20 +42,26 @@ namespace SOM.Procedures
                     result.AppendLine(line);
                     continue;
                 }
-                string target = line;
+                string oldLine = line;
                 string pattern = "([^\\d]|^)(" + this.Pattern + ")([^\\d]|$)";
-                if (Regex.IsMatch(target, pattern))
-                {
-                    target = Regex.Replace(target, pattern,
-                        m =>
-                        {
-                            int nextint = (this.To - this.From) + Convert.ToInt32(m.Groups[2].Value) + 0;
-                            return $"{m.Groups[1].Value}{nextint}{m.Groups[3].Value}";
-                        }
-                        , RegexOptions.Singleline);
-                };
-                target = Regex.Replace(target, $@"\n|\r", "");
-                result.AppendLine($"{target}");
+                string newLine = "";
+                var match = Regex.Match(oldLine, pattern);
+                if(!match.Success) {
+                    oldLine = Regex.Replace(oldLine, $@"\n|\r", "");
+                    result.AppendLine($"{oldLine}");
+                }else{
+                    while (match.Success)
+                    {
+                        int pos = match.Index;
+                        int newValue = (this.To - this.From) + Convert.ToInt32(match.Groups[2].Value);
+                        newLine = newLine + oldLine.Substring(0, pos) + $"{match.Groups[1].Value}{newValue.ToString()}{match.Groups[3].Value}";
+                        int matchLength = pos + match.Value.Length;
+                        oldLine = oldLine.Substring(matchLength, oldLine.Length - matchLength);
+                        match = Regex.Match(oldLine, pattern);
+                    };
+                    newLine = Regex.Replace(newLine, $@"\n|\r", "");
+                    result.AppendLine($"{newLine}");
+                }   
             }
             return result.ToString();
         }

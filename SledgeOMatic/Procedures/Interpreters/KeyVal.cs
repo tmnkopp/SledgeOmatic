@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq; 
 using System.IO;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace SOM.Procedures
 { 
@@ -29,8 +30,19 @@ namespace SOM.Procedures
             {
                 Source = Source.Replace("~", somContext.BasePath);
                 using (TextReader tr = File.OpenText(Source))
-                    src = tr.ReadToEnd();
-                KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(src);
+                    src = tr.ReadToEnd().Trim();
+                
+                if (src.StartsWith("["))
+                {
+                    var list = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(src);
+                    List<string> keys = list[0].Keys.ToList(); 
+                    foreach (var item in list)
+                    {
+                        KeyVals.Add(item[keys[0]], item[keys[1]]);
+                    } 
+                } else{
+                    KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(src);
+                }
                 return KeyVals;
             }
             if (Source.ToLower().EndsWith(".sql"))
@@ -51,11 +63,7 @@ namespace SOM.Procedures
                         }        
                 }
                 return KeyVals;
-            }
-            if (this.IsValidJson(Source))
-            {
-                KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(Source);
-            }
+            } 
             return KeyVals;
         }
         protected bool IsValidJson(string strInput)

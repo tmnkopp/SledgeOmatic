@@ -79,7 +79,7 @@ namespace SOM
             var services = new ServiceCollection();
             services.AddLogging(cfg => cfg.AddSerilog());
            
-            Log.Information($"Information: {basepath}");
+            Log.Information($"basepath: {basepath}");
               
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
             services.AddSingleton(configuration); 

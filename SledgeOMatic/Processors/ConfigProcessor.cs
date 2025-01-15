@@ -1,14 +1,18 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Serilog;
 using SOM.Compilers; 
 using SOM.Procedures;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SOM 
 {
@@ -19,23 +23,19 @@ namespace SOM
     public class ConfigProcessor: IConfigProcessor
     { 
         private readonly IConfiguration config;
-        private readonly ILogger logger;
+        private readonly Serilog.ILogger logger;
         public ConfigProcessor( 
              IConfiguration config
-            , ILogger logger
+            , Serilog.ILogger logger
             )
         { 
             this.config = config;
             this.logger = logger;
         }
         public void Process(ConfigOptions o) {
-         
-            string basepath = Environment.GetEnvironmentVariable("som", EnvironmentVariableTarget.User);
-
-            logger.Information($"basepath: {basepath}");
-            logger.Information($"Bootstrap: {o.Bootstrap}");
-            logger.Information($"Args: {o.Args}");
-            logger.Information($"Path: {o.Path}"); 
+          
+            logger.Information($"Bootstrap: {o.Bootstrap}"); 
+            logger.Information($"PK_FORM: {o.PK_FORM}"); 
 
             var splitArgs = o.Args?.Split(new[] { "/p" }, StringSplitOptions.None) ?? new string[]{ };
             logger.Information($"\n{string.Join("\n", from t in splitArgs where !string.IsNullOrWhiteSpace(t) select t)}");
@@ -43,23 +43,30 @@ namespace SOM
             var AppSettings = config.GetSection("AppSettings").GetChildren();
             foreach (var item in AppSettings) logger.Information("{k} {v}", item.Key, item.Value);
             StringBuilder sb = new StringBuilder();
-            StringBuilder sb1 = new StringBuilder();
 
-            sb.AppendLine($"");
-            types().ForEach(t =>
-            { 
-                sb.AppendLine($"\n- CompilerType:'{t.Name}'"); 
-                sb.Append($"  Params: '");
-                string parms = "";
-                (from p in t.GetProperties() select p).ToList().ForEach(p => {
-                    parms += $" /p:{p.Name}={p.PropertyType.Name}"; 
-                 });
-                sb.Append($" {parms}");
-                sb.Append($"'");
-                sb1.Append($"\nsom!{t.Name} -p {parms} \n{t.Name}!som\n");
-            });
-            logger.Information(sb.ToString());
-            logger.Information(sb1.ToString());
+            try
+            {
+                string _filePath = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory);
+                _filePath = Regex.Match(_filePath, "(.*SledgeOmatic\\\\).*").Groups[1].Value + "SledgeOMatic\\Tasks\\keys.sql";
+                string sql = System.IO.File.ReadAllText(_filePath);
+                if (!string.IsNullOrEmpty(o.PK_FORM))
+                {
+                    sql = Regex.Replace(sql, @"\d{4}-\w{1,4}-\w{1,8}", o.PK_FORM);
+                    sql = sql.Replace(@"DC_", $"_{o.PK_FORM.Replace("-", "")}_");
+                }
+                var provider = new DataTableProvider(config, logger);
+                var dt = provider.Provide(sql);
+                var ser = JsonConvert.SerializeObject(dt);
+                ser = ser.Replace(",", "\n,");
+                sb.AppendLine(ser);
+            }
+            catch (Exception ex)
+            {
+
+                logger.Error(ex, "keys.sql file error");
+            }
+              
+            logger.Information(sb.ToString()); 
             if (o.Bootstrap) SomBootstrapper.Run(o); 
         }
         private static List<Type> types()

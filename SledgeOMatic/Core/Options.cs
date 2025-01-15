@@ -20,7 +20,7 @@ namespace SOM
         int SearchDepth { get; set; }
         SomMode Mode { get; set; }
         bool Verbose { get; set; }
-        List<string> GetArgs { get;  }
+        List<string> GetArgsSequential { get;  }
 
     }
     [Serializable]
@@ -39,7 +39,7 @@ namespace SOM
         public int SearchDepth { get; set; }
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
-        public List<string> GetArgs
+        public List<string> GetArgsSequential
         { 
             get{
                 return (from s in new List<string>(Regex.Split(this.Args.Trim(), @"/p ")) where !string.IsNullOrWhiteSpace(s) select s.Trim()).ToList();
@@ -51,7 +51,7 @@ namespace SOM
     [Verb("parse", HelpText = @"Command Runner: som parse -p CS -v -d 1 --help ")]
     public class ParseOptions : ISomOptions
     {
-        [Option('a', "Args", Default = "")]
+        [Option('a', "Args", Default = "", HelpText= "Arguments in order of ParseType (e.g. LineExtractor) constructor:   -a \"/p KEYWORD /p 5\"")]
         public string Args { get; set; }
         [Option('t', "Task")]
         public string Task { get; set; }
@@ -63,7 +63,7 @@ namespace SOM
         public int SearchDepth { get; set; } 
         [Option('v', "Verbose", HelpText = "Print details during execution.")]
         public bool Verbose { get; set; }
-        public List<string> GetArgs
+        public List<string> GetArgsSequential
         {
             get
             {
@@ -78,7 +78,9 @@ namespace SOM
         [Option('a', "Args", HelpText = "-a \"/p:param1=value /p:param2=value \"")]
         public string Args { get; set; }
         [Option('b', "Bootstrap", HelpText = "Bootstraps Som")]
-        public bool Bootstrap { get; set; } 
+        public bool Bootstrap { get; set; }         
+        [Option('f', "PK_FORM", HelpText = "PK_FORM")]
+        public string PK_FORM { get; set; } 
         private string path;
         [Option('p', "Path", HelpText = "-p \" c:\\basepath_to_som  \"")]
         public string Path

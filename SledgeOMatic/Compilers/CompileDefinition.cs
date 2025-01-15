@@ -12,13 +12,14 @@ namespace SOM.Compilers
         public List<CompilerDef> ContentCompilers { get; set; }
         public List<CompilerDef> FilenameCompilers { get; set; }
         public List<Compilation> Compilations { get; set; }
-    
+        
         public class CompilerDef
         {
             public string CompilerType { get; set; } 
             public List<object> Args { get; set; } 
             public string Params { get; set; } 
             public string Description { get; set; } 
+            public string Skip { get; set; } 
         }
         public class Compilation
         {

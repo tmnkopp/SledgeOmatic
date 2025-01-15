@@ -19,6 +19,7 @@ using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using SOM.Core;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SOM 
 {
@@ -53,26 +54,24 @@ namespace SOM
             var deser = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var def = deser.Deserialize<CompileDefinition>(raw);
  
-            def.ContentCompilers.ForEach(c =>
-            {
+            def.ContentCompilers.Where(c => c.Skip?.Trim() != "true").ToList().ForEach(c =>
+            { 
                 var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
-                logger.Debug("ContentCompilers: {o}", JsonConvert.SerializeObject(c));
                 ICompilable obj = GenericFactory<ICompilable>.Create(typ.FullName, c.Params);
                 compiler.ContentCompilers.Add(obj); 
             });
-            def.FilenameCompilers.ForEach(c =>
+            def.FilenameCompilers.Where(c => c.Skip?.Trim() != "true").ToList().ForEach(c =>
             {
                 var typ = AssmTypes().Where(t => t.Name == c.CompilerType && typeof(ICompilable).IsAssignableFrom(t)).FirstOrDefault();
-                logger.Debug("FilenameCompilers: {o}", JsonConvert.SerializeObject(c));
                 ICompilable obj = GenericFactory<ICompilable>.Create(typ.FullName, c.Params);
                 compiler.FilenameCompilers.Add(obj);
             }); 
             def.Compilations.ForEach(c =>
-            {
+            { 
                 compiler.FileFilter = c.FileFilter;
                 compiler.Source = (c.Source ?? "~").Replace("~", somContext.BasePath);
-                compiler.Dest = (c.Dest ?? "~").Replace("~", somContext.BasePath);
-                compiler.Compile();
+                compiler.Dest = (c.Dest ?? "~").Replace("~", somContext.BasePath); 
+                compiler.Compile(); 
             });
             if (somContext.Options.Mode != SomMode.Commit) somContext.Cache.Inspect();
            

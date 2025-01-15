@@ -1,7 +1,7 @@
 Directories:  
 - 'C:\dev\CyberScope\CyberScopeBranch\CSwebdev\database\*.sql'    
 ParseType: LineExtractor
-PathExcludePattern: 'archive'
+PathExcludePattern: 'Historical'
 ParseTypeArgs:
 - 'fnIsObjVisible'
 - 5
