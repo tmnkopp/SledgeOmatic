@@ -63,7 +63,8 @@ namespace SOM.Procedures
                         }        
                 }
                 return KeyVals;
-            } 
+            }
+            KeyVals = JsonConvert.DeserializeObject<Dictionary<string, string>>(this.Source);
             return KeyVals;
         }
         protected bool IsValidJson(string strInput)

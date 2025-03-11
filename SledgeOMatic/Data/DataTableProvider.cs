@@ -12,6 +12,12 @@ namespace SOM
     {
         private IConfiguration config;
         private Serilog.ILogger logger;
+
+        public DataTableProvider(IConfiguration config)
+        {
+            this.config = config;
+        }
+
         public DataTableProvider(IConfiguration _config
             , Serilog.ILogger _logger)
         {

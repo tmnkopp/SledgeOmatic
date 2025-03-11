@@ -33,8 +33,7 @@ namespace SOM.Procedures
         public string Compile(ISomContext somContext)
         {
             string content = somContext.Content;
-            StringBuilder result = new StringBuilder();
-            somContext.Logger.Debug("{o}", new { NumericPattern=this.Pattern });
+            StringBuilder result = new StringBuilder(); 
             foreach (var line in base.ParseLines(content))
             {
                 if (Regex.IsMatch(line, $@"(som!\w+|\w+!som)"))
@@ -59,7 +58,8 @@ namespace SOM.Procedures
                         oldLine = oldLine.Substring(matchLength, oldLine.Length - matchLength);
                         match = Regex.Match(oldLine, pattern);
                     };
-                    newLine = Regex.Replace(newLine, $@"\n|\r", "");
+                    if (!string.IsNullOrWhiteSpace(oldLine)) newLine += oldLine;
+                    newLine = Regex.Replace(newLine, $@"\n|\r", ""); 
                     result.AppendLine($"{newLine}");
                 }   
             }

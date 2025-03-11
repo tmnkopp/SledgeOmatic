@@ -48,6 +48,9 @@ namespace SOM
             {
                 string _filePath = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory);
                 _filePath = Regex.Match(_filePath, "(.*SledgeOmatic\\\\).*").Groups[1].Value + "SledgeOMatic\\Tasks\\keys.sql";
+                if( !string.IsNullOrEmpty(config.GetSection("AppSettings")["ConfigSqlPath"]) ){
+                    _filePath = config.GetSection("AppSettings")["ConfigSqlPath"];
+                }
                 string sql = System.IO.File.ReadAllText(_filePath);
                 if (!string.IsNullOrEmpty(o.PK_FORM))
                 {
